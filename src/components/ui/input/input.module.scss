@@ -1,0 +1,19 @@
+@import '../../../index.scss';
+
+.input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    border: none;
+    background-color: $transparent-color;
+    border-bottom: 2px solid $dark-gray;
+    padding: 0 10px;
+    font-size: 0.9rem;
+    &:focus {
+        outline-color: $dark-gray;
+        box-shadow: 0 0 1rem $dark-gray;
+        border: none;
+        outline-style: solid;
+        outline-width: 2px;
+    }
+}

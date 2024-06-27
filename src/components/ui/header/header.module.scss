@@ -1,0 +1,72 @@
+@import "../../../index.scss";
+
+.header {
+    height: 50px;
+    background-color: $dark-gray;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+    color: $light-gray;
+}
+
+.header_light {
+    background-color: $white;
+    color: $dark-gray;
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+    background-position: bottom;
+    background-size: 100% 8px;
+    background-repeat: no-repeat;
+}
+
+.header__title {
+    margin: 0;
+}
+
+.header__nav {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.header__list {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+
+.list__item {
+    margin-left: 1rem;
+}
+
+.logo__wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+        animation: jumping infinite 1s;
+    }
+
+    @media screen and (max-width: 576px) {
+        .header__title {
+            display: none;
+        }
+
+        &:hover {
+            animation: none;
+        }
+    }
+}
+
+@keyframes jumping {
+    0% {
+        transform: none;
+    }
+
+    50% {
+        transform: translateY(-0.25rem);
+    }
+
+    100% {
+        transform: none;
+    }
+}

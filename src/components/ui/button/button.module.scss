@@ -1,0 +1,30 @@
+@import '../../../index.scss';
+
+.button {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: $transparent-color;
+    color: $dark-gray;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: all 0.25s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1px;
+    &:hover {
+        background-color: $dark-gray;
+        color: $light-gray;
+        box-shadow: 0 0 0.5rem $dark-gray;
+    }
+
+    &:focus {
+        outline: none;
+        outline-style: solid;
+        outline-width: 2px;
+        outline-color: $transparent-color;
+        box-shadow: 0 0 0.5rem $dark-gray;
+        background-color: $dark-gray;
+        color: $light-gray;
+    }
+}

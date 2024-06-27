@@ -1,0 +1,42 @@
+@import "../../../index.scss";
+
+.form__item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.form {
+  background-color: $light-gray;
+  width: 300px;
+  box-shadow: 0 0 10px $accent-color;
+  color: $black;
+  padding: 10px 20px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  @include backlight(0, 0, 20rem, 0.5, $accent-color, $light-gray, 10s);
+}
+
+.form__title {
+  font-family: "Inter", sans-serif;
+  font-weight: 700;
+  text-align: center;
+  margin: 0;
+}
+
+label {
+  align-self: flex-start;
+}
+
+.invalid__text {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.form_light{
+  @include backlight(0, 0, 15rem, 0.9, $accent-color, $dark-gray, 10s);
+}
