@@ -2,10 +2,11 @@ import { Link } from "react-router-dom";
 import styles from "./header.module.scss";
 import "../../../index.scss";
 import { observer } from "mobx-react-lite";
-import ThemeStore from "../../../stores/theme-store";
+import ThemeStore from "../../../stores/theme.store";
 import { useEffect } from "react";
 import { ToggleComponent } from "../toggle/toggle";
 import { RiCriminalFill } from "react-icons/ri";
+import { GiBowieKnife } from "react-icons/gi";
 
 export const Header: React.FC = observer(() => {
   const { lightMode } = ThemeStore;
@@ -20,11 +21,18 @@ export const Header: React.FC = observer(() => {
   }, [lightMode]);
   return (
     <header
-      className={`${styles.header} ${lightMode ? styles.header_light : ""} user-select-none`}
+      className={`${styles.header} ${
+        lightMode ? styles.header_light : ""
+      } user-select-none cursor_crosshair`}
     >
       <div className={styles.logo__wrapper}>
         <h1 className={styles.header__title}>Incidents</h1>
-        <RiCriminalFill size={48} />
+        <div className={styles.icon__wrapper}>
+          <RiCriminalFill size={48} />
+          <div className={styles.knife__wrapper}>
+            <GiBowieKnife className={styles.knife__icon} size={28} />
+          </div>
+        </div>
       </div>
       <nav className={styles.header__nav}>
         <ul className={styles.header__list}>

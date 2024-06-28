@@ -7,6 +7,7 @@
     justify-content: space-between;
     padding: 0 20px;
     color: $light-gray;
+    overflow: hidden;
 }
 
 .header_light {
@@ -41,9 +42,11 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-
+    z-index: 1;
     &:hover {
-        animation: jumping infinite 1s;
+        &>.header__title {
+            animation: jumping infinite 1s;
+        }
     }
 
     @media screen and (max-width: 576px) {
@@ -69,4 +72,58 @@
     100% {
         transform: none;
     }
+}
+
+.icon__wrapper {
+    position: relative;
+    display: inline-block;
+
+    &:hover {
+        &>.knife__wrapper {
+            top: 15%;
+        }
+        &>.icon{
+            transform: scale(1.2);
+        }
+        &>.knife__wrapper>.knife__icon {
+            visibility: visible;
+            transform: rotate(90deg);
+        }
+    }
+}
+
+.knife__wrapper {
+    position: absolute;
+    top: 60%;
+    right: 0;
+    transform: translate(50%, 50%);
+    transition: top 0.3s ease-in;
+}
+
+.knife__icon {
+    visibility: hidden;
+    transform: rotate(160deg);
+    transition: visibility 0.2s, transform 0.2s ease-in;
+    animation: knife 0.5s infinite;
+    z-index: 1;
+}
+
+@keyframes knife {
+    0% {
+        transform: rotate(90deg);
+    }
+
+    50% {
+        transform: rotate(100deg);
+    }
+
+    100% {
+        transform: rotate(90deg);
+    }
+}
+
+.icon{
+    transform: scale(1);
+    transition: transform 0.2s ease-in;
+    z-index: 0;
 }

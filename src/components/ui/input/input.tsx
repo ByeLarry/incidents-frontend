@@ -11,6 +11,9 @@ export const InputComponent: React.FC<InputComponentProps> = (
       value={props.value}
       id={props.id}
       name={props.name}
+      onChange={props.onChange}
+      onBlur={props.onBlur}
+      required={props.required}
     />
   );
 };

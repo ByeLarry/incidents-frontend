@@ -82,6 +82,9 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
         camera: { tilt: ymap.tilt, azimuth: ymap.azimuth, duration: 250 },
         location: { center: position, zoom: ymap.zoom },
       });
+      setCoords(position);
+      setMapCenter(position);
+      setMapZoom(ymap.zoom);
       // console.log(`[onGeolocatePositionFromControl]: ${position}`);
     },
     [ymap]
