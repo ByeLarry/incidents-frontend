@@ -17,7 +17,7 @@ npm run dev
 
 ## Проектирование
 
-_Диаграммы можно сохранить и редактировать в ***[draw.io](https://app.diagrams.net/)***_
+_Диаграммы можно сохранять и редактировать в ***[draw.io](https://app.diagrams.net/)***_
 
 - ### Диаграмма прецедентов
      ![Диаграмма прецедентов](https://github.com/ByeLarry/incidents-frontend/assets/120035099/246fc3bc-2a86-4948-9ce4-f2228c897f68)
