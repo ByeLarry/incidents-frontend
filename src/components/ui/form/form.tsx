@@ -7,13 +7,18 @@ interface FormComponentProps {
   children?: React.ReactNode;
   action?: string;
   title: string;
+  name?: string;
 }
 
 export const FormComponent: React.FC<FormComponentProps> = observer(
   (props: FormComponentProps) => {
     const { lightMode } = ThemeStore;
     return (
-      <form className={`${styles.form} ${lightMode ? styles.form_light : ""}`}>
+      <form
+        name={props.name}
+        onSubmit={props.onSubmit}
+        className={`${styles.form} ${lightMode ? styles.form_light : ""}`}
+      >
         <h2 className={styles.form__title}>{props.title}</h2>
         {props.children}
       </form>

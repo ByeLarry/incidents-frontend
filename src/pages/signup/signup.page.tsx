@@ -19,7 +19,7 @@ import csrfStore from "../../stores/csrf.store";
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
-  const { changeAllFields } = UserStore;
+  const { changeUser } = UserStore;
   const { lightMode } = ThemeStore;
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });
   const password = useInput("", { minLength: 8, isEmpty: true });
@@ -85,7 +85,8 @@ export const SignUp: React.FC = () => {
     return null;
   };
 
-  const onSubmit = async () => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const data: SignUpDto = {
       email: email.value,
       password: password.value,
@@ -94,7 +95,7 @@ export const SignUp: React.FC = () => {
     };
     try {
       const response = await AuthService.postSignUp(data);
-      changeAllFields(response.data as User);
+      changeUser(response.data as User);
       csrfStore.changeCsrf(response.data.csrf_token);
       navigate("/", { replace: true });
     } catch (error) {
@@ -130,7 +131,7 @@ export const SignUp: React.FC = () => {
         Incidents
       </h1>
       <section className={styles.wrapper}>
-        <FormComponent title="Регистрация">
+        <FormComponent title="Регистрация" onSubmit={onSubmit}>
           <div className="form__item">
             <InputComponent
               type="email"
@@ -225,8 +226,7 @@ export const SignUp: React.FC = () => {
               !surname.inputValid ||
               password.value.trim() !== confirmPassword.value.trim()
             }
-            type="button"
-            onClick={onSubmit}
+            type="submit"
           >
             Войти
           </ButtonComponent>

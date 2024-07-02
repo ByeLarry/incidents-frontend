@@ -1,6 +1,5 @@
 import { UserDto } from "../dto/user.dto";
 
-export interface User {
-  user: UserDto;
+export interface User extends UserDto {
   csrf_token: string;
 }

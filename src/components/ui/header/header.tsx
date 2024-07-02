@@ -12,7 +12,7 @@ import { ButtonComponent } from "../button/button";
 import { IoIosLogOut } from "react-icons/io";
 import { ModalComponent } from "../../Modal/modal";
 import { AuthService } from "../../../services/auth.service";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import CsrfStore from "../../../stores/csrf.store";
 
 export const Header: React.FC = observer(() => {
@@ -21,7 +21,6 @@ export const Header: React.FC = observer(() => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleLogout = () => {
-    console.log("handleLogout ", CsrfStore.csrf);
     AuthService.postLogout({ csrf_token: CsrfStore.csrf })
       .then(() => {
         toast.success("Вы вышли из аккаунта");
@@ -50,11 +49,6 @@ export const Header: React.FC = observer(() => {
         lightMode ? styles.header_light : ""
       } user-select-none cursor_crosshair`}
     >
-      <Toaster
-        position="bottom-center"
-        richColors
-        toastOptions={{ duration: 3500 }}
-      />
       <div className={styles.logo__wrapper}>
         <h1 className={styles.header__title}>Incidents</h1>
         <div className={styles.icon__wrapper}>

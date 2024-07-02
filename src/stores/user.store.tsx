@@ -12,10 +12,6 @@ class UserStore {
     this.user = data;
   };
 
-  changeAllFields = (data: User) => {
-    this.user = data;
-  };
-
   isEmptyUser = (): boolean => {
     return this.user === null;
   };

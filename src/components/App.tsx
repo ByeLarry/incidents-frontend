@@ -3,7 +3,7 @@ import "./App.scss";
 import { Home } from "../pages/home/home.page";
 import { SignIn } from "../pages/signin/signin.page";
 import { SignUp } from "../pages/signup/signup.page";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { AuthService } from "../services/auth.service";
 import UserStore from "../stores/user.store";
 import { User } from "../interfaces/IUser";
@@ -11,18 +11,17 @@ import { AxiosError } from "axios";
 import { Toaster, toast } from "sonner";
 import { ErrorPage } from "../pages/error/error.page";
 import csrfStore from "../stores/csrf.store";
+import { observer } from "mobx-react-lite";
 
-function App() {
-  const { changeAllFields } = UserStore;
+const App = observer(() => {
+  const { user, changeUser } = UserStore;
   const { csrf, changeCsrf } = csrfStore;
-  const [auth, setAuth] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await AuthService.getMe();
-        changeAllFields(response.data as User);
+        changeUser(response.data as User);
         changeCsrf(response.data.csrf_token);
-        setAuth(true);
       } catch (error) {
         if (error instanceof AxiosError) {
           switch (error.response?.status) {
@@ -37,7 +36,15 @@ function App() {
     };
 
     fetchData();
-  }, [changeAllFields, changeCsrf, csrf]);
+  }, [changeUser, changeCsrf]);
+
+  useEffect(() => {
+    if (!user || user.activated === undefined) return;
+    if (user.activated === false) {
+      console.log("user:", user.activated);
+      toast.info("Почта не подтверждена");
+    }
+  }, [user]);
   return (
     <>
       <div className="App">
@@ -50,17 +57,17 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route
             path="/signin"
-            element={!auth ? <SignIn /> : <Navigate to="/" />}
+            element={!csrf && !user ? <SignIn /> : <Navigate to="/" />}
           />
           <Route
             path="/signup"
-            element={!auth ? <SignUp /> : <Navigate to="/" />}
+            element={!csrf && !user ? <SignUp /> : <Navigate to="/" />}
           />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>
     </>
   );
-}
+});
 
 export default App;

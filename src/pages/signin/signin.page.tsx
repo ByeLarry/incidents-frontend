@@ -17,7 +17,7 @@ import csrfStore from "../../stores/csrf.store";
 
 export const SignIn: React.FC = () => {
   const navigate = useNavigate();
-  const { changeAllFields } = UserStore;
+  const { changeUser } = UserStore;
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });
   const password = useInput("", { minLength: 8, isEmpty: true });
 
@@ -45,14 +45,15 @@ export const SignIn: React.FC = () => {
     return null;
   };
 
-  const onSubmit = async function () {
+  const onSubmit = async function (e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     const data: SignInDto = {
       email: email.value,
       password: password.value,
     };
     try {
       const response = await AuthService.postSignIn(data);
-      changeAllFields(response.data as User);
+      changeUser(response.data as User);
       csrfStore.changeCsrf(response.data.csrf_token);
       navigate("/", { replace: true });
     } catch (error) {
@@ -88,7 +89,10 @@ export const SignIn: React.FC = () => {
       />
       <h1 className={`${styles.title}`}>Incidents</h1>
       <section className={`${styles.wrapper}`}>
-        <FormComponent title="Вход">
+        <FormComponent
+          title="Вход"
+          onSubmit={onSubmit}
+        >
           <div className="form__item">
             <InputComponent
               type="email"
@@ -126,8 +130,7 @@ export const SignIn: React.FC = () => {
 
           <ButtonComponent
             disabled={!email.inputValid || !password.inputValid}
-            type="button"
-            onClick={onSubmit}
+            type="submit"
           >
             Войти
           </ButtonComponent>
