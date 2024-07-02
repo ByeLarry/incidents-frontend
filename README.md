@@ -27,3 +27,20 @@ _Диаграммы можно сохранять и редактировать 
 
 ## Прототипы пользовательского интерфейса
 
+_Прототипы в **Figma**: https://www.figma.com/design/uS1sOHazna93fKYVemZtpb/incidents?node-id=0-1&t=I219QsAhbcTF8Shd-1_
+
+- ### Прототип главной страницы
+  ![Главная страница](https://github.com/ByeLarry/incidents-frontend/assets/120035099/9e6d3036-5451-4641-9836-744bce41cc1f)
+
+- ### Прототип страницы регистрации
+  ![Регистрация](https://github.com/ByeLarry/incidents-frontend/assets/120035099/0b8cf9b1-144e-4a54-b91c-b8bc6dfcb0bd)
+
+- ### Прототип страницы входа
+  ![Страница входа](https://github.com/ByeLarry/incidents-frontend/assets/120035099/feda1642-3500-466e-846d-7ce0245b88b7)
+
+- ### Прототип страницы 404
+  ![Страница ошибки](https://github.com/ByeLarry/incidents-frontend/assets/120035099/388927f1-51af-4456-b7af-225a6589160b)
+
+
+
+
