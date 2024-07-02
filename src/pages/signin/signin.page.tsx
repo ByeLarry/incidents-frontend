@@ -13,6 +13,7 @@ import { Toaster, toast } from "sonner";
 import { AxiosError } from "axios";
 import UserStore from "../../stores/user.store";
 import { User } from "../../interfaces/IUser";
+import csrfStore from "../../stores/csrf.store";
 
 export const SignIn: React.FC = () => {
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ export const SignIn: React.FC = () => {
     try {
       const response = await AuthService.postSignIn(data);
       changeAllFields(response.data as User);
+      csrfStore.changeCsrf(response.data.csrf_token);
       navigate("/", { replace: true });
     } catch (error) {
       if (error instanceof AxiosError) {

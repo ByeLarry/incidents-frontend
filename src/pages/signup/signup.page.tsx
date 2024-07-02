@@ -15,6 +15,7 @@ import { AxiosError } from "axios";
 import UserStore from "../../stores/user.store";
 import { User } from "../../interfaces/IUser";
 import { useNavigate } from "react-router-dom";
+import csrfStore from "../../stores/csrf.store";
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -94,6 +95,7 @@ export const SignUp: React.FC = () => {
     try {
       const response = await AuthService.postSignUp(data);
       changeAllFields(response.data as User);
+      csrfStore.changeCsrf(response.data.csrf_token);
       navigate("/", { replace: true });
     } catch (error) {
       if (error instanceof AxiosError) {

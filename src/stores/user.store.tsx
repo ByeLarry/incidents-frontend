@@ -4,18 +4,12 @@ import { User } from "../interfaces/IUser";
 class UserStore {
   user: User | null = null;
 
-  csrf: string = "";
-
   constructor() {
     makeAutoObservable(this);
   }
 
-  changeUser = (data: User) => {
+  changeUser = (data: User | null) => {
     this.user = data;
-  };
-
-  changeCsrf = (data: string) => {
-    this.csrf = data;
   };
 
   changeAllFields = (data: User) => {
@@ -23,7 +17,7 @@ class UserStore {
   };
 
   isEmptyUser = (): boolean => {
-    return !this.user && this.csrf === "";
+    return this.user === null;
   };
 }
 
