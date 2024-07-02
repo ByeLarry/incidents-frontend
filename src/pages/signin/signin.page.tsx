@@ -77,7 +77,7 @@ export const SignIn: React.FC = () => {
   };
 
   return (
-    <main className={`${styles.main}  user-select-none`}>
+    <main className={`${styles.main} user-select-none`}>
       <CustomCursorComponent highlight />
       <Toaster
         position="bottom-center"

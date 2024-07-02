@@ -13,6 +13,7 @@ interface ButtonComponentProps {
   transparent?: boolean;
   ariaLabel?: string;
   zIndex?: number;
+  modalButton?: boolean;
 }
 
 export const ButtonComponent: React.FC<ButtonComponentProps> = (
@@ -25,7 +26,7 @@ export const ButtonComponent: React.FC<ButtonComponentProps> = (
       onClick={props.onClick}
       disabled={props.disabled}
       title={props.title}
-      className={`${props.noHover ? styles.button_no_hover : styles.button} ${
+      className={`${props.noHover ? styles.button_no_hover : styles.button} ${props.modalButton ? styles.button_modal : ""} ${
         props.inverse && styles.button_inverse
       } ${props.textInverse && styles.button__text_inverse} ${
         props.noHover && styles.button_no_hover

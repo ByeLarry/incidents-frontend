@@ -3,17 +3,19 @@ import styles from "./header.module.scss";
 import "../../../index.scss";
 import { observer } from "mobx-react-lite";
 import ThemeStore from "../../../stores/theme.store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ToggleComponent } from "../toggle/toggle";
 import { RiCriminalFill } from "react-icons/ri";
 import { GiBowieKnife } from "react-icons/gi";
 import UserStore from "../../../stores/user.store";
 import { ButtonComponent } from "../button/button";
 import { IoIosLogOut } from "react-icons/io";
+import { ModalComponent } from "../../Modal/modal";
 
 export const Header: React.FC = observer(() => {
   const { lightMode } = ThemeStore;
   const { isEmptyUser } = UserStore;
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     if (!lightMode) {
@@ -75,6 +77,7 @@ export const Header: React.FC = observer(() => {
                 ariaLabel="Выход"
                 noHover={lightMode}
                 className="position_relative"
+                onClick={() => setModalOpen(true)}
               >
                 <IoIosLogOut size={30} color={lightMode ? "black" : "white"} />
               </ButtonComponent>
@@ -82,6 +85,24 @@ export const Header: React.FC = observer(() => {
           )}
         </ul>
       </nav>
+      <ModalComponent isOpen={modalOpen} onClose={() => setModalOpen(false)}>
+        <h3 style={{ textAlign: "center", fontWeight: "normal" }}>
+          Вы уверены, что хотите выйти?
+        </h3>
+        <div className={styles.buttons__wrapper}>
+          <ButtonComponent type="button" ariaLabel="Да" modalButton>
+            Да
+          </ButtonComponent>
+          <ButtonComponent
+            type="button"
+            ariaLabel="Нет"
+            modalButton
+            onClick={() => setModalOpen(false)}
+          >
+            Нет
+          </ButtonComponent>
+        </div>
+      </ModalComponent>
     </header>
   );
 });

@@ -24,7 +24,7 @@ import { Spiner } from "../ui/spiner/spiner";
 import { FaCompass } from "react-icons/fa";
 
 interface MapProps {
-  lightMode: boolean
+  lightMode: boolean;
 }
 
 const SOURCE = "source";

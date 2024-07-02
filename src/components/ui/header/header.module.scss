@@ -131,3 +131,11 @@
 .btn_header {
     color: $light-gray;
 }
+
+.buttons__wrapper{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}

@@ -77,3 +77,29 @@
         color: $dark-gray;
     }
 }
+
+.button_modal {
+    padding: 0.3rem 3.4rem;
+    color: $dark-gray;
+    border: 2px solid $dark-gray;
+
+    &:hover {
+        background-color: $transparent-color;
+        color: $dark-gray;
+        border-color: $dark-gray;
+        box-shadow: 0.4rem 0.4rem 0 $dark-gray;
+        transform: translate(-0.4rem, -0.4rem);
+    }
+
+    &:focus {
+        background-color: $transparent-color;
+        color: $dark-gray;
+        border-color: $dark-gray;
+        box-shadow: 0.4rem 0.4rem 0 $dark-gray;
+        transform: translate(-0.4rem, -0.4rem);
+    }
+
+    &:last-child {
+        margin: 0;
+    }
+}

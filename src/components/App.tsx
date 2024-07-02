@@ -9,6 +9,7 @@ import UserStore from "../stores/user.store";
 import { User } from "../interfaces/IUser";
 import { AxiosError } from "axios";
 import { Toaster, toast } from "sonner";
+import { ErrorPage } from "../pages/error/error.page";
 
 function App() {
   const { changeAllFields } = UserStore;
@@ -45,6 +46,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>
     </>

@@ -20,7 +20,6 @@ class UserStore {
 
   changeAllFields = (data: User) => {
     this.user = data;
-    console.log(this.user);
   };
 
   isEmptyUser = (): boolean => {
