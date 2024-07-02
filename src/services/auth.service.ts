@@ -14,18 +14,7 @@ export class AuthService {
       });
       return response;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Axios error:", error.message);
-        if (error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
-          console.error("Response headers:", error.response.headers);
-        } else if (error.request) {
-          console.error("Request data:", error.request);
-        }
-      } else {
-        console.error("Unknown error:", error);
-      }
+      console.error("Axios error:", error);
       throw error;
     }
   }
@@ -38,11 +27,20 @@ export class AuthService {
       });
       return response;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Axios error:", error.message);
-      } else {
-        console.error("Unknown error:", error);
-      }
+      console.error("Axios error:", error);
+      throw error;
+    }
+  }
+
+  static async getMe() {
+    try {
+      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/auth/me`;
+      const response = await axios.get<User>(url, {
+        withCredentials: true,
+      });
+      return response;
+    } catch (error) {
+      console.error("Axios error:", error);
       throw error;
     }
   }

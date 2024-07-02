@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./cursor.scss";
-import { CustomCursorProps } from "../propses/CustomCursorProps";
+
+interface CustomCursorProps {
+  highlight?: boolean;
+  cursor?: boolean;
+  coordinates?: boolean;
+}
 
 const CustomCursorComponent: React.FC<CustomCursorProps> = (
   props: CustomCursorProps

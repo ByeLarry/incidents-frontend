@@ -1,7 +1,13 @@
 import { observer } from "mobx-react-lite";
-import { FormComponentProps } from "../../../propses/FormComponentProps";
 import styles from "./from.module.scss";
 import ThemeStore from "../../../stores/theme.store";
+
+interface FormComponentProps {
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
+  children?: React.ReactNode;
+  action?: string;
+  title: string;
+}
 
 export const FormComponent: React.FC<FormComponentProps> = observer(
   (props: FormComponentProps) => {

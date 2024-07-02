@@ -20,9 +20,12 @@ import styles from "./map.module.scss";
 import { GeoService } from "../../services/geo.service";
 import { MapMarkerAlt } from "./markers/marker-al";
 import { MapMarker } from "./markers/marker";
-import { MapProps } from "../../propses/MapProps";
 import { Spiner } from "../ui/spiner/spiner";
 import { FaCompass } from "react-icons/fa";
+
+interface MapProps {
+  lightMode: boolean
+}
 
 const SOURCE = "source";
 export const MapComponent: React.FC<MapProps> = (props: MapProps) => {

@@ -1,5 +1,14 @@
-import { SpinerProps } from "../../../propses/SpinerProps";
 import "./spiner.scss";
+
+interface SpinerProps {
+  lightMode?: boolean;
+  zIndex?: number;
+  className?: string;
+  fixed?: boolean;
+  size?: number;
+  color?: string;
+  visible?: boolean;
+}
 
 export const Spiner: React.FC<SpinerProps> = (props: SpinerProps) => {
   return (
@@ -25,3 +34,5 @@ export const Spiner: React.FC<SpinerProps> = (props: SpinerProps) => {
     </div>
   );
 };
+
+

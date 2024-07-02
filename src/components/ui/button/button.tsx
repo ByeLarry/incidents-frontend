@@ -1,15 +1,36 @@
-import { ButtonComponentProps } from "../../../propses/ButtonComponentProps";
 import styles from "./button.module.scss";
+
+interface ButtonComponentProps {
+  className?: string;
+  onClick?: () => void;
+  children?: React.ReactNode;
+  type?: "submit" | "button" | "reset";
+  disabled?: boolean;
+  title?: string;
+  inverse?: boolean;
+  textInverse?: boolean;
+  noHover?: boolean;
+  transparent?: boolean;
+  ariaLabel?: string;
+  zIndex?: number;
+}
+
 export const ButtonComponent: React.FC<ButtonComponentProps> = (
   props: ButtonComponentProps
 ) => {
   return (
     <button
+      aria-label={props.ariaLabel}
       type={props.type}
       onClick={props.onClick}
       disabled={props.disabled}
       title={props.title}
-      className={`${styles.button} ${props.className}`}
+      className={`${props.noHover ? styles.button_no_hover : styles.button} ${
+        props.inverse && styles.button_inverse
+      } ${props.textInverse && styles.button__text_inverse} ${
+        props.noHover && styles.button_no_hover
+      } ${props.transparent && styles.button_transparent} ${props.className}`}
+      style={{ zIndex: props.zIndex }}
     >
       {props.children}
     </button>

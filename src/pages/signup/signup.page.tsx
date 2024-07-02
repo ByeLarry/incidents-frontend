@@ -4,14 +4,21 @@ import styles from "./signup.module.scss";
 import "../../index.scss";
 import { FormComponent } from "../../components/ui/form/form";
 import { ButtonComponent } from "../../components/ui/button/button";
-import CustomCursorComponent from "../../components/customCursorComponent";
+import CustomCursorComponent from "../../components/ui/cursor/customCursorComponent";
 import ThemeStore from "../../stores/theme.store";
 import useInput from "../../hooks/input.hook";
 import { LabelComponent } from "../../components/ui/label/label";
 import { SignUpDto } from "../../dto/signup.dto";
 import { AuthService } from "../../services/auth.service";
+import { Toaster, toast } from "sonner";
+import { AxiosError } from "axios";
+import UserStore from "../../stores/user.store";
+import { User } from "../../interfaces/IUser";
+import { useNavigate } from "react-router-dom";
 
 export const SignUp: React.FC = () => {
+  const navigate = useNavigate();
+  const { changeAllFields } = UserStore;
   const { lightMode } = ThemeStore;
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });
   const password = useInput("", { minLength: 8, isEmpty: true });
@@ -30,7 +37,6 @@ export const SignUp: React.FC = () => {
     }
     return null;
   };
-
   const getPasswordErrorMessage = () => {
     if (password.isDirty) {
       if (password.isEmpty) {
@@ -43,9 +49,15 @@ export const SignUp: React.FC = () => {
   };
 
   const getConfirmPasswordErrorMessage = () => {
-    if (confirmPassword.isDirty && password.value !== confirmPassword.value) {
-      confirmPassword.inputValid = false;
-      return "Пароли не совпадают";
+    if (confirmPassword.isDirty) {
+      if (confirmPassword.isEmpty) {
+        return "Подтверждение пароля не введено";
+      } else if (
+        confirmPassword.isDirty &&
+        password.value.trim() !== confirmPassword.value.trim()
+      ) {
+        return "Пароли не совпадают";
+      }
     }
     return null;
   };
@@ -81,15 +93,37 @@ export const SignUp: React.FC = () => {
     };
     try {
       const response = await AuthService.postSignUp(data);
-      console.log(response.data);
+      changeAllFields(response.data as User);
+      navigate("/", { replace: true });
     } catch (error) {
-      console.error("Error during signup:", error);
+      if (error instanceof AxiosError) {
+        switch (error.response?.status) {
+          case 409:
+            toast.error("Такой пользователь уже существует");
+            break;
+          case 500:
+            toast.error("Произошла серверная ошибка");
+            break;
+          default:
+            toast.error(
+              error.response?.data.message ||
+                "Во время регистрации произошла ошибка"
+            );
+        }
+      } else {
+        toast.error("Произошла непредвиденная ошибка");
+      }
     }
   };
 
   return (
     <main className={`${styles.main} user-select-none`}>
       <CustomCursorComponent highlight />
+      <Toaster
+        position="bottom-center"
+        richColors
+        toastOptions={{ duration: 4000 }}
+      />
       <h1 className={`${styles.title} ${lightMode ? styles.text_shadow : ""}`}>
         Incidents
       </h1>
@@ -186,7 +220,8 @@ export const SignUp: React.FC = () => {
               !password.inputValid ||
               !confirmPassword.inputValid ||
               !name.inputValid ||
-              !surname.inputValid
+              !surname.inputValid ||
+              password.value.trim() !== confirmPassword.value.trim()
             }
             type="button"
             onClick={onSubmit}

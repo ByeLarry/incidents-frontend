@@ -151,6 +151,10 @@ body {
     position: relative;
     transition: all 0.2s ease-out;
 
+    @media screen and (max-width: 576px) {
+        font-size: 0.8rem;
+    }
+
     &:after {
         content: " ";
         width: 100%;
@@ -191,6 +195,20 @@ body {
 
     &:hover {
         color: $light-gray;
+    }
+
+    &:focus {
+        &:before {
+            width: 0px;
+        }
+
+        &:after {
+            width: 0px;
+        }
+
+        &:hover {
+            padding: 0 0;
+        }
     }
 }
 
@@ -257,6 +275,10 @@ body.dark-mode {
     -webkit-user-select: none;
 }
 
-.form__item{
+.form__item {
     width: 100%;
+}
+
+.position_relative {
+    position: relative;
 }

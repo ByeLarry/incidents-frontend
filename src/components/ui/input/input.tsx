@@ -1,5 +1,17 @@
-import { InputComponentProps } from "../../../propses/InputComponentProps";
 import styles from "./input.module.scss";
+
+interface InputComponentProps {
+  type?: string;
+  placeholder?: string;
+  value?: string;
+  id?: string;
+  name?: string;
+  className?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  required?: boolean;
+}
+
 export const InputComponent: React.FC<InputComponentProps> = (
   props: InputComponentProps
 ) => {

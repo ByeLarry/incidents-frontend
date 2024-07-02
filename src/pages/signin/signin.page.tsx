@@ -1,16 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FormComponent } from "../../components/ui/form/form";
 import { InputComponent } from "../../components/ui/input/input";
 import "../../index.scss";
 import styles from "./signin.module.scss";
 import { ButtonComponent } from "../../components/ui/button/button";
-import CustomCursorComponent from "../../components/customCursorComponent";
+import CustomCursorComponent from "../../components/ui/cursor/customCursorComponent";
 import { LabelComponent } from "../../components/ui/label/label";
 import useInput from "../../hooks/input.hook";
 import { SignInDto } from "../../dto/signin.dto";
 import { AuthService } from "../../services/auth.service";
+import { Toaster, toast } from "sonner";
+import { AxiosError } from "axios";
+import UserStore from "../../stores/user.store";
+import { User } from "../../interfaces/IUser";
 
 export const SignIn: React.FC = () => {
+  const navigate = useNavigate();
+  const { changeAllFields } = UserStore;
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });
   const password = useInput("", { minLength: 8, isEmpty: true });
 
@@ -45,15 +51,39 @@ export const SignIn: React.FC = () => {
     };
     try {
       const response = await AuthService.postSignIn(data);
-      console.log(response);
+      changeAllFields(response.data as User);
+      navigate("/", { replace: true });
     } catch (error) {
-      console.error("Error during signup:", error);
+      if (error instanceof AxiosError) {
+        switch (error.response?.status) {
+          case 404:
+            toast.error("Пользователь несуществует");
+            break;
+          case 401:
+            toast.error("Неправильный пароль");
+            break;
+          case 500:
+            toast.error("Произошла серверная ошибка");
+            break;
+          default:
+            toast.error(
+              error.response?.data.message || "Во время входа произошла ошибка"
+            );
+        }
+      } else {
+        toast.error("Произошла непредвиденная ошибка");
+      }
     }
   };
 
   return (
     <main className={`${styles.main}  user-select-none`}>
       <CustomCursorComponent highlight />
+      <Toaster
+        position="bottom-center"
+        richColors
+        toastOptions={{ duration: 4000 }}
+      />
       <h1 className={`${styles.title}`}>Incidents</h1>
       <section className={`${styles.wrapper}`}>
         <FormComponent title="Вход">

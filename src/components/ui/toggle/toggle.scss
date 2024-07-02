@@ -50,6 +50,12 @@
     content: '🌙';
 }
 
+.toggle-checkbox:focus+.toggle-label {
+    outline: 1.5px solid rgb(255, 255, 255);
+    border: 1.5px solid rgb(0, 0, 0);
+    transition: none;
+}
+
 .toggle__wrapper {
     position: relative;
 

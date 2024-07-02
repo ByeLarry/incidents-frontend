@@ -1,6 +1,16 @@
 import { YMapMarker } from "ymap3-components";
-import { MapMarkerProps } from "../../../propses/MapMarkerProps";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { LngLat } from "@yandex/ymaps3-types";
+
+interface MapMarkerProps {
+  coords: [number, number] | LngLat;
+  color?: string;
+  size?: number;
+  id?: string;
+  Key?: string;
+  source?: string;
+}
+
 export const MapMarkerAlt = (props: MapMarkerProps) => {
   return (
     <YMapMarker coordinates={props.coords} id={props.id} key={props.Key} source={props.source}>
