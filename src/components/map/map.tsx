@@ -72,23 +72,16 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
 
   const onResetCamera = useCallback(() => {
     if (ymap) {
-      if (ymap.azimuth < (180 * Math.PI) / 180) {
-        ymap.update({
-          camera: {
-            tilt: ymap.tilt,
-            azimuth: (0 * Math.PI) / 180,
-            duration: 250,
-          },
-        });
-      } else {
-        ymap.update({
-          camera: {
-            tilt: ymap.tilt,
-            azimuth: (360 * Math.PI) / 180,
-            duration: 250,
-          },
-        });
-      }
+      ymap.update({
+        camera: {
+          tilt: ymap.tilt,
+          azimuth:
+            ymap.azimuth < (180 * Math.PI) / 180
+              ? (0 * Math.PI) / 180
+              : (360 * Math.PI) / 180,
+          duration: 250,
+        },
+      });
     }
   }, [ymap]);
 
@@ -98,7 +91,14 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
         return;
       }
       ymap.update({
-        camera: { tilt: ymap.tilt, azimuth: ymap.azimuth, duration: 250 },
+        camera: {
+          tilt: ymap.tilt,
+          azimuth:
+            ymap.azimuth > (180 * Math.PI) / 180
+              ? ymap.azimuth - (360 * Math.PI) / 180
+              : ymap.azimuth,
+          duration: 350,
+        },
         location: { center: position, zoom: ymap.zoom },
       });
       setCoords(position);
