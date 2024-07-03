@@ -72,7 +72,23 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
 
   const onResetCamera = useCallback(() => {
     if (ymap) {
-      ymap.update({ camera: { tilt: ymap.tilt, azimuth: 0, duration: 250 } });
+      if (ymap.azimuth < (180 * Math.PI) / 180) {
+        ymap.update({
+          camera: {
+            tilt: ymap.tilt,
+            azimuth: (0 * Math.PI) / 180,
+            duration: 250,
+          },
+        });
+      } else {
+        ymap.update({
+          camera: {
+            tilt: ymap.tilt,
+            azimuth: (360 * Math.PI) / 180,
+            duration: 250,
+          },
+        });
+      }
     }
   }, [ymap]);
 
