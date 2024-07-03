@@ -89,10 +89,7 @@ export const SignIn: React.FC = () => {
       />
       <h1 className={`${styles.title}`}>Incidents</h1>
       <section className={`${styles.wrapper}`}>
-        <FormComponent
-          title="Вход"
-          onSubmit={onSubmit}
-        >
+        <FormComponent title="Вход" onSubmit={onSubmit}>
           <div className="form__item">
             <InputComponent
               type="email"
