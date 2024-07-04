@@ -41,7 +41,6 @@ const App = observer(() => {
   useEffect(() => {
     if (!user || user.activated === undefined) return;
     if (user.activated === false) {
-      console.log("user:", user.activated);
       toast.info("Почта не подтверждена");
     }
   }, [user]);

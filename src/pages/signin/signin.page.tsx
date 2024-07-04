@@ -14,13 +14,14 @@ import { AxiosError } from "axios";
 import UserStore from "../../stores/user.store";
 import { User } from "../../interfaces/IUser";
 import csrfStore from "../../stores/csrf.store";
+import { useState } from "react";
 
 export const SignIn: React.FC = () => {
   const navigate = useNavigate();
   const { changeUser } = UserStore;
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });
   const password = useInput("", { minLength: 8, isEmpty: true });
-
+  const [submitting, setSubmitting] = useState(false);
   const getEmailErrorMessage = () => {
     if (email.isDirty) {
       if (email.isEmpty) {
@@ -52,11 +53,14 @@ export const SignIn: React.FC = () => {
       password: password.value,
     };
     try {
+      setSubmitting(true);
       const response = await AuthService.postSignIn(data);
       changeUser(response.data as User);
       csrfStore.changeCsrf(response.data.csrf_token);
       navigate("/", { replace: true });
+      setSubmitting(false);
     } catch (error) {
+      setSubmitting(false);
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
           case 404:
@@ -126,7 +130,7 @@ export const SignIn: React.FC = () => {
           </div>
 
           <ButtonComponent
-            disabled={!email.inputValid || !password.inputValid}
+            disabled={!email.inputValid || !password.inputValid || submitting}
             type="submit"
           >
             Войти

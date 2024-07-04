@@ -16,6 +16,7 @@ import UserStore from "../../stores/user.store";
 import { User } from "../../interfaces/IUser";
 import { useNavigate } from "react-router-dom";
 import csrfStore from "../../stores/csrf.store";
+import { useState } from "react";
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export const SignUp: React.FC = () => {
   const name = useInput("", { minLength: 3, isEmpty: true });
   const surname = useInput("", { minLength: 3, isEmpty: true });
   const confirmPassword = useInput("", { minLength: 8, isEmpty: true });
+  const [submitting, setSubmitting] = useState(false);
   const getEmailErrorMessage = () => {
     if (email.isDirty) {
       if (email.isEmpty) {
@@ -94,11 +96,14 @@ export const SignUp: React.FC = () => {
       surname: surname.value,
     };
     try {
+      setSubmitting(true);
       const response = await AuthService.postSignUp(data);
       changeUser(response.data as User);
       csrfStore.changeCsrf(response.data.csrf_token);
       navigate("/", { replace: true });
+      setSubmitting(false);
     } catch (error) {
+      setSubmitting(false);
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
           case 409:
@@ -219,6 +224,7 @@ export const SignUp: React.FC = () => {
           </div>
           <ButtonComponent
             disabled={
+              submitting ||
               !email.inputValid ||
               !password.inputValid ||
               !confirmPassword.inputValid ||
