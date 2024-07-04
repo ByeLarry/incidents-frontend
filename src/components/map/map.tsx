@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import "../../index.scss";
 import {
   YMap,
@@ -10,11 +9,12 @@ import {
   YMapDefaultSchemeLayer,
   YMapFeatureDataSource,
   YMapGeolocationControl,
+  YMapCustomClusterer,
   YMapLayer,
   YMapListener,
 } from "ymap3-components";
 import * as YMaps from "@yandex/ymaps3-types";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CustomMapSchemaLayer } from "./custom-map-shcema-layer/customMapSchemaLayer";
 import styles from "./map.module.scss";
 import { GeoService } from "../../services/geo.service";
@@ -22,12 +22,15 @@ import { MapMarkerAlt } from "./markers/marker-al";
 import { MapMarker } from "./markers/marker";
 import { Spiner } from "../ui/spiner/spiner";
 import { FaCompass } from "react-icons/fa";
-
+import { io, Socket } from "socket.io-client";
+import { CoordsDto } from "../../dto/coords.dto";
+import { MsgEnum } from "../../utils/msg.enum";
+import { Feature } from "@yandex/ymaps3-clusterer";
+import { markerFn, clusterFn, SOURCE } from "./cluster";
 interface MapProps {
   lightMode: boolean;
 }
 
-const SOURCE = "source";
 export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
   const onUpdate: YMaps.MapEventUpdateHandler = useCallback((object) => {
     // console.log("[onUpdate]: ", object);
@@ -41,6 +44,26 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
   const [mapCenter, setMapCenter] = useState<YMaps.LngLat>([0, 0]);
   const [mapZoom, setMapZoom] = useState(15);
   const [isMapInitialized, setIsMapInitialized] = useState(false);
+  const [points, setPoints] = useState<Feature[]>([]);
+  const marker = useCallback(markerFn, []);
+  const cluster = useCallback(clusterFn, []);
+
+  const socket = useRef<Socket | null>(null);
+  useEffect(() => {
+    socket.current = io(import.meta.env.VITE_SOCKET_CONNECT, {
+      reconnection: false,
+    });
+    socket.current.on(MsgEnum.CONNECT, () => {
+      console.log("connected");
+    });
+    socket.current.on(MsgEnum.DISCONNECT, () => {
+      console.log("disconnected");
+    });
+    socket.current.on(MsgEnum.MAP_INIT_RECV, (points: Feature[]) => {
+      setPoints(points);
+      console.log("[INIT_MAP_RECV]: ", points);
+    });
+  }, []);
 
   useEffect(() => {
     if (ymap) {
@@ -53,15 +76,15 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
   }, [lightMode, ymap]);
 
   useEffect(() => {
-    console.log("[map.useEffect]: ");
     if (!ymap || isMapInitialized) return;
-
     const fetchData = async () => {
       try {
         const { latitude, longitude } = await GeoService.getCurrentLocation();
         // console.log("[getCurrentLocationFromBrowserAPI]: ", [latitude, longitude]);
         setCoords([longitude, latitude]);
         setMapCenter([longitude, latitude]);
+        const coords: CoordsDto = { lat: latitude, lng: longitude };
+        socket.current?.emit(MsgEnum.MAP_INIT_SEND, coords);
         setIsMapInitialized(true);
       } catch (error) {
         console.error(error);
@@ -151,12 +174,17 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
             <YMapDefaultFeaturesLayer visible={false} />
             <YMapFeatureDataSource id={SOURCE} />
             <YMapLayer source={SOURCE} type="markers" zIndex={1800} />
-
+            <YMapCustomClusterer
+              marker={marker}
+              cluster={cluster}
+              features={points}
+              gridSize={64}
+            />
             <YMapListener onUpdate={onUpdate} />
             <YMapDefaultMarker coordinates={[0.25, 0.25]} source={SOURCE} />
 
             <MapMarkerAlt coords={coords} color="green" source={SOURCE} />
-            <MapMarker coords={[0, 0]} color="red" />
+            <MapMarker source={SOURCE} coords={[0, 0]} color="red" />
             <YMapControls position="top right" orientation="vertical">
               <YMapGeolocationControl
                 onGeolocatePosition={onGeolocatePositionHandler}

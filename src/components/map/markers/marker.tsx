@@ -13,7 +13,7 @@ interface MapMarkerProps {
 
 export const MapMarker = (props: MapMarkerProps) => {
   return (
-    <YMapMarker coordinates={props.coords} id={props.id} key={props.Key}>
+    <YMapMarker coordinates={props.coords} id={props.id} key={props.Key} source={props.source}>
       <FaMapMarker
         style={{
           position: "absolute",
