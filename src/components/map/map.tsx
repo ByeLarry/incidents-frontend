@@ -11,30 +11,30 @@ import {
   YMapGeolocationControl,
   YMapCustomClusterer,
   YMapLayer,
-  YMapListener,
 } from "ymap3-components";
 import * as YMaps from "@yandex/ymaps3-types";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CustomMapSchemaLayer } from "./custom-map-shcema-layer/customMapSchemaLayer";
 import styles from "./map.module.scss";
 import { GeoService } from "../../services/geo.service";
-import { MapMarkerAlt } from "./markers/marker-al";
-import { MapMarker } from "./markers/marker";
+import { CurrentPositionMarkerComponent } from "./markers/markerCurrentPositionComponent";
+import { MarkerComponent, MarkerWrapped } from "./markers/markerComponent";
 import { Spiner } from "../ui/spiner/spiner";
 import { FaCompass } from "react-icons/fa";
 import { io, Socket } from "socket.io-client";
 import { CoordsDto } from "../../dto/coords.dto";
 import { MsgEnum } from "../../utils/msg.enum";
 import { Feature } from "@yandex/ymaps3-clusterer";
-import { markerFn, clusterFn, SOURCE } from "./cluster";
+import { SOURCE } from "./cluster";
+import { ClusterComponent } from "./markers/clusterComponent";
 interface MapProps {
   lightMode: boolean;
 }
 
 export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
-  const onUpdate: YMaps.MapEventUpdateHandler = useCallback((object) => {
-    // console.log("[onUpdate]: ", object);
-  }, []);
+  // const onUpdate: YMaps.MapEventUpdateHandler = useCallback((object) => {
+  //    console.log("[onUpdate]: ", object);
+  // }, []);
   const [coords, setCoords] = useState<YMaps.LngLat>([0, 0]);
   const lightMode = props.lightMode;
   const [ymap, setYmap] = useState<YMaps.YMap>();
@@ -45,8 +45,8 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
   const [mapZoom, setMapZoom] = useState(15);
   const [isMapInitialized, setIsMapInitialized] = useState(false);
   const [points, setPoints] = useState<Feature[]>([]);
-  const marker = useCallback(markerFn, []);
-  const cluster = useCallback(clusterFn, []);
+  const marker = useCallback(MarkerWrapped, []);
+  const cluster = useCallback(ClusterComponent, []);
 
   const socket = useRef<Socket | null>(null);
   useEffect(() => {
@@ -80,7 +80,6 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
     const fetchData = async () => {
       try {
         const { latitude, longitude } = await GeoService.getCurrentLocation();
-        // console.log("[getCurrentLocationFromBrowserAPI]: ", [latitude, longitude]);
         setCoords([longitude, latitude]);
         setMapCenter([longitude, latitude]);
         const coords: CoordsDto = { lat: latitude, lng: longitude };
@@ -127,7 +126,6 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
       setCoords(position);
       setMapCenter(position);
       setMapZoom(ymap.zoom);
-      // console.log(`[onGeolocatePositionFromControl]: ${position}`);
     },
     [ymap]
   );
@@ -180,11 +178,14 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
               features={points}
               gridSize={64}
             />
-            <YMapListener onUpdate={onUpdate} />
+            {/* <YMapListener onUpdate={onUpdate} /> */}
             <YMapDefaultMarker coordinates={[0.25, 0.25]} source={SOURCE} />
-
-            <MapMarkerAlt coords={coords} color="green" source={SOURCE} />
-            <MapMarker source={SOURCE} coords={[0, 0]} color="red" />
+            <CurrentPositionMarkerComponent
+              coords={coords}
+              color="green"
+              source={SOURCE}
+            />
+            <MarkerComponent source={SOURCE} coords={[0, 0]} color="red" />
             <YMapControls position="top right" orientation="vertical">
               <YMapGeolocationControl
                 onGeolocatePosition={onGeolocatePositionHandler}
