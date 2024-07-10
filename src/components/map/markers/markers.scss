@@ -79,3 +79,17 @@
 .popup-footer {
     margin-top: 1rem;
 }
+
+.cluster {
+    border-radius: 50%;
+    background: linear-gradient(to bottom, rgb(0, 0, 0), rgb(255, 0, 0));
+    color: white;
+    width: 42px;
+    height: 42px;
+    outline: solid 3px rgb(255, 0, 0);
+    outline-offset: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translate(-50%, -50%);
+}

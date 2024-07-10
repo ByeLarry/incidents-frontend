@@ -19,6 +19,7 @@ import { VerifyMarkDto } from "../../../dto/verify-mark.dto";
 import { MarkDto } from "../../../dto/mark.dto";
 import { formatDistance } from "../../../utils/formatDistance";
 import { colors } from "../../../utils/incidents-colors";
+import { TooltipComponent } from "../../ui/tooltip/tooltip";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -168,23 +169,28 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
               </p>
 
               <div className="popup-footer">
-                <ButtonComponent
-                  modalButton
-                  type="button"
-                  ariaLabel="Подтверждаю"
-                  onClick={onVerifyHandler}
-                  disabled={submittingVerify}
-                  verifyed={!verified && !isEmptyUser()}
-                  categoryId={markData?.category.id as number}
+                <TooltipComponent
+                  text="Отменить подтверждение"
+                  visible={verified && !isEmptyUser()}
                 >
-                  {submittingVerify ? (
-                    <Spiner lightMode visible size={16} />
-                  ) : verified ? (
-                    "Подтверждаю"
-                  ) : (
-                    "Подтверждаю"
-                  )}
-                </ButtonComponent>
+                  <ButtonComponent
+                    modalButton
+                    type="button"
+                    ariaLabel="Подтверждаю"
+                    onClick={onVerifyHandler}
+                    disabled={submittingVerify}
+                    verifyed={!verified && !isEmptyUser()}
+                    categoryId={markData?.category.id as number}
+                  >
+                    {submittingVerify ? (
+                      <Spiner lightMode visible size={16} />
+                    ) : verified ? (
+                      "Подтверждаю"
+                    ) : (
+                      "Подтверждаю"
+                    )}
+                  </ButtonComponent>
+                </TooltipComponent>
               </div>
             </div>
           ) : (
