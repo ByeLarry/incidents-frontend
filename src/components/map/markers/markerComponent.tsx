@@ -20,6 +20,10 @@ import { MarkDto } from "../../../dto/mark.dto";
 import { formatDistance } from "../../../utils/formatDistance";
 import { colors } from "../../../utils/incidents-colors";
 import { TooltipComponent } from "../../ui/tooltip/tooltip";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import { GiPathDistance } from "react-icons/gi";
+import { GiConfirmed } from "react-icons/gi";
+import { CiCalendarDate } from "react-icons/ci";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -148,9 +152,18 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
           {submitting ? (
             <h4 className="load-title">Загрузка...</h4>
           ) : markData ? (
-            <div className="popup-content">
+            <div
+              className={`popup-content backlight-${
+                colors[markData?.category.id as number]
+              }`}
+            >
               <div className="popup-header">
-                <p className="popup-date">{timeAgo(markData?.createdAt)}</p>
+                <p className="popup-date">
+                  <TooltipComponent text="Дата создания" visible>
+                    <CiCalendarDate size={20} />
+                  </TooltipComponent>
+                  {timeAgo(markData?.createdAt)}
+                </p>
               </div>
               <IncidentCategoryLabel
                 id={markData?.category.id as number}
@@ -158,14 +171,22 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
               />
               <h4 className="popup-title">{markData?.title}</h4>
               <p className="popup-description">
-                Подтвеждений: {verificationCount}
+                <TooltipComponent visible text="Подтверждений">
+                  <GiConfirmed size={24} className="popup-icon" />
+                </TooltipComponent>
+                {verificationCount}
               </p>
               <p className="popup-description">
-                От вас:{" "}
+                <TooltipComponent visible text="Расстояние">
+                  <GiPathDistance size={24} className="popup-icon" />
+                </TooltipComponent>
                 {`${formatDistance(props.properties!["distance"] as number)}`}
               </p>
               <p className="popup-description">
-                Описание: {markData?.description}
+                <TooltipComponent visible text="Описание">
+                  <IoDocumentTextOutline size={24} className="popup-icon" />
+                </TooltipComponent>
+                {markData?.description}
               </p>
 
               <div className="popup-footer">

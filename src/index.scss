@@ -33,11 +33,6 @@ body {
 
 }
 
-// .App {
-//     height: 100%;
-//     width: 100%;
-// }
-
 :root {
     --primary-color: #8774e1;
     --text-primary-color: #8774e1;
@@ -366,7 +361,11 @@ body.dark-mode {
     border-color: $red-accent;
 }
 
-.color-text-red{
+.backlight-red {
+    @include backlight(0, 0, 10rem, 0.9, $red, $red-accent, 1s);
+}
+
+.color-text-red {
     color: $red-accent;
 }
 
@@ -375,7 +374,11 @@ body.dark-mode {
     border-color: $orange-accent;
 }
 
-.color-text-orange{
+.backlight-orange {
+    @include backlight(0, 0, 10rem, 0.9, $orange, $orange-accent, 1s);
+}
+
+.color-text-orange {
     color: $orange-accent;
 }
 
@@ -384,7 +387,11 @@ body.dark-mode {
     border-color: $green-accent;
 }
 
-.color-text-green{
+.backlight-green {
+    @include backlight(0, 0, 10rem, 0.9, $green, $green-accent, 1s);
+}
+
+.color-text-green {
     color: $green-accent;
 }
 
@@ -393,7 +400,11 @@ body.dark-mode {
     border-color: $blue-accent;
 }
 
-.color-text-blue{
+.backlight-blue {
+    @include backlight(0, 0, 10rem, 0.9, $blue, $blue-accent, 1s);
+}
+
+.color-text-blue {
     color: $blue-accent;
 }
 
@@ -402,7 +413,11 @@ body.dark-mode {
     border-color: $purple-accent;
 }
 
-.color-text-purple{
+.backlight-purple {
+    @include backlight(0, 0, 10rem, 0.9, $purple, $purple-accent, 1s);
+}
+
+.color-text-purple {
     color: $purple-accent;
 }
 
@@ -411,6 +426,10 @@ body.dark-mode {
     border-color: $yellow-accent;
 }
 
-.color-text-yellow{
+.backlight-yellow {
+    @include backlight(0, 0, 10rem, 0.9, $yellow, $yellow-accent, 1s);
+}
+
+.color-text-yellow {
     color: $yellow-accent;
 }
