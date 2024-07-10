@@ -12,11 +12,11 @@ export const ClusterComponent = (coordinates: LngLat, features: Feature[]) => (
     <span
       style={{
         borderRadius: "50%",
-        background: "rgb(219, 82, 19)",
+        background: "linear-gradient(to bottom, red, black)",
         color: "white",
         width: 42,
         height: 42,
-        outline: "solid 3px rgb(219, 82, 19)",
+        outline: "solid 3px black",
         outlineOffset: "3px",
         display: "flex",
         justifyContent: "center",

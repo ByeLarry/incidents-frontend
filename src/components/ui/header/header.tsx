@@ -102,7 +102,7 @@ export const Header: React.FC = observer(() => {
         </ul>
       </nav>
       <ModalComponent isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <h3 style={{ textAlign: "center", fontWeight: "normal" }}>
+        <h3 className={styles.modal__title}>
           Вы уверены, что хотите выйти?
         </h3>
         <div className={styles.buttons__wrapper}>

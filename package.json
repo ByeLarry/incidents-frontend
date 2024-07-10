@@ -13,6 +13,7 @@
     "@yandex/ymaps3-clusterer": "^0.0.9",
     "@yandex/ymaps3-types": "^0.0.27",
     "axios": "^1.7.2",
+    "date-fns": "^3.6.0",
     "mobx": "^6.12.4",
     "mobx-react-lite": "^4.0.7",
     "react": "^18.3.1",

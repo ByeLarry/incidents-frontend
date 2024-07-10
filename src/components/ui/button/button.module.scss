@@ -103,3 +103,11 @@
         margin: 0;
     }
 }
+
+.button_verifyed{
+    background-color: $light-green;
+
+    &:hover {
+        background-color: $light-green;
+    }
+}

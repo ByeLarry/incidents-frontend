@@ -1,6 +1,7 @@
 import { YMapMarker } from "ymap3-components";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { LngLat } from "@yandex/ymaps3-types";
+import { memo } from "react";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -12,7 +13,7 @@ interface MapMarkerProps {
   zIndex?: number;
 }
 
-export const CurrentPositionMarkerComponent = (props: MapMarkerProps) => {
+export const CurrentPositionMarkerComponent = memo((props: MapMarkerProps) => {
   return (
     <YMapMarker
       coordinates={props.coords}
@@ -33,4 +34,4 @@ export const CurrentPositionMarkerComponent = (props: MapMarkerProps) => {
       />
     </YMapMarker>
   );
-};
+});

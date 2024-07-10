@@ -9,6 +9,21 @@ $accent-color: #1e1e1e;
 $light-gray-second: #f5f5f5;
 $dark-gray-second: #34363a;
 $transparent-color: rgba(0, 0, 0, 0);
+$light-green: rgba(130, 217, 141, 0.5);
+
+$red: rgba(157, 35, 35, 0.3);
+$red-accent: rgba(157, 35, 35, 1);
+$orange: rgba(255, 127, 0, 0.3);
+$orange-accent: rgba(255, 127, 0, 1);
+$green: rgba(0, 128, 0, 0.3);
+$green-accent: rgba(0, 128, 0, 1);
+$blue: rgba(0, 0, 255, 0.3);
+$blue-accent: rgba(0, 0, 255, 1);
+$purple: rgba(128, 0, 128, 0.3);
+$purple-accent: rgba(128, 0, 128, 1);
+$yellow: rgba(255, 255, 0, 0.3);
+$yellow-accent: rgba(255, 255, 0, 1);
+
 
 
 body {
@@ -343,4 +358,59 @@ body.dark-mode {
 
 .border-box {
     box-sizing: border-box;
+}
+
+
+.color-red {
+    background-color: $red;
+    border-color: $red-accent;
+}
+
+.color-text-red{
+    color: $red-accent;
+}
+
+.color-orange {
+    background-color: $orange;
+    border-color: $orange-accent;
+}
+
+.color-text-orange{
+    color: $orange-accent;
+}
+
+.color-green {
+    background-color: $green;
+    border-color: $green-accent;
+}
+
+.color-text-green{
+    color: $green-accent;
+}
+
+.color-blue {
+    background-color: $blue;
+    border-color: $blue-accent;
+}
+
+.color-text-blue{
+    color: $blue-accent;
+}
+
+.color-purple {
+    background-color: $purple;
+    border-color: $purple-accent;
+}
+
+.color-text-purple{
+    color: $purple-accent;
+}
+
+.color-yellow {
+    background-color: $yellow;
+    border-color: $yellow-accent;
+}
+
+.color-text-yellow{
+    color: $yellow-accent;
 }

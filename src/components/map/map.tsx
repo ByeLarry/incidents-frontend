@@ -13,12 +13,12 @@ import {
   YMapLayer,
 } from "ymap3-components";
 import * as YMaps from "@yandex/ymaps3-types";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import { CustomMapSchemaLayer } from "./custom-map-shcema-layer/customMapSchemaLayer";
 import styles from "./map.module.scss";
 import { GeoService } from "../../services/geo.service";
 import { CurrentPositionMarkerComponent } from "./markers/markerCurrentPositionComponent";
-import { MarkerComponent, MarkerWrapped } from "./markers/markerComponent";
+import { MarkerComponent } from "./markers/markerComponent";
 import { Spiner } from "../ui/spiner/spiner";
 import { FaCompass } from "react-icons/fa";
 import { io, Socket } from "socket.io-client";
@@ -27,11 +27,14 @@ import { MsgEnum } from "../../utils/msg.enum";
 import { Feature } from "@yandex/ymaps3-clusterer";
 import { SOURCE } from "./cluster";
 import { ClusterComponent } from "./markers/clusterComponent";
+import { MarksService } from "../../services/marks.service";
+import { AxiosError } from "axios";
+import { toast } from "sonner";
 interface MapProps {
   lightMode: boolean;
 }
 
-export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
+export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
   // const onUpdate: YMaps.MapEventUpdateHandler = useCallback((object) => {
   //    console.log("[onUpdate]: ", object);
   // }, []);
@@ -47,23 +50,9 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
   const [points, setPoints] = useState<Feature[]>([]);
   const marker = useCallback(MarkerWrapped, []);
   const cluster = useCallback(ClusterComponent, []);
+  const [submitting, setSubmitting] = useState(false);
 
   const socket = useRef<Socket | null>(null);
-  useEffect(() => {
-    socket.current = io(import.meta.env.VITE_SOCKET_CONNECT, {
-      reconnection: false,
-    });
-    socket.current.on(MsgEnum.CONNECT, () => {
-      console.log("connected");
-    });
-    socket.current.on(MsgEnum.DISCONNECT, () => {
-      console.log("disconnected");
-    });
-    socket.current.on(MsgEnum.MAP_INIT_RECV, (points: Feature[]) => {
-      setPoints(points);
-      console.log("[INIT_MAP_RECV]: ", points);
-    });
-  }, []);
 
   useEffect(() => {
     if (ymap) {
@@ -77,20 +66,57 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
 
   useEffect(() => {
     if (!ymap || isMapInitialized) return;
-    const fetchData = async () => {
+
+    const fetchMarks = async (data: CoordsDto) => {
+      try {
+        setSubmitting(true);
+        const response = await MarksService.getMarks(data);
+        setPoints(response.data);
+        setSubmitting(false);
+      } catch (error) {
+        setSubmitting(false);
+        if (error instanceof AxiosError) {
+          switch (error.response?.status) {
+            case 404:
+              toast.error("Точки не найдены");
+              break;
+            case 500:
+              toast.error("Сервис данных не работает");
+              break;
+            default:
+              toast.error("Во время получения точек произошла ошибка");
+          }
+        }
+      }
+    };
+
+    const fetchCurrentPosition = async () => {
       try {
         const { latitude, longitude } = await GeoService.getCurrentLocation();
         setCoords([longitude, latitude]);
         setMapCenter([longitude, latitude]);
         const coords: CoordsDto = { lat: latitude, lng: longitude };
-        socket.current?.emit(MsgEnum.MAP_INIT_SEND, coords);
+        fetchMarks(coords);
         setIsMapInitialized(true);
       } catch (error) {
         console.error(error);
       }
     };
-    fetchData();
-  }, [isMapInitialized, ymap]);
+
+    fetchCurrentPosition();
+  }, [coords, isMapInitialized, ymap]);
+
+  useEffect(() => {
+    socket.current = io(import.meta.env.VITE_SOCKET_CONNECT, {
+      reconnection: false,
+    });
+    socket.current.on(MsgEnum.CONNECT, () => {
+      console.log("connected");
+    });
+    socket.current.on(MsgEnum.DISCONNECT, () => {
+      console.log("disconnected");
+    });
+  }, [coords]);
 
   const onResetCamera = useCallback(() => {
     if (ymap) {
@@ -133,7 +159,7 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
   return (
     <>
       <Spiner
-        visible={isLoadingMap}
+        visible={isLoadingMap || submitting}
         fixed
         zIndex={2000}
         lightMode={lightMode}
@@ -198,6 +224,20 @@ export const MapComponent: React.FC<MapProps> = (props: MapProps) => {
           </YMap>
         </YMapComponentsProvider>
       </div>
+    </>
+  );
+});
+
+const MarkerWrapped = (feature: Feature) => {
+  return (
+    <>
+      <MarkerComponent
+        markId={feature.id}
+        key={feature.id}
+        coords={feature.geometry.coordinates}
+        source={SOURCE}
+        properties={feature.properties}
+      />
     </>
   );
 };
