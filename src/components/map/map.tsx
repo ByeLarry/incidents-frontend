@@ -10,10 +10,10 @@ import {
   YMapGeolocationControl,
   YMapCustomClusterer,
   YMapLayer,
+  YMapListener,
 } from "ymap3-components";
 import * as YMaps from "@yandex/ymaps3-types";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
-import { CustomMapSchemaLayer } from "./custom-map-shcema-layer/customMapSchemaLayer";
 import styles from "./map.module.scss";
 import { GeoService } from "../../services/geo.service";
 import { CurrentPositionMarkerComponent } from "./markers/markerCurrentPositionComponent";
@@ -31,6 +31,8 @@ import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { MdOutlinePlace } from "react-icons/md";
 import { MarkerCandidateIncidentComponent } from "./markers/markerCandidateIncidentComponent";
+import { debounce } from "lodash";
+
 interface MapProps {
   lightMode: boolean;
   isEmptyUser: boolean;
@@ -56,24 +58,33 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
     useState<boolean>(false);
   const socket = useRef<Socket | null>(null);
 
+  const onPointsUpdateHandler = useCallback((data: Feature) => {
+    setPoints((prev) => [...prev, data]);
+  }, []);
+
   useEffect(() => {
-    if (ymap) {
-      setMapAzimuth(ymap.azimuth);
-      setMapTilt(ymap.tilt);
-      const temp = [...ymap.center] as [number, number];
-      setMapCenter(temp);
-      setMapZoom(ymap.zoom);
-    }
-  }, [lightMode, ymap]);
+    if (socket.current) return;
+    socket.current = io(import.meta.env.VITE_SOCKET_CONNECT, {
+      reconnection: false,
+    });
+    socket.current.on(MsgEnum.CONNECT, () => {
+      console.log("Web socket connected");
+    });
+    socket.current.on(MsgEnum.DISCONNECT, () => {
+      console.log("Web socket disconnected");
+    });
+    socket.current.on("new-mark", onPointsUpdateHandler);
+  }, [onPointsUpdateHandler]);
 
   useEffect(() => {
     if (!ymap || isMapInitialized) return;
-
     const fetchMarks = async (data: CoordsDto) => {
       try {
         setSubmitting(true);
-        const response: AxiosResponse<Feature[]> = await MarksService.getMarks(data);
-        setPoints(response.data);
+        const response: AxiosResponse<Feature[]> = await MarksService.getMarks(
+          data
+        );
+        setPoints((prev) => [...prev, ...response.data]);
         setSubmitting(false);
       } catch (error) {
         setSubmitting(false);
@@ -106,21 +117,8 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
         );
       }
     };
-
     fetchCurrentPosition();
   }, [currentCoords, isMapInitialized, ymap]);
-
-  useEffect(() => {
-    socket.current = io(import.meta.env.VITE_SOCKET_CONNECT, {
-      reconnection: false,
-    });
-    socket.current.on(MsgEnum.CONNECT, () => {
-      console.log("connected");
-    });
-    socket.current.on(MsgEnum.DISCONNECT, () => {
-      console.log("disconnected");
-    });
-  }, []);
 
   const onResetCamera = useCallback(() => {
     if (ymap) {
@@ -131,39 +129,36 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
             ymap.azimuth < (180 * Math.PI) / 180
               ? (0 * Math.PI) / 180
               : (360 * Math.PI) / 180,
-          duration: 250,
+          duration: 350,
         },
       });
     }
   }, [ymap]);
 
-  const onGeolocatePositionHandler = useCallback(
-    (position: YMaps.LngLat) => {
-      if (!ymap) {
-        return;
-      }
-      ymap.update({
-        camera: {
-          tilt: ymap.tilt,
-          azimuth:
-            ymap.azimuth > (180 * Math.PI) / 180
-              ? ymap.azimuth - (360 * Math.PI) / 180
-              : ymap.azimuth,
-          duration: 350,
-        },
-        location: { center: position, zoom: ymap.zoom },
-      });
-      setCurrentCoords(position);
-      setMapCenter(position);
-      setMapZoom(ymap.zoom);
-    },
-    [ymap]
-  );
+  const onMapUpdateHandler: YMaps.MapEventUpdateHandler = debounce((obj) => {
+    setMapCenter(obj.location.center);
+    setMapZoom(obj.location.zoom);
+    setMapTilt(obj.camera.tilt || 0);
+    setMapAzimuth(obj.camera.azimuth || 0);
+  }, 100);
 
-  const onSpawnMarkerControlClick = useCallback(() => {
+  const onGeolocatePositionHandler = (position: YMaps.LngLat) => {
+    setCurrentCoords(position);
+    setMapCenter(position);
+    setMapZoom(ymap?.zoom || 15);
+    setMapTilt(0);
+    setMapAzimuth(0);
+  };
+
+  const onSpawnMarkerControlClick = () => {
+    if (!selectIncidentMode) {
+      setMapCenter(currentCoords);
+      setMapAzimuth(0);
+      setMapTilt(0);
+    }
     setSelectIncidentMode(!selectIncidentMode);
     setCandidateIncidentVisible(!candidateIncidentVisible);
-  }, [candidateIncidentVisible, selectIncidentMode]);
+  };
 
   return (
     <>
@@ -205,8 +200,7 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
             mode="vector"
             theme={!lightMode ? "dark" : "light"}
           >
-            {!lightMode && <CustomMapSchemaLayer />}
-            {lightMode && <YMapDefaultSchemeLayer />}
+            <YMapDefaultSchemeLayer />
             <YMapDefaultFeaturesLayer visible={false} />
             <YMapFeatureDataSource id={SOURCE} />
             <YMapLayer source={SOURCE} type="markers" zIndex={1800} />
@@ -216,7 +210,7 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
               features={points}
               gridSize={16}
             />
-
+            <YMapListener onUpdate={onMapUpdateHandler} />
             <MarkerCandidateIncidentComponent
               coords={currentCoords}
               visible={candidateIncidentVisible}

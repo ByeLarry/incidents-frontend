@@ -25,6 +25,7 @@ import { GiPathDistance } from "react-icons/gi";
 import { CiCircleCheck } from "react-icons/ci";
 import { CiCalendarDate } from "react-icons/ci";
 import { VerifiedCountDto } from "../../../dto/verified-count.dto";
+import { GeoService } from "../../../services/geo.service";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -56,14 +57,18 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
     setPopupState(true);
     setZIndex(200);
     try {
+      const currentCoords = await GeoService.getCurrentLocation();
       setSubmitting(true);
       const data: MarkDto = {
         markId: props.markId as string,
         userId: user?._id as string,
+        lng: currentCoords.latitude,
+        lat: currentCoords.longitude,
       };
       const response: AxiosResponse<MarkRecvDto> = await MarksService.getMark(
         data
       );
+      console.log(response.data);
       setVerified(response.data.isMyVerify || false);
       setVerificationCount(response.data.verified || 0);
       setMarkData(response.data);
@@ -182,7 +187,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                   <GiPathDistance size={24} className="popup-icon" />
                 </TooltipComponent>
                 <p className="popup-text">
-                  {`${formatDistance(props.properties!["distance"] as number)}`}
+                  {`${formatDistance(markData.distance as number)}`}
                 </p>
               </div>
               <div className="popup-description">

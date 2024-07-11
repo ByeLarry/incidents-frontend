@@ -18,6 +18,8 @@ export class MarksService {
       const params = new URLSearchParams({
         userId: data.userId.toString(),
         markId: data.markId.toString(),
+        lat: data.lat.toString(),
+        lng: data.lng.toString(),
       }).toString();
       const response = await axios.get<MarkRecvDto>(`${url}?${params}`);
       return response;
@@ -87,9 +89,7 @@ export class MarksService {
 
   static async postCreateMark(data: CreateMarkDto) {
     try {
-      const url = `${
-        import.meta.env.VITE_API_GETAWAY_HOST
-      }/api/marks/create`;
+      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/marks/create`;
       const response = await axios.post<Feature>(`${url}`, data, {
         withCredentials: true,
       });

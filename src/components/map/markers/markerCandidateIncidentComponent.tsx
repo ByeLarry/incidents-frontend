@@ -20,7 +20,6 @@ import userStore from "../../../stores/user.store";
 import csrfStore from "../../../stores/csrf.store";
 import { categoryIdFromValue } from "../../../utils/categoryIdFromValue";
 import { CreateMarkDto } from "../../../dto/create-mark.dto";
-import { Feature } from "@yandex/ymaps3-clusterer";
 import { Spiner } from "../../ui/spiner/spiner";
 
 interface Props {
@@ -116,9 +115,7 @@ export const MarkerCandidateIncidentComponent: React.FC<Props> = observer(
             categories
           ) as number,
         };
-        const response: AxiosResponse<Feature> =
-          await MarksService.postCreateMark(data);
-        console.log(response.data);
+        await MarksService.postCreateMark(data);
         setFormSubmitting(false);
         if (props.callback) {
           props.callback();
