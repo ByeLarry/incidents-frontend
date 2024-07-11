@@ -11,7 +11,7 @@ const useInput = (
   const [isDirty, setDirty] = useState(false);
   const valid = useValidation(value, validations);
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
@@ -20,6 +20,7 @@ const useInput = (
   };
   return {
     value,
+    setValue,
     onChange,
     onBlur,
     isDirty,

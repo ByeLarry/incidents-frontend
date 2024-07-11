@@ -40,3 +40,8 @@ label {
 .form_light{
   @include backlight(0, 0, 15rem, 0.9, $accent-color, $dark-gray, 10s);
 }
+
+.basic_form{
+  width: 300px;
+  padding: 10px 20px ;
+}

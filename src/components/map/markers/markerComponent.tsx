@@ -4,7 +4,7 @@ import { LngLat } from "@yandex/ymaps3-types";
 import { useState } from "react";
 import "./markers.scss";
 import { MarksService } from "../../../services/marks.service";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { IoMdClose } from "react-icons/io";
 import { MarkRecvDto } from "../../../dto/mark-recv.dto";
@@ -20,10 +20,11 @@ import { MarkDto } from "../../../dto/mark.dto";
 import { formatDistance } from "../../../utils/formatDistance";
 import { colors } from "../../../utils/incidents-colors";
 import { TooltipComponent } from "../../ui/tooltip/tooltip";
-import { IoDocumentTextOutline } from "react-icons/io5";
+import { PiFileTextThin } from "react-icons/pi";
 import { GiPathDistance } from "react-icons/gi";
-import { GiConfirmed } from "react-icons/gi";
+import { CiCircleCheck } from "react-icons/ci";
 import { CiCalendarDate } from "react-icons/ci";
+import { VerifiedCountDto } from "../../../dto/verified-count.dto";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -60,9 +61,11 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
         markId: props.markId as string,
         userId: user?._id as string,
       };
-      const response = await MarksService.getMark(data);
-      setVerified(response.data.isMyVerify);
-      setVerificationCount(response.data.verified);
+      const response: AxiosResponse<MarkRecvDto> = await MarksService.getMark(
+        data
+      );
+      setVerified(response.data.isMyVerify || false);
+      setVerificationCount(response.data.verified || 0);
       setMarkData(response.data);
       setSubmitting(false);
     } catch (error) {
@@ -95,7 +98,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
           userId: user?._id as string,
           csrf_token: csrf,
         };
-        let response;
+        let response: AxiosResponse<VerifiedCountDto>;
         if (verified) {
           response = await MarksService.postVerifyFalse(data);
           setVerified(false);
@@ -157,38 +160,37 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                 colors[markData?.category.id as number]
               }`}
             >
-              <div className="popup-header">
-                <p className="popup-date">
-                  <TooltipComponent text="Дата создания" visible>
-                    <CiCalendarDate size={20} />
-                  </TooltipComponent>
-                  {timeAgo(markData?.createdAt)}
-                </p>
-              </div>
               <IncidentCategoryLabel
                 id={markData?.category.id as number}
                 name={markData?.category.name as string}
               />
               <h4 className="popup-title">{markData?.title}</h4>
-              <p className="popup-description">
-                <TooltipComponent visible text="Подтверждений">
-                  <GiConfirmed size={24} className="popup-icon" />
+              <div className="popup-description">
+                <TooltipComponent text="Дата создания" visible>
+                  <CiCalendarDate size={24} className="popup-icon" />
                 </TooltipComponent>
-                {verificationCount}
-              </p>
-              <p className="popup-description">
+                <p className="popup-text">{timeAgo(markData?.createdAt)}</p>
+              </div>
+              <div className="popup-description">
+                <TooltipComponent visible text="Подтверждений">
+                  <CiCircleCheck size={24} className="popup-icon" />
+                </TooltipComponent>
+                <p className="popup-text">{verificationCount}</p>
+              </div>
+              <div className="popup-description">
                 <TooltipComponent visible text="Расстояние">
                   <GiPathDistance size={24} className="popup-icon" />
                 </TooltipComponent>
-                {`${formatDistance(props.properties!["distance"] as number)}`}
-              </p>
-              <p className="popup-description">
+                <p className="popup-text">
+                  {`${formatDistance(props.properties!["distance"] as number)}`}
+                </p>
+              </div>
+              <div className="popup-description">
                 <TooltipComponent visible text="Описание">
-                  <IoDocumentTextOutline size={24} className="popup-icon" />
+                  <PiFileTextThin size={24} className="popup-icon" />
                 </TooltipComponent>
-                {markData?.description}
-              </p>
-
+                <p className="popup-text">{markData?.description}</p>
+              </div>
               <div className="popup-footer">
                 <TooltipComponent
                   text="Отменить подтверждение"
@@ -197,7 +199,9 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                   <ButtonComponent
                     modalButton
                     type="button"
-                    ariaLabel="Подтверждаю"
+                    ariaLabel={
+                      verified ? "Отменить подтверждение" : "Подтвердить"
+                    }
                     onClick={onVerifyHandler}
                     disabled={submittingVerify}
                     verifyed={!verified && !isEmptyUser()}
@@ -206,7 +210,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                     {submittingVerify ? (
                       <Spiner lightMode visible size={16} />
                     ) : verified ? (
-                      "Подтверждаю"
+                      "Отменить"
                     ) : (
                       "Подтверждаю"
                     )}

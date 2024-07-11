@@ -1,6 +1,8 @@
 import { Transition } from "react-transition-group";
 import "./modal.scss";
+import "../../index.scss";
 import { IoMdClose } from "react-icons/io";
+import { useRef } from "react";
 
 interface ModalProps {
   children?: React.ReactNode;
@@ -9,11 +11,12 @@ interface ModalProps {
 }
 
 export const ModalComponent: React.FC<ModalProps> = (props: ModalProps) => {
+  const modal = useRef(null);
   return (
     <>
-      <Transition in={props.isOpen} timeout={350} unmountOnExit>
+      <Transition nodeRef={modal} in={props.isOpen} timeout={350} unmountOnExit>
         {(state) => (
-          <div className={`modal modal--${state}`}>
+          <div ref={modal} className={`modal modal--${state}`}>
             <div className="modal-wrapper">
               <div className="modal-content">
                 <button

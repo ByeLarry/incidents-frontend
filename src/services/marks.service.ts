@@ -4,6 +4,9 @@ import { Feature } from "@yandex/ymaps3-clusterer";
 import { CoordsDto } from "../dto/coords.dto";
 import { VerifyMarkDto } from "../dto/verify-mark.dto";
 import { MarkDto } from "../dto/mark.dto";
+import { CategoryDto } from "../dto/categories.dto";
+import { VerifiedCountDto } from "../dto/verified-count.dto";
+import { CreateMarkDto } from "../dto/create-mark.dto";
 
 export class MarksService {
   static async getMark(data: MarkDto) {
@@ -44,7 +47,7 @@ export class MarksService {
       const url = `${
         import.meta.env.VITE_API_GETAWAY_HOST
       }/api/marks/verify/true`;
-      const response = await axios.post(`${url}`, data, {
+      const response = await axios.post<VerifiedCountDto>(`${url}`, data, {
         withCredentials: true,
       });
       return response;
@@ -59,7 +62,35 @@ export class MarksService {
       const url = `${
         import.meta.env.VITE_API_GETAWAY_HOST
       }/api/marks/verify/false`;
-      const response = await axios.post(`${url}`, data, {
+      const response = await axios.post<VerifiedCountDto>(`${url}`, data, {
+        withCredentials: true,
+      });
+      return response;
+    } catch (error) {
+      console.error("Axios error:", error);
+      throw error;
+    }
+  }
+
+  static async getCategories() {
+    try {
+      const url = `${
+        import.meta.env.VITE_API_GETAWAY_HOST
+      }/api/marks/categories`;
+      const response = await axios.get<CategoryDto[]>(`${url}`);
+      return response;
+    } catch (error) {
+      console.error("Axios error:", error);
+      throw error;
+    }
+  }
+
+  static async postCreateMark(data: CreateMarkDto) {
+    try {
+      const url = `${
+        import.meta.env.VITE_API_GETAWAY_HOST
+      }/api/marks/create`;
+      const response = await axios.post<Feature>(`${url}`, data, {
         withCredentials: true,
       });
       return response;

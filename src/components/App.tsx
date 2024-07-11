@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { AuthService } from "../services/auth.service";
 import UserStore from "../stores/user.store";
 import { User } from "../interfaces/IUser";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import { Toaster, toast } from "sonner";
 import { ErrorPage } from "../pages/error/error.page";
 import csrfStore from "../stores/csrf.store";
@@ -19,8 +19,8 @@ const App = observer(() => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await AuthService.getMe();
-        changeUser(response.data as User);
+        const response: AxiosResponse<User> = await AuthService.getMe();
+        changeUser(response.data);
         changeCsrf(response.data.csrf_token);
       } catch (error) {
         if (error instanceof AxiosError) {

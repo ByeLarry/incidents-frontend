@@ -433,3 +433,8 @@ body.dark-mode {
 .color-text-yellow {
     color: $yellow-accent;
 }
+
+
+.backlight-white{
+    @include backlight(0, 0, 10rem, 0.9, $white, $black, 5s);
+}

@@ -11,7 +11,7 @@ import { LabelComponent } from "../../components/ui/label/label";
 import { SignUpDto } from "../../dto/signup.dto";
 import { AuthService } from "../../services/auth.service";
 import { Toaster, toast } from "sonner";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import UserStore from "../../stores/user.store";
 import { User } from "../../interfaces/IUser";
 import { useNavigate } from "react-router-dom";
@@ -97,7 +97,7 @@ export const SignUp: React.FC = () => {
     };
     try {
       setSubmitting(true);
-      const response = await AuthService.postSignUp(data);
+      const response: AxiosResponse<User> = await AuthService.postSignUp(data);
       changeUser(response.data as User);
       csrfStore.changeCsrf(response.data.csrf_token);
       navigate("/", { replace: true });

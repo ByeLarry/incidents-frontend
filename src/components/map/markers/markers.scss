@@ -15,7 +15,7 @@
 }
 
 .popup {
-    width: 300px;
+    width: 225px;
     height: auto;
     min-height: 30px;
     background: white;
@@ -46,6 +46,7 @@
     text-align: center;
     font-size: 1.2rem;
     width: 100%;
+    word-wrap: break-word;
 }
 
 .popup-content {
@@ -69,6 +70,9 @@
     align-self: flex-start;
     display: flex;
     align-items: center;
+    width: 100%;
+    border-bottom: 1px solid $dark-gray;
+    padding-bottom: 1px;
 }
 
 .popup-header {
@@ -101,3 +105,10 @@
 .popup-icon {
     margin-right: 0.5rem;
 }
+
+.popup-text{
+    word-wrap: break-word;
+    margin: 0;
+    width: 85%;
+}
+

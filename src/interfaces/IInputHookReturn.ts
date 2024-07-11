@@ -9,7 +9,8 @@ export interface InputHookReturn {
   minLength: number;
   maxLength: number;
   value: string;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
   onBlur: () => void;
   isDirty: boolean;
+  setValue: (value: string) => void;
 }

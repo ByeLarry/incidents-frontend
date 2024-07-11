@@ -6,8 +6,9 @@ interface FormComponentProps {
   onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
   children?: React.ReactNode;
   action?: string;
-  title: string;
+  title?: string;
   name?: string;
+  noStyle?: boolean;
 }
 
 export const FormComponent: React.FC<FormComponentProps> = observer(
@@ -17,7 +18,11 @@ export const FormComponent: React.FC<FormComponentProps> = observer(
       <form
         name={props.name}
         onSubmit={props.onSubmit}
-        className={`${styles.form} ${lightMode ? styles.form_light : ""}`}
+        className={`${
+          props.noStyle
+            ? styles.basic_form
+            : `${styles.form} ${lightMode ? styles.form_light : ""}`
+        } `}
       >
         <h2 className={styles.form__title}>{props.title}</h2>
         {props.children}

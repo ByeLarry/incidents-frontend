@@ -1,0 +1,18 @@
+@import '../../../index.scss';
+
+.textarea {
+    box-sizing: border-box;
+    border: none;
+    background-color: $transparent-color;
+    border-bottom: 2px solid $dark-gray;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    resize: none;
+    &:focus {
+        outline-color: $dark-gray;
+        box-shadow: 0 0 1rem $dark-gray;
+        border: none;
+        outline-style: solid;
+        outline-width: 2px;
+    }
+}

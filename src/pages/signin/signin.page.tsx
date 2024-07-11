@@ -10,7 +10,7 @@ import useInput from "../../hooks/input.hook";
 import { SignInDto } from "../../dto/signin.dto";
 import { AuthService } from "../../services/auth.service";
 import { Toaster, toast } from "sonner";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import UserStore from "../../stores/user.store";
 import { User } from "../../interfaces/IUser";
 import csrfStore from "../../stores/csrf.store";
@@ -54,7 +54,7 @@ export const SignIn: React.FC = () => {
     };
     try {
       setSubmitting(true);
-      const response = await AuthService.postSignIn(data);
+      const response: AxiosResponse<User> = await AuthService.postSignIn(data);
       changeUser(response.data as User);
       csrfStore.changeCsrf(response.data.csrf_token);
       navigate("/", { replace: true });

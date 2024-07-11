@@ -10,6 +10,8 @@ interface InputComponentProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   required?: boolean;
+  width?: number | string;
+  disabled?: boolean;
 }
 
 export const InputComponent: React.FC<InputComponentProps> = (
@@ -26,6 +28,8 @@ export const InputComponent: React.FC<InputComponentProps> = (
       onChange={props.onChange}
       onBlur={props.onBlur}
       required={props.required}
+      style={{ width: props.width }}
+      disabled={props.disabled}
     />
   );
 };
