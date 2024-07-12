@@ -41,6 +41,10 @@ _Прототипы в **Figma**: https://www.figma.com/design/uS1sOHazna93fKYVe
 - ### Прототип страницы 404
   ![Страница ошибки](https://github.com/ByeLarry/incidents-frontend/assets/120035099/388927f1-51af-4456-b7af-225a6589160b)
 
+- ### Окно с описанием инцидента
+  ![Окно с описанием инцидента](https://github.com/user-attachments/assets/4ebe520d-8945-449e-a39f-ff271e67866c)
+
+
 
 
 
