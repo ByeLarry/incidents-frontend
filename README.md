@@ -20,7 +20,7 @@ npm run dev
 _Диаграммы можно сохранять и редактировать в ***[draw.io](https://app.diagrams.net/)***_
 
 - ### Диаграмма прецедентов
-     ![Диаграмма прецедентов](https://github.com/ByeLarry/incidents-frontend/assets/120035099/246fc3bc-2a86-4948-9ce4-f2228c897f68)
+     ![Диаграмма прецедентов](https://github.com/user-attachments/assets/28d2a1f0-4f0a-4959-92ee-ba4041a0e844)
 
 - ### Архитектура приложения
     ![Архитектура приложения](https://github.com/user-attachments/assets/0a4c07b9-a896-4e9e-860c-2a3ebc212536)
