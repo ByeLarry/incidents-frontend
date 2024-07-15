@@ -32,6 +32,8 @@ import { toast } from "sonner";
 import { MdOutlinePlace } from "react-icons/md";
 import { MarkerCandidateIncidentComponent } from "./markers/markerCandidateIncidentComponent";
 import { debounce } from "lodash";
+import { FilterButton } from "./markers/filterButton";
+import selectedCategoriesStore from "../../stores/selectedCategories.store";
 
 interface MapProps {
   lightMode: boolean;
@@ -49,6 +51,7 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
   const [mapZoom, setMapZoom] = useState(15);
   const [isMapInitialized, setIsMapInitialized] = useState(false);
   const [points, setPoints] = useState<Feature[]>([]);
+  const [filteredPoints, setFilteredPoints] = useState<Feature[]>([]);
   const [selectIncidentMode, setSelectIncidentMode] = useState<boolean>(false);
   const marker = useCallback(MarkerWrapped, []);
   const cluster = useCallback(ClusterComponent, []);
@@ -60,6 +63,12 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
 
   const onPointsUpdateHandler = useCallback((data: Feature) => {
     setPoints((prev) => [...prev, data]);
+    if (
+      selectedCategoriesStore.selectedCategories.includes(
+        data.properties?.categoryId as number
+      )
+    )
+      setFilteredPoints((prev) => [...prev, data]);
   }, []);
 
   useEffect(() => {
@@ -85,6 +94,7 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
           data
         );
         setPoints((prev) => [...prev, ...response.data]);
+        setFilteredPoints((prev) => [...prev, ...response.data]);
         setSubmitting(false);
       } catch (error) {
         setSubmitting(false);
@@ -118,7 +128,7 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
       }
     };
     fetchCurrentPosition();
-  }, [currentCoords, isMapInitialized, ymap]);
+  }, [isMapInitialized, points, ymap]);
 
   const onResetCamera = useCallback(() => {
     if (ymap) {
@@ -207,7 +217,7 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
             <YMapCustomClusterer
               marker={marker}
               cluster={cluster}
-              features={points}
+              features={filteredPoints}
               gridSize={16}
             />
             <YMapListener onUpdate={onMapUpdateHandler} />
@@ -230,6 +240,14 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
                 <YMapControlButton onClick={onSpawnMarkerControlClick}>
                   Выйти из режима выбора
                 </YMapControlButton>
+              )}
+              {!selectIncidentMode && (
+                <YMapControls position="top left" orientation="vertical">
+                  <FilterButton
+                    points={points}
+                    setFilteredPoints={setFilteredPoints}
+                  />
+                </YMapControls>
               )}
             </YMapControls>
             {!selectIncidentMode && (

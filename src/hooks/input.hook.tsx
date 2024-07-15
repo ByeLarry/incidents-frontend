@@ -20,6 +20,7 @@ const useInput = (
   };
   return {
     value,
+    setDirty,
     setValue,
     onChange,
     onBlur,

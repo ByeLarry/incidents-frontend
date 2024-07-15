@@ -117,6 +117,8 @@ export const MarkerCandidateIncidentComponent: React.FC<Props> = observer(
         };
         await MarksService.postCreateMark(data);
         setFormSubmitting(false);
+        title.setDirty(false);
+        description.setDirty(false);
         if (props.callback) {
           props.callback();
         }

@@ -13,4 +13,5 @@ export interface InputHookReturn {
   onBlur: () => void;
   isDirty: boolean;
   setValue: (value: string) => void;
+  setDirty: (value: boolean) => void;
 }
