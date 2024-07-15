@@ -7,6 +7,7 @@ export interface MarkRecvDto {
   category: {
     id: number;
     name: string;
+    color: string;
   };
   createdAt?: Date;
   userId?: string;

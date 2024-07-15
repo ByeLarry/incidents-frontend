@@ -1,7 +1,6 @@
 import React, { FormEventHandler } from "react";
 import styles from "./button.module.scss";
 import "../../../index.scss";
-import { colors } from "../../../utils/incidents-colors";
 
 interface ButtonComponentProps {
   className?: string;
@@ -21,6 +20,7 @@ interface ButtonComponentProps {
   form?: string;
   verifyed?: boolean;
   categoryId?: number;
+  categoryColor?: string;
 }
 
 export const ButtonComponent: React.FC<ButtonComponentProps> = (
@@ -42,7 +42,7 @@ export const ButtonComponent: React.FC<ButtonComponentProps> = (
       } ${props.noHover && styles.button_no_hover} ${
         props.transparent && styles.button_transparent
       } ${props.className} ${
-        props.verifyed ? `color-${colors[props.categoryId as number]}` : ""
+        props.verifyed ? `color-${props.categoryColor}` : ""
       }`}
       style={{ zIndex: props.zIndex }}
     >

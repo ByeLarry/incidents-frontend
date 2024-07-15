@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import "./select.scss";
-import { colors } from "../../../utils/incidents-colors";
 
 interface Props {
   id?: string;
@@ -10,6 +9,7 @@ interface Props {
   isCategories?: boolean;
   width?: number | string;
   disabled?: boolean;
+  colors?: { name: string; color: string }[];
   setCheckedValue: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
@@ -23,7 +23,7 @@ export const SelectComponent: React.FC<Props> = (props: Props) => {
   useEffect(() => {
     if (!selectedValue) setSelectedValue(props.values[0]);
   }, [props.values, selectedValue]);
-  
+
   useEffect(() => {
     props.setCheckedValue(selectedValue);
   }, [props, selectedValue]);
@@ -32,7 +32,7 @@ export const SelectComponent: React.FC<Props> = (props: Props) => {
     <>
       <select
         className={`select color-${
-          colors[props.values.indexOf(selectedValue || "") + 1]
+          props.colors?.find((color) => color.name === selectedValue)?.color
         }`}
         id={props.id}
         name={props.name}

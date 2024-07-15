@@ -18,7 +18,6 @@ import { Spiner } from "../../ui/spiner/spiner";
 import { VerifyMarkDto } from "../../../dto/verify-mark.dto";
 import { MarkDto } from "../../../dto/mark.dto";
 import { formatDistance } from "../../../utils/formatDistance";
-import { colors } from "../../../utils/incidents-colors";
 import { TooltipComponent } from "../../ui/tooltip/tooltip";
 import { PiFileTextThin } from "react-icons/pi";
 import { GiPathDistance } from "react-icons/gi";
@@ -48,6 +47,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
   const [zIndex, setZIndex] = useState(100);
   const { user, isEmptyUser } = userStore;
   const { csrf } = csrfStore;
+
   const onClickHandler = async () => {
     if (popupState) {
       setPopupState(false);
@@ -68,7 +68,6 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
       const response: AxiosResponse<MarkRecvDto> = await MarksService.getMark(
         data
       );
-      console.log(response.data);
       setVerified(response.data.isMyVerify || false);
       setVerificationCount(response.data.verified || 0);
       setMarkData(response.data);
@@ -140,7 +139,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
         onClick={onClickHandler}
         className={`${
           props.properties
-            ? `color-text-${colors[props.properties["categoryId"] as number]}`
+            ? `color-text-${props.properties["color"] as string}`
             : ""
         } ${!popupState ? `fixed` : "fixed-top-left"} `}
         size={props.size || 32}
@@ -161,13 +160,18 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
             <h4 className="load-title">Загрузка...</h4>
           ) : markData ? (
             <div
-              className={`popup-content backlight-${
-                colors[markData?.category.id as number]
-              }`}
+              className={`${
+                props.properties
+                  ? `popup-content backlight-${
+                      props.properties["color"] as string
+                    }`
+                  : "popup-content"
+              } `}
             >
               <IncidentCategoryLabel
                 id={markData?.category.id as number}
                 name={markData?.category.name as string}
+                color={markData?.category.color as string}
               />
               <h4 className="popup-title">{markData?.title}</h4>
               <div className="popup-description">
@@ -211,6 +215,8 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                     disabled={submittingVerify}
                     verifyed={!verified && !isEmptyUser()}
                     categoryId={markData?.category.id as number}
+                    categoryColor={markData?.category.color as string}
+                    noHover
                   >
                     {submittingVerify ? (
                       <Spiner lightMode visible size={16} />

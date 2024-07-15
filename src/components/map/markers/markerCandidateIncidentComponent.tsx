@@ -178,6 +178,12 @@ export const MarkerCandidateIncidentComponent: React.FC<Props> = observer(
                       width={300}
                       disabled={categories.length === 0 || submitting}
                       setCheckedValue={setCheckedValue}
+                      colors={categories.map((category) => {
+                        return {
+                          name: category.name,
+                          color: category.color,
+                        };
+                      })}
                     />
                     {categories.length === 0 && (
                       <LabelComponent htmlFor="incident-category">
