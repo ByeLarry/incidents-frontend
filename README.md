@@ -23,7 +23,7 @@ _Диаграммы можно сохранять и редактировать 
      ![Диаграмма прецедентов](https://github.com/ByeLarry/incidents-frontend/assets/120035099/246fc3bc-2a86-4948-9ce4-f2228c897f68)
 
 - ### Архитектура приложения
-    ![Архитектура приложения](https://github.com/ByeLarry/incidents-frontend/assets/120035099/53210464-38b9-4244-9e5b-3928bd0a54b1)
+    ![Архитектура приложения](https://github.com/user-attachments/assets/0a4c07b9-a896-4e9e-860c-2a3ebc212536)
 
 ## Прототипы пользовательского интерфейса
 
@@ -41,7 +41,7 @@ _Прототипы в **Figma**: https://www.figma.com/design/uS1sOHazna93fKYVe
 - ### Прототип страницы 404
   ![Страница ошибки](https://github.com/ByeLarry/incidents-frontend/assets/120035099/388927f1-51af-4456-b7af-225a6589160b)
 
-- ### Окно с описанием инцидента
+- ### Прототип окна с описанием инцидента
   ![Окно с описанием инцидента](https://github.com/user-attachments/assets/4ebe520d-8945-449e-a39f-ff271e67866c)
 
 
