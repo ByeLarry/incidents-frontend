@@ -8,8 +8,6 @@ export class AuthService {
   static async postSignIn(data: SignInDto) {
     try {
       const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/auth/signin`;
-      console.log("Sending request to URL:", url);
-
       const response = await axios.post<User>(url, data, {
         withCredentials: true,
       });

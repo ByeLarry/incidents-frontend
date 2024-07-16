@@ -11,27 +11,12 @@ import UserStore from "../../../stores/user.store";
 import { ButtonComponent } from "../button/button";
 import { IoIosLogOut } from "react-icons/io";
 import { ModalComponent } from "../../Modal/modal";
-import { AuthService } from "../../../services/auth.service";
-import { toast } from "sonner";
-import CsrfStore from "../../../stores/csrf.store";
+import { LogoutModal } from "../../modals/logout.modal";
 
 export const Header: React.FC = observer(() => {
   const { lightMode } = ThemeStore;
   const { isEmptyUser } = UserStore;
   const [modalOpen, setModalOpen] = useState(false);
-
-  const handleLogout = () => {
-    AuthService.postLogout({ csrf_token: CsrfStore.csrf })
-      .then(() => {
-        toast.success("Вы вышли из аккаунта");
-        UserStore.changeUser(null);
-        CsrfStore.changeCsrf("");
-        setModalOpen(false);
-      })
-      .catch(() => {
-        toast.error("Произошла ошибка при выходе из аккаунта");
-      });
-  };
 
   useEffect(() => {
     if (!lightMode) {
@@ -102,27 +87,7 @@ export const Header: React.FC = observer(() => {
         </ul>
       </nav>
       <ModalComponent isOpen={modalOpen} onClose={() => setModalOpen(false)}>
-        <h3 className={styles.modal__title}>
-          Вы уверены, что хотите выйти?
-        </h3>
-        <div className={styles.buttons__wrapper}>
-          <ButtonComponent
-            type="button"
-            ariaLabel="Да"
-            modalButton
-            onClick={handleLogout}
-          >
-            Да
-          </ButtonComponent>
-          <ButtonComponent
-            type="button"
-            ariaLabel="Нет"
-            modalButton
-            onClick={() => setModalOpen(false)}
-          >
-            Нет
-          </ButtonComponent>
-        </div>
+        <LogoutModal setModalOpen={setModalOpen} />
       </ModalComponent>
     </header>
   );

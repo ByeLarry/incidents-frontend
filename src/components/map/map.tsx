@@ -32,8 +32,8 @@ import { toast } from "sonner";
 import { MdOutlinePlace } from "react-icons/md";
 import { MarkerCandidateIncidentComponent } from "./markers/markerCandidateIncidentComponent";
 import { debounce } from "lodash";
-import { FilterButton } from "./markers/filterButton";
 import selectedCategoriesStore from "../../stores/selectedCategories.store";
+import { FilterButton } from "./filterButton";
 
 interface MapProps {
   lightMode: boolean;
