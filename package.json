@@ -1,7 +1,10 @@
 {
   "name": "front",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Frontend for the Incidents project",
+  "author": "Solovey Roman",
+  "license": "UNLICENSED",
   "type": "module",
   "scripts": {
     "dev": "vite",
