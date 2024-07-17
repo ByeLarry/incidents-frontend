@@ -12,6 +12,7 @@ interface InputComponentProps {
   required?: boolean;
   width?: number | string;
   disabled?: boolean;
+  autoComplete?: string;
 }
 
 export const InputComponent: React.FC<InputComponentProps> = (
@@ -30,6 +31,7 @@ export const InputComponent: React.FC<InputComponentProps> = (
       required={props.required}
       style={{ width: props.width }}
       disabled={props.disabled}
+      autoComplete={props.autoComplete}
     />
   );
 };

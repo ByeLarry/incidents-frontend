@@ -135,6 +135,7 @@ export const CreateMarkForm: React.FC<Props> = memo((props: Props) => {
               value={title.value}
               onChange={title.onChange}
               onBlur={title.onBlur}
+              autoComplete="off"
             />
             {getTitleErrorMessage() && (
               <LabelComponent htmlFor="incident-title">
