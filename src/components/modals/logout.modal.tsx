@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import { AuthService } from "../../services/auth.service";
 import csrfStore from "../../stores/csrf.store";
 import { ButtonComponent } from "../ui/button/button";
-import styles from "../ui/header/header.module.scss";
+import styles from "../header/header.module.scss";
 import userStore from "../../stores/user.store";
 import { memo } from "react";
 

@@ -1,8 +1,6 @@
 import "./tooltip.scss";
 
 interface Props {
-  top?: number;
-  left?: number;
   zIndex?: number;
   children?: React.ReactNode;
   text?: string;

@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../../index.scss";
 import styles from "./signin.module.scss";
-import CustomCursorComponent from "../../components/ui/cursor/customCursorComponent";
+import CustomCursorComponent from "../../components/cursor/customCursorComponent";
 import { Toaster } from "sonner";
 import { SignInForm } from "../../components/forms/signin.form";
 

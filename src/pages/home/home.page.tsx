@@ -1,4 +1,4 @@
-import { Header } from "../../components/ui/header/header";
+import { Header } from "../../components/header/header";
 import { MapComponent } from "../../components/map/map";
 import { observer } from "mobx-react-lite";
 import ThemeStore from "../../stores/theme.store";

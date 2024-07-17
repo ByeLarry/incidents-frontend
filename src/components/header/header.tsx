@@ -1,21 +1,23 @@
 import { Link } from "react-router-dom";
 import styles from "./header.module.scss";
-import "../../../index.scss";
+import '../../index.scss'
 import { observer } from "mobx-react-lite";
-import ThemeStore from "../../../stores/theme.store";
 import { useEffect, useState } from "react";
-import { ToggleComponent } from "../toggle/toggle";
 import { RiCriminalFill } from "react-icons/ri";
 import { GiBowieKnife } from "react-icons/gi";
-import UserStore from "../../../stores/user.store";
-import { ButtonComponent } from "../button/button";
+
 import { IoIosLogOut } from "react-icons/io";
-import { ModalComponent } from "../../Modal/modal";
-import { LogoutModal } from "../../modals/logout.modal";
+import themeStore from "../../stores/theme.store";
+import userStore from "../../stores/user.store";
+import { ToggleComponent } from "../ui/toggle/toggle";
+import { ButtonComponent } from "../ui/button/button";
+import { ModalComponent } from "../Modal/modal";
+import { LogoutModal } from "../modals/logout.modal";
+
 
 export const Header: React.FC = observer(() => {
-  const { lightMode } = ThemeStore;
-  const { isEmptyUser } = UserStore;
+  const { lightMode } = themeStore;
+  const { isEmptyUser } = userStore;
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
