@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { YMapDefaultMarker } from "ymap3-components";
 import "./markers.scss";
 import "./create-incident-form.scss";
-import { ModalComponent } from "../../Modal/modal";
+import { ModalComponent } from "../../modal/modal";
 import { MarksService } from "../../../services/marks.service";
 import { CategoryDto } from "../../../dto/categories.dto";
 import { toast } from "sonner";

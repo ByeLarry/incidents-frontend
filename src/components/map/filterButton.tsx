@@ -6,7 +6,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { Feature } from "@yandex/ymaps3-clusterer";
 import { observer } from "mobx-react-lite";
-import { ModalComponent } from "../Modal/modal";
+import { ModalComponent } from "../modal/modal";
 import selectedCategoriesStore from "../../stores/selectedCategories.store";
 import { CategoryDto } from "../../dto/categories.dto";
 import { MarksService } from "../../services/marks.service";
