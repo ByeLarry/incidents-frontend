@@ -51,7 +51,7 @@ _Прототипы в **Figma**: https://www.figma.com/design/uS1sOHazna93fKYVe
 - #### API-шлюз:  *https://github.com/ByeLarry/incidents-gateway*
 - #### Сервис авторизации:  *https://github.com/ByeLarry/incidents-auth-service*
 - #### Сервис марок (инцидентов): *https://github.com/ByeLarry/indcidents-marks-service*
-- #### Демонастрация функционала версии 0.1.0 *https://youtu.be/H0-Qg97rvBM*
+- #### Демонастрация функционала версии 0.1.0: *https://youtu.be/H0-Qg97rvBM*
 
 
 
