@@ -47,7 +47,11 @@ _Прототипы в **Figma**: https://www.figma.com/design/uS1sOHazna93fKYVe
 - ### Прототип окна с описанием инцидента
   ![Окно с описанием инцидента](https://github.com/user-attachments/assets/4ebe520d-8945-449e-a39f-ff271e67866c)
 
+## Ссылки
 
+- #### API-шлюз:  *https://github.com/ByeLarry/incidents-gateway*
+- #### Сервис авторизации:  *https://github.com/ByeLarry/incidents-auth-service*
+- #### Сервис марок (инцидентов): *https://github.com/ByeLarry/indcidents-marks-service*
 
 
 
