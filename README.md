@@ -25,7 +25,7 @@ _Диаграммы можно сохранять и редактировать 
      ![Диаграмма прецедентов](https://github.com/user-attachments/assets/28d2a1f0-4f0a-4959-92ee-ba4041a0e844)
 
 - ### Архитектура приложения
-    ![Архитектура приложения](https://github.com/user-attachments/assets/0a4c07b9-a896-4e9e-860c-2a3ebc212536)
+    ![Архитектура приложения](https://github.com/user-attachments/assets/15ca1580-62a1-418b-bd27-fbd20f18426d)
 
 ## Прототипы пользовательского интерфейса
 
