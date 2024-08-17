@@ -7,7 +7,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import csrfStore from "../../stores/csrf.store";
 import { User } from "../../interfaces/IUser";
 import { AuthService } from "../../services/auth.service";
-import useInput from "../../hooks/input.hook";
+import useInput from "../../hooks/useInput.hook";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../stores/user.store";
 import { InputComponent } from "../ui/input/input";

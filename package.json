@@ -1,7 +1,7 @@
 {
   "name": "front",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Frontend for the Incidents project",
   "author": "Solovey Roman",
   "license": "UNLICENSED",
@@ -15,6 +15,8 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.51.23",
+    "@tanstack/react-query-devtools": "^5.51.23",
     "@yandex/ymaps3-clusterer": "^0.0.9",
     "@yandex/ymaps3-types": "^0.0.27",
     "axios": "^1.7.2",

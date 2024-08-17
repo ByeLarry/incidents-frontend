@@ -9,9 +9,10 @@ import { VerifiedCountDto } from "../dto/verified-count.dto";
 import { CreateMarkDto } from "../dto/create-mark.dto";
 
 export class MarksService {
+  private static baseUrl = import.meta.env.VITE_API_GETAWAY_HOST;
   static async getMark(data: MarkDto) {
     try {
-      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/marks/one/`;
+      const url = `${this.baseUrl}/api/marks/one/`;
 
       if (!data.userId) data.userId = "";
 
@@ -29,26 +30,18 @@ export class MarksService {
     }
   }
 
-  static async getMarks(data: CoordsDto) {
-    try {
-      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/marks/`;
-      const params = new URLSearchParams({
-        lat: data.lat.toString(),
-        lng: data.lng.toString(),
-      }).toString();
-      const response = await axios.get<Feature[]>(`${url}?${params}`);
-      return response;
-    } catch (error) {
-      console.error("Axios error:", error);
-      throw error;
-    }
+  static async getMarks(currentCoords: CoordsDto) {
+    const url = `${this.baseUrl}/api/marks/`;
+    const params = new URLSearchParams({
+      lat: currentCoords.lat.toString(),
+      lng: currentCoords.lng.toString(),
+    }).toString();
+    return await axios.get<Feature[]>(`${url}?${params}`);
   }
 
   static async postVerifyTrue(data: VerifyMarkDto) {
     try {
-      const url = `${
-        import.meta.env.VITE_API_GETAWAY_HOST
-      }/api/marks/verify/true`;
+      const url = `${this.baseUrl}/api/marks/verify/true`;
       const response = await axios.post<VerifiedCountDto>(`${url}`, data, {
         withCredentials: true,
       });
@@ -61,9 +54,7 @@ export class MarksService {
 
   static async postVerifyFalse(data: VerifyMarkDto) {
     try {
-      const url = `${
-        import.meta.env.VITE_API_GETAWAY_HOST
-      }/api/marks/verify/false`;
+      const url = `${this.baseUrl}/api/marks/verify/false`;
       const response = await axios.post<VerifiedCountDto>(`${url}`, data, {
         withCredentials: true,
       });
@@ -76,9 +67,7 @@ export class MarksService {
 
   static async getCategories() {
     try {
-      const url = `${
-        import.meta.env.VITE_API_GETAWAY_HOST
-      }/api/marks/categories`;
+      const url = `${this.baseUrl}/api/marks/categories`;
       const response = await axios.get<CategoryDto[]>(`${url}`);
       return response;
     } catch (error) {
@@ -89,7 +78,7 @@ export class MarksService {
 
   static async postCreateMark(data: CreateMarkDto) {
     try {
-      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/marks/create`;
+      const url = `${this.baseUrl}/api/marks/create`;
       const response = await axios.post<Feature>(`${url}`, data, {
         withCredentials: true,
       });

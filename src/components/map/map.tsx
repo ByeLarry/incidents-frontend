@@ -21,19 +21,17 @@ import { MarkerComponent } from "./markers/markerComponent";
 import { Spiner } from "../ui/spiner/spiner";
 import { FaCompass } from "react-icons/fa";
 import { io, Socket } from "socket.io-client";
-import { CoordsDto } from "../../dto/coords.dto";
 import { MsgEnum } from "../../utils/msg.enum";
 import { Feature } from "@yandex/ymaps3-clusterer";
 import { SOURCE } from "./cluster";
 import { ClusterComponent } from "./markers/clusterComponent";
-import { MarksService } from "../../services/marks.service";
-import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { MdOutlinePlace } from "react-icons/md";
 import { MarkerCandidateIncidentComponent } from "./markers/markerCandidateIncidentComponent";
 import { debounce } from "lodash";
 import selectedCategoriesStore from "../../stores/selectedCategories.store";
 import { FilterButton } from "./filterButton";
+import { useGetMarks } from "../../hooks/useGetMarks.hook";
 
 interface MapProps {
   lightMode: boolean;
@@ -55,20 +53,32 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
   const [selectIncidentMode, setSelectIncidentMode] = useState<boolean>(false);
   const marker = useCallback(MarkerWrapped, []);
   const cluster = useCallback(ClusterComponent, []);
-  const [submitting, setSubmitting] = useState(false);
   useState<YMaps.LngLat>([0, 0]);
   const [candidateIncidentVisible, setCandidateIncidentVisible] =
     useState<boolean>(false);
   const socket = useRef<Socket | null>(null);
+  const { marks, isLoadingGetMarks, isFetchingGetMarks, isSuccessGetMarks } =
+    useGetMarks({
+      lng: currentCoords[0],
+      lat: currentCoords[1],
+    });
 
-  const onPointsUpdateHandler = useCallback((data: Feature) => {
-    setPoints((prev) => [...prev, data]);
+  useEffect(() => {
+    if (isSuccessGetMarks && marks) {
+      console.log(marks);
+      setPoints(marks);
+      setFilteredPoints(marks);
+    }
+  }, [marks, isSuccessGetMarks]);
+
+  const onPointsUpdateHandler = useCallback((newFeature: Feature) => {
+    setPoints((prev) => [...prev, newFeature]);
     if (
       selectedCategoriesStore.selectedCategories.includes(
-        data.properties?.categoryId as number
+        newFeature.properties?.categoryId as number
       )
     )
-      setFilteredPoints((prev) => [...prev, data]);
+      setFilteredPoints((prev) => [...prev, newFeature]);
   }, []);
 
   useEffect(() => {
@@ -87,39 +97,11 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
 
   useEffect(() => {
     if (!ymap || isMapInitialized) return;
-    const fetchMarks = async (data: CoordsDto) => {
-      try {
-        setSubmitting(true);
-        const response: AxiosResponse<Feature[]> = await MarksService.getMarks(
-          data
-        );
-        setPoints((prev) => [...prev, ...response.data]);
-        setFilteredPoints((prev) => [...prev, ...response.data]);
-        setSubmitting(false);
-      } catch (error) {
-        setSubmitting(false);
-        if (error instanceof AxiosError) {
-          switch (error.response?.status) {
-            case 404:
-              toast.error("Точки не найдены");
-              break;
-            case 500:
-              toast.error("Сервис данных не работает");
-              break;
-            default:
-              toast.error("Во время получения точек произошла ошибка");
-          }
-        }
-      }
-    };
-
     const fetchCurrentPosition = async () => {
       try {
         const { latitude, longitude } = await GeoService.getCurrentLocation();
         setCurrentCoords([longitude, latitude]);
         setMapCenter([longitude, latitude]);
-        const coords: CoordsDto = { lat: latitude, lng: longitude };
-        fetchMarks(coords);
         setIsMapInitialized(true);
       } catch (error) {
         toast.error(
@@ -128,7 +110,7 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
       }
     };
     fetchCurrentPosition();
-  }, [isMapInitialized, points, ymap]);
+  }, [isMapInitialized, ymap]);
 
   const onResetCamera = useCallback(() => {
     if (ymap) {
@@ -173,7 +155,7 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
   return (
     <>
       <Spiner
-        visible={isLoadingMap || submitting}
+        visible={isLoadingMap || isFetchingGetMarks || isLoadingGetMarks}
         fixed
         zIndex={2000}
         lightMode={lightMode}

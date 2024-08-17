@@ -2,7 +2,7 @@ import { memo, useState } from "react";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
 import { LabelComponent } from "../ui/label/label";
-import useInput from "../../hooks/input.hook";
+import useInput from "../../hooks/useInput.hook";
 import userStore from "../../stores/user.store";
 import csrfStore from "../../stores/csrf.store";
 import { CreateMarkDto } from "../../dto/create-mark.dto";

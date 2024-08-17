@@ -5,9 +5,10 @@ import { SignUpDto } from "../dto/signup.dto";
 import { LogoutDto } from "../dto/logout.dto";
 
 export class AuthService {
+  private static baseUrl = import.meta.env.VITE_API_GETAWAY_HOST;
   static async postSignIn(data: SignInDto) {
     try {
-      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/auth/signin`;
+      const url = `${this.baseUrl}/api/auth/signin`;
       const response = await axios.post<User>(url, data, {
         withCredentials: true,
       });
@@ -20,7 +21,7 @@ export class AuthService {
 
   static async postSignUp(data: SignUpDto) {
     try {
-      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/auth/signup`;
+      const url = `${this.baseUrl}/api/auth/signup`;
       const response = await axios.post<User>(url, data, {
         withCredentials: true,
       });
@@ -33,7 +34,7 @@ export class AuthService {
 
   static async getMe() {
     try {
-      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/auth/me`;
+      const url = `${this.baseUrl}/api/auth/me`;
       const response = await axios.get<User>(url, {
         withCredentials: true,
       });
@@ -46,7 +47,7 @@ export class AuthService {
 
   static async postLogout(data: LogoutDto) {
     try {
-      const url = `${import.meta.env.VITE_API_GETAWAY_HOST}/api/auth/logout`;
+      const url = `${this.baseUrl}/api/auth/logout`;
       const response = await axios.post(url, data, {
         withCredentials: true,
       });
