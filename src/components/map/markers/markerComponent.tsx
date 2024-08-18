@@ -1,7 +1,7 @@
 import { YMapMarker } from "ymap3-components";
 import { FaMapMarker } from "react-icons/fa";
 import { LngLat } from "@yandex/ymaps3-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./markers.scss";
 import { MarksService } from "../../../services/marks.service";
 import { AxiosError, AxiosResponse } from "axios";
@@ -16,7 +16,6 @@ import userStore from "../../../stores/user.store";
 import csrfStore from "../../../stores/csrf.store";
 import { Spiner } from "../../ui/spiner/spiner";
 import { VerifyMarkDto } from "../../../dto/verify-mark.dto";
-import { MarkDto } from "../../../dto/mark.dto";
 import { formatDistance } from "../../../utils/formatDistance";
 import { TooltipComponent } from "../../ui/tooltip/tooltip";
 import { PiFileTextThin } from "react-icons/pi";
@@ -25,21 +24,17 @@ import { CiCircleCheck } from "react-icons/ci";
 import { CiCalendarDate } from "react-icons/ci";
 import { VerifiedCountDto } from "../../../dto/verified-count.dto";
 import { GeoService } from "../../../services/geo.service";
+import { useGetMark } from "../../../hooks/useGetMark.hook";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
-  color?: string;
-  size?: number;
-  id?: string;
-  Key?: string;
-  source?: string;
-  markId?: string;
+  source: string;
+  markId: string;
   properties?: Record<string, unknown>;
 }
 
 export const MarkerComponent = observer((props: MapMarkerProps) => {
   const [popupState, setPopupState] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [submittingVerify, setSubmittingVerify] = useState(false);
   const [verified, setVerified] = useState(false);
   const [verificationCount, setVerificationCount] = useState(0);
@@ -47,6 +42,33 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
   const [zIndex, setZIndex] = useState(100);
   const { user, isEmptyUser } = userStore;
   const { csrf } = csrfStore;
+  const [currentCoords, setCurrentCoords] = useState<{
+    latitude: number;
+    longitude: number;
+  }>({
+    latitude: 0,
+    longitude: 0,
+  });
+
+  const getMarkDto = {
+    markId: props.markId,
+    userId: user?._id as string,
+    lat: currentCoords?.latitude,
+    lng: currentCoords?.longitude,
+    enabled: popupState,
+  };
+  const { mark, isFetchingGetMark, isLoadingGetMark } = useGetMark(getMarkDto);
+  useEffect(() => {
+    if (mark) setMarkData(mark);
+  }, [mark]);
+
+  useEffect(() => {
+    const getCurrentCoords = async () => {
+      const currentCoords = await GeoService.getCurrentLocation();
+      setCurrentCoords(currentCoords);
+    };
+    getCurrentCoords();
+  }, []);
 
   const onClickHandler = async () => {
     if (popupState) {
@@ -56,37 +78,6 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
     }
     setPopupState(true);
     setZIndex(200);
-    try {
-      const currentCoords = await GeoService.getCurrentLocation();
-      setSubmitting(true);
-      const data: MarkDto = {
-        markId: props.markId as string,
-        userId: user?._id as string,
-        lng: currentCoords.latitude,
-        lat: currentCoords.longitude,
-      };
-      const response: AxiosResponse<MarkRecvDto> = await MarksService.getMark(
-        data
-      );
-      setVerified(response.data.isMyVerify || false);
-      setVerificationCount(response.data.verified || 0);
-      setMarkData(response.data);
-      setSubmitting(false);
-    } catch (error) {
-      setSubmitting(false);
-      if (error instanceof AxiosError) {
-        switch (error.response?.status) {
-          case 404:
-            toast.error("Точка не найдена");
-            break;
-          case 500:
-            toast.error("Произошла серверная ошибка");
-            break;
-          default:
-            toast.error("Произошла непредвиденная ошибка");
-        }
-      }
-    }
   };
 
   const onVerifyHandler = async () => {
@@ -130,8 +121,6 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
   return (
     <YMapMarker
       coordinates={props.coords}
-      id={props.id}
-      key={props.Key}
       source={props.source}
       zIndex={zIndex}
     >
@@ -142,7 +131,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
             ? `color-text-${props.properties["color"] as string}`
             : ""
         } ${!popupState ? `fixed` : "fixed-top-left"} `}
-        size={props.size || 32}
+        size={32}
       />
       {popupState && (
         <div className="popup">
@@ -156,7 +145,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
           >
             <IoMdClose size={32} />
           </button>
-          {submitting ? (
+          {isLoadingGetMark || isFetchingGetMark ? (
             <h4 className="load-title">Загрузка...</h4>
           ) : markData ? (
             <div

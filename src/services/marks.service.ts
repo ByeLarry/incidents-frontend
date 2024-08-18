@@ -10,33 +10,53 @@ import { CreateMarkDto } from "../dto/create-mark.dto";
 
 export class MarksService {
   private static baseUrl = import.meta.env.VITE_API_GETAWAY_HOST;
-  static async getMark(data: MarkDto) {
-    try {
-      const url = `${this.baseUrl}/api/marks/one/`;
-
-      if (!data.userId) data.userId = "";
-
-      const params = new URLSearchParams({
-        userId: data.userId.toString(),
-        markId: data.markId.toString(),
-        lat: data.lat.toString(),
-        lng: data.lng.toString(),
-      }).toString();
-      const response = await axios.get<MarkRecvDto>(`${url}?${params}`);
-      return response;
-    } catch (error) {
-      console.error("Axios error:", error);
-      throw error;
-    }
+  static async getMark(mark: MarkDto) {
+    const url: string = `${this.baseUrl}/api/marks/one/`;
+    const userId: string = this.userIdConversion(mark.userId);
+    const params = this.makeParamsForGetMark(
+      userId,
+      mark.markId,
+      mark.lng,
+      mark.lat,
+    );
+    return await axios.get<MarkRecvDto>(`${url}?${params}`);
   }
 
-  static async getMarks(currentCoords: CoordsDto) {
-    const url = `${this.baseUrl}/api/marks/`;
+  private static userIdConversion(userId: string) {
+    if (!userId) return "";
+    return userId;
+  }
+
+  private static makeParamsForGetMark(
+    userId: string,
+    markId: string,
+    lat: number,
+    lng: number
+  ) {
     const params = new URLSearchParams({
-      lat: currentCoords.lat.toString(),
-      lng: currentCoords.lng.toString(),
+      userId,
+      markId: markId.toString(),
+      lat: lat.toString(),
+      lng: lng.toString(),
     }).toString();
+    return params;
+  }
+
+  static async getNearestMarks(currentCoords: CoordsDto) {
+    const url = `${this.baseUrl}/api/marks/`;
+    const params = this.makeParamsForGetMarks(
+      currentCoords.lat,
+      currentCoords.lng
+    );
     return await axios.get<Feature[]>(`${url}?${params}`);
+  }
+
+  private static makeParamsForGetMarks(lat: number, lng: number) {
+    const params = new URLSearchParams({
+      lat: lat.toString(),
+      lng: lng.toString(),
+    }).toString();
+    return params;
   }
 
   static async postVerifyTrue(data: VerifyMarkDto) {

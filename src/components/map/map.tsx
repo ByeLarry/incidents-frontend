@@ -65,7 +65,6 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
 
   useEffect(() => {
     if (isSuccessGetMarks && marks) {
-      console.log(marks);
       setPoints(marks);
       setFilteredPoints(marks);
     }
