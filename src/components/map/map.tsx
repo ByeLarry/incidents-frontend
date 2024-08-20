@@ -127,22 +127,17 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
     setMapAzimuth(obj.camera.azimuth || MapConsts.INITIAL_AZIMUTH);
   }, MAP_UPDATE_DELAY);
 
-  const onSpawnMarkerControlClick = useCallback(() => {
-    console.log("onSpawnMarkerControlClick");
-    if (!selectIncidentMode) {
-      setMapCenter(currentCoords);
-      setMapAzimuth(MapConsts.INITIAL_AZIMUTH);
-      setMapTilt(MapConsts.INITIAL_TILT);
-    }
-    setSelectIncidentMode(!selectIncidentMode);
-    setCandidateIncidentVisible(!candidateIncidentVisible);
-  }, [candidateIncidentVisible, currentCoords, selectIncidentMode]);
-
   useEffect(() => {
-    closeCandidateMarkFormCallbackStore.changeCallback(
-      onSpawnMarkerControlClick
-    );
-  }, [onSpawnMarkerControlClick]);
+    closeCandidateMarkFormCallbackStore.changeCallback(() => {
+      if (!selectIncidentMode) {
+        setMapCenter(currentCoords);
+        setMapAzimuth(MapConsts.INITIAL_AZIMUTH);
+        setMapTilt(MapConsts.INITIAL_TILT);
+      }
+      setSelectIncidentMode(!selectIncidentMode);
+      setCandidateIncidentVisible(!candidateIncidentVisible);
+    });
+  }, [candidateIncidentVisible, currentCoords, selectIncidentMode]);
 
   return (
     <>
