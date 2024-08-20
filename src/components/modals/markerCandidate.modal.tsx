@@ -2,11 +2,12 @@ import { memo } from "react";
 import { Spiner } from "../ui/spiner/spiner";
 import { LngLat } from "@yandex/ymaps3-types";
 import { CategoryDto } from "../../dto/categories.dto";
-import { CreateMarkForm } from "../forms/create-mark.form";
+import { CreateMarkForm } from "../forms/createMark.form";
+import { XXXLARGE_SIZE_MARKER } from "../../utils/markerSizes";
 
 interface Props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  propsCallback?: () => void;
+  propsCallback: () => void;
   coords: [number, number] | LngLat;
   categories: CategoryDto[];
   setCategories: React.Dispatch<React.SetStateAction<CategoryDto[]>>;
@@ -18,7 +19,7 @@ interface Props {
 export const MarkerCandidateModal: React.FC<Props> = memo((props: Props) => {
   return (
     <>
-      {props.submitting && <Spiner lightMode fixed visible size={96} />}
+      {props.submitting && <Spiner lightMode fixed visible size={XXXLARGE_SIZE_MARKER} />}
       <div className="modal__wrapper">
         <h3 className={"modal__title"}>{"Инцидент"}</h3>
         <CreateMarkForm

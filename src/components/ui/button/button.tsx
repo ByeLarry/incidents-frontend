@@ -1,4 +1,4 @@
-import React, { FormEventHandler } from "react";
+import React, { FormEventHandler, memo } from "react";
 import styles from "./button.module.scss";
 import "../../../index.scss";
 
@@ -23,30 +23,30 @@ interface ButtonComponentProps {
   categoryColor?: string;
 }
 
-export const ButtonComponent: React.FC<ButtonComponentProps> = (
-  props: ButtonComponentProps
-) => {
-  return (
-    <button
-      form={props.form}
-      onSubmit={props.onSubmit}
-      aria-label={props.ariaLabel}
-      type={props.type}
-      onClick={props.onClick}
-      disabled={props.disabled}
-      title={props.title}
-      className={`${props.noHover ? styles.button_no_hover : styles.button} ${
-        props.modalButton ? styles.button_modal : ""
-      } ${props.inverse && styles.button_inverse} ${
-        props.textInverse && styles.button__text_inverse
-      } ${props.noHover && styles.button_no_hover} ${
-        props.transparent && styles.button_transparent
-      } ${props.className} ${
-        props.verifyed ? `color-${props.categoryColor}` : ""
-      }`}
-      style={{ zIndex: props.zIndex }}
-    >
-      {props.children}
-    </button>
-  );
-};
+export const ButtonComponent: React.FC<ButtonComponentProps> = memo(
+  (props: ButtonComponentProps) => {
+    return (
+      <button
+        form={props.form}
+        onSubmit={props.onSubmit}
+        aria-label={props.ariaLabel}
+        type={props.type}
+        onClick={props.onClick}
+        disabled={props.disabled}
+        title={props.title}
+        className={`${props.noHover ? styles.button_no_hover : styles.button} ${
+          props.modalButton ? styles.button_modal : ""
+        } ${props.inverse && styles.button_inverse} ${
+          props.textInverse && styles.button__text_inverse
+        } ${props.noHover && styles.button_no_hover} ${
+          props.transparent && styles.button_transparent
+        } ${props.className} ${
+          props.verifyed ? `color-${props.categoryColor}` : ""
+        }`}
+        style={{ zIndex: props.zIndex }}
+      >
+        {props.children}
+      </button>
+    );
+  }
+);

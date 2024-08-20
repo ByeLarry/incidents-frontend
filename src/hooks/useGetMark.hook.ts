@@ -3,7 +3,7 @@ import { MarksService } from "../services/marks.service";
 import { useEffect } from "react";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
-import { UseGetMarkDto } from "../dto/use-get-mark.dto";
+import { UseGetMarkDto } from "../dto/useGetMark.dto";
 
 export function useGetMark(markGetDto: UseGetMarkDto) {
   const { data, isLoading, isSuccess, isError, error, isFetching } = useQuery({

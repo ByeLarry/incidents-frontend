@@ -1,4 +1,4 @@
-import "./incident-category-label.scss";
+import "./incidentCategoryLabel.scss";
 
 interface Props {
   id: number;

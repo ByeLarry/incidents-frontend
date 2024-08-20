@@ -12,6 +12,7 @@ import { ToggleComponent } from "../ui/toggle/toggle";
 import { ButtonComponent } from "../ui/button/button";
 import { ModalComponent } from "../modal/modal";
 import { LogoutModal } from "../modals/logout.modal";
+import { MEDIUM_SIZE_MARKER, XLARGE_SIZE_MARKER } from "../../utils/markerSizes";
 
 
 export const Header: React.FC = observer(() => {
@@ -38,9 +39,9 @@ export const Header: React.FC = observer(() => {
       <div className={styles.logo__wrapper}>
         <h1 className={styles.header__title}>Incidents</h1>
         <div className={styles.icon__wrapper}>
-          <RiCriminalFill size={48} />
+          <RiCriminalFill size={XLARGE_SIZE_MARKER} />
           <div className={styles.knife__wrapper}>
-            <GiBowieKnife className={styles.knife__icon} size={28} />
+            <GiBowieKnife className={styles.knife__icon} size={MEDIUM_SIZE_MARKER} />
           </div>
         </div>
       </div>

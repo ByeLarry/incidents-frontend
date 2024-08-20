@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useValidation from "./useValidation.hook";
-import { Validation } from "../interfaces/IValidators";
-import { InputHookReturn } from "../interfaces/IInputHookReturn";
+import { Validation } from "../interfaces/validators";
+import { InputHookReturn } from "../interfaces/inputHookReturn";
 
 const useInput = (
   initialValue: string,

@@ -1,111 +1,87 @@
-import axios from "axios";
-import { MarkRecvDto } from "../dto/mark-recv.dto";
+import axios, { AxiosResponse } from "axios";
+import { MarkRecvDto } from "../dto/markRecv.dto";
 import { Feature } from "@yandex/ymaps3-clusterer";
 import { CoordsDto } from "../dto/coords.dto";
-import { VerifyMarkDto } from "../dto/verify-mark.dto";
+import { VerifyMarkDto } from "../dto/verifyMark.dto";
 import { MarkDto } from "../dto/mark.dto";
 import { CategoryDto } from "../dto/categories.dto";
-import { VerifiedCountDto } from "../dto/verified-count.dto";
-import { CreateMarkDto } from "../dto/create-mark.dto";
+import { VerifiedCountDto } from "../dto/verifiedCount.dto";
+import { CreateMarkDto } from "../dto/createMark.dto";
 
 export class MarksService {
-  private static baseUrl = import.meta.env.VITE_API_GETAWAY_HOST;
-  static async getMark(mark: MarkDto) {
-    const url: string = `${this.baseUrl}/api/marks/one/`;
-    const userId: string = this.userIdConversion(mark.userId);
-    const params = this.makeParamsForGetMark(
-      userId,
-      mark.markId,
-      mark.lng,
-      mark.lat,
-    );
+  private static baseUrl: string = import.meta.env.VITE_API_GETAWAY_HOST;
+  static async getMark(mark: MarkDto): Promise<AxiosResponse<MarkRecvDto>> {
+    const url = `${this.baseUrl}/api/marks/one/`;
+    const userId = this.userIdConversion(mark.userId);
+    const params = this.makeParamsForGetMark({ ...mark, userId });
     return await axios.get<MarkRecvDto>(`${url}?${params}`);
   }
 
-  private static userIdConversion(userId: string) {
+  private static userIdConversion(userId: string): string {
     if (!userId) return "";
     return userId;
   }
 
-  private static makeParamsForGetMark(
-    userId: string,
-    markId: string,
-    lat: number,
-    lng: number
-  ) {
+  private static makeParamsForGetMark(mark: MarkDto): string {
     const params = new URLSearchParams({
-      userId,
-      markId: markId.toString(),
-      lat: lat.toString(),
-      lng: lng.toString(),
+      userId: mark.userId,
+      markId: mark.markId.toString(),
+      // For YMaps coords must be swapped
+      lat: mark.lng.toString(),
+      lng: mark.lat.toString(),
     }).toString();
     return params;
   }
 
-  static async getNearestMarks(currentCoords: CoordsDto) {
+  static async getNearestMarks(
+    currentCoords: CoordsDto
+  ): Promise<AxiosResponse<Feature[]>> {
     const url = `${this.baseUrl}/api/marks/`;
-    const params = this.makeParamsForGetMarks(
-      currentCoords.lat,
-      currentCoords.lng
-    );
+    const coords: CoordsDto = {
+      lat: currentCoords.lat,
+      lng: currentCoords.lng,
+    };
+    const params = this.makeParamsForGetMarks(coords);
     return await axios.get<Feature[]>(`${url}?${params}`);
   }
 
-  private static makeParamsForGetMarks(lat: number, lng: number) {
+  private static makeParamsForGetMarks(coords: CoordsDto): string {
     const params = new URLSearchParams({
-      lat: lat.toString(),
-      lng: lng.toString(),
+      lat: coords.lat.toString(),
+      lng: coords.lng.toString(),
     }).toString();
     return params;
   }
 
-  static async postVerifyTrue(data: VerifyMarkDto) {
-    try {
-      const url = `${this.baseUrl}/api/marks/verify/true`;
-      const response = await axios.post<VerifiedCountDto>(`${url}`, data, {
-        withCredentials: true,
-      });
-      return response;
-    } catch (error) {
-      console.error("Axios error:", error);
-      throw error;
-    }
+  static async postVerifyTrue(
+    verifyData: VerifyMarkDto
+  ): Promise<AxiosResponse<VerifiedCountDto>> {
+    const url = `${this.baseUrl}/api/marks/verify/true`;
+    return await axios.post<VerifiedCountDto>(`${url}`, verifyData, {
+      withCredentials: true,
+    });
   }
 
-  static async postVerifyFalse(data: VerifyMarkDto) {
-    try {
-      const url = `${this.baseUrl}/api/marks/verify/false`;
-      const response = await axios.post<VerifiedCountDto>(`${url}`, data, {
-        withCredentials: true,
-      });
-      return response;
-    } catch (error) {
-      console.error("Axios error:", error);
-      throw error;
-    }
+  static async postVerifyFalse(
+    data: VerifyMarkDto
+  ): Promise<AxiosResponse<VerifiedCountDto>> {
+    const url = `${this.baseUrl}/api/marks/verify/false`;
+    return await axios.post<VerifiedCountDto>(`${url}`, data, {
+      withCredentials: true,
+    });
   }
 
-  static async getCategories() {
-    try {
-      const url = `${this.baseUrl}/api/marks/categories`;
-      const response = await axios.get<CategoryDto[]>(`${url}`);
-      return response;
-    } catch (error) {
-      console.error("Axios error:", error);
-      throw error;
-    }
+  static async getCategories(): Promise<AxiosResponse<CategoryDto[]>> {
+    const url = `${this.baseUrl}/api/marks/categories`;
+    return await axios.get<CategoryDto[]>(`${url}`);
   }
 
-  static async postCreateMark(data: CreateMarkDto) {
-    try {
-      const url = `${this.baseUrl}/api/marks/create`;
-      const response = await axios.post<Feature>(`${url}`, data, {
-        withCredentials: true,
-      });
-      return response;
-    } catch (error) {
-      console.error("Axios error:", error);
-      throw error;
-    }
+  static async postCreateMark(
+    newMark: CreateMarkDto
+  ): Promise<AxiosResponse<Feature>> {
+    const url = `${this.baseUrl}/api/marks/create`;
+    return await axios.post<Feature>(`${url}`, newMark, {
+      withCredentials: true,
+    });
   }
 }

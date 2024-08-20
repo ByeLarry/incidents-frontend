@@ -1,26 +1,25 @@
-import { memo, useState } from "react";
+import { memo } from "react";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
 import { LabelComponent } from "../ui/label/label";
 import useInput from "../../hooks/useInput.hook";
 import userStore from "../../stores/user.store";
 import csrfStore from "../../stores/csrf.store";
-import { CreateMarkDto } from "../../dto/create-mark.dto";
+import { CreateMarkDto } from "../../dto/createMark.dto";
 import { LngLat } from "@yandex/ymaps3-types";
 import { categoryIdFromValue } from "../../utils/categoryIdFromValue";
-import { MarksService } from "../../services/marks.service";
-import { AxiosError } from "axios";
-import { toast } from "sonner";
 import { SelectComponent } from "../ui/select/select";
 import { InputComponent } from "../ui/input/input";
 import { TextareaComponent } from "../ui/textarea/textarea";
 import { CategoryDto } from "../../dto/categories.dto";
+import { useCreateMark } from "../../hooks/useCreateMark.hook";
+import { ValidationErrorMessages } from "../../utils/validationErrorMessages";
 
 interface Props {
   submitting: boolean;
   setCheckedValue: React.Dispatch<React.SetStateAction<string | undefined>>;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  propsCallback?: () => void;
+  propsCallback: () => void;
   categories: CategoryDto[];
   checkedValue?: string;
   coords: [number, number] | LngLat;
@@ -31,69 +30,28 @@ export const CreateMarkForm: React.FC<Props> = memo((props: Props) => {
   const description = useInput("", { maxLength: 199 });
   const { user } = userStore;
   const { csrf } = csrfStore;
-  const [formSubmitting, setFormSubmitting] = useState(false);
-
-  const getTitleErrorMessage = () => {
-    if (title.isDirty) {
-      if (title.isEmpty) {
-        return "Заголовок не введён";
-      } else if (title.minLengthError) {
-        return "Длина должна быть больше 3 символов";
-      } else if (title.maxLengthError) {
-        return "Длина должна быть меньше 100 символов";
-      }
-    }
-    return null;
-  };
-
-  const getDescriptionErrorMessage = () => {
-    if (description.isDirty) {
-      if (description.maxLengthError) {
-        return "Длина должна быть меньше 200 символов";
-      }
-    }
-    return null;
-  };
+  const { createMark, isPendingCreateMark } = useCreateMark();
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      setFormSubmitting(true);
-      const data: CreateMarkDto = {
-        userId: user?._id as string,
-        csrf_token: csrf,
-        lat: props.coords[1],
-        lng: props.coords[0],
-        title: title.value,
-        description: description.value,
-        categoryId: categoryIdFromValue(
-          props.checkedValue as string,
-          props.categories
-        ) as number,
-      };
-      await MarksService.postCreateMark(data);
-      setFormSubmitting(false);
-      title.setDirty(false);
-      description.setDirty(false);
-      if (props.propsCallback) props.propsCallback();
-    } catch (error) {
-      setFormSubmitting(false);
-      if (error instanceof AxiosError) {
-        switch (error.response?.status) {
-          case 500:
-            toast.error("Произошла серверная ошибка");
-            break;
-          case 409:
-            toast.error("Рядом уже есть инцидент");
-            break;
-          case 403:
-            toast.error("Нельзя отмечать более 5 инцидентов за 12 часов");
-            break;
-          default:
-            toast.error("Произошла непредвиденная ошибка");
-        }
-      }
-    }
+
+    const newMark: CreateMarkDto = {
+      userId: user?._id as string,
+      csrf_token: csrf,
+      lat: props.coords[1],
+      lng: props.coords[0],
+      title: title.value,
+      description: description.value,
+      categoryId: categoryIdFromValue(
+        props.checkedValue as string,
+        props.categories
+      ) as number,
+    };
+    createMark(newMark);
+    title.setDirty(false);
+    description.setDirty(false);
+    if (props.propsCallback) props.propsCallback();
+
     props.setModalOpen(false);
     title.setValue("");
     description.setValue("");
@@ -137,9 +95,9 @@ export const CreateMarkForm: React.FC<Props> = memo((props: Props) => {
               onBlur={title.onBlur}
               autoComplete="off"
             />
-            {getTitleErrorMessage() && (
+            {ValidationErrorMessages.getTitleErrorMessage(title) && (
               <LabelComponent htmlFor="incident-title">
-                {getTitleErrorMessage()}
+                {ValidationErrorMessages.getTitleErrorMessage(title)}
               </LabelComponent>
             )}
           </li>
@@ -156,9 +114,13 @@ export const CreateMarkForm: React.FC<Props> = memo((props: Props) => {
               onChange={description.onChange}
               onBlur={description.onBlur}
             />
-            {getDescriptionErrorMessage() && (
+            {ValidationErrorMessages.getDescriptionErrorMessage(
+              description
+            ) && (
               <LabelComponent htmlFor="incident-description">
-                {getDescriptionErrorMessage()}
+                {ValidationErrorMessages.getDescriptionErrorMessage(
+                  description
+                )}
               </LabelComponent>
             )}
           </li>
@@ -168,7 +130,7 @@ export const CreateMarkForm: React.FC<Props> = memo((props: Props) => {
               className="button"
               modalButton
               disabled={
-                formSubmitting ||
+                isPendingCreateMark ||
                 props.submitting ||
                 props.categories.length === 0 ||
                 !title.inputValid

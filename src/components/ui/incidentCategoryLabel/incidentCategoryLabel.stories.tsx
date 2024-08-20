@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { IncidentCategoryLabel } from "./incident-category-label";
+import { IncidentCategoryLabel } from "./incidentCategoryLabel";
 
 const meta: Meta<typeof IncidentCategoryLabel> = {
   component: IncidentCategoryLabel,

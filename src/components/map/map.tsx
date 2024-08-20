@@ -2,58 +2,65 @@ import "../../index.scss";
 import {
   YMap,
   YMapComponentsProvider,
-  YMapControlButton,
-  YMapControls,
   YMapDefaultFeaturesLayer,
   YMapDefaultSchemeLayer,
   YMapFeatureDataSource,
-  YMapGeolocationControl,
   YMapCustomClusterer,
   YMapLayer,
   YMapListener,
 } from "ymap3-components";
-import * as YMaps from "@yandex/ymaps3-types";
 import { memo, useCallback, useEffect, useRef, useState } from "react";
 import styles from "./map.module.scss";
-import { GeoService } from "../../services/geo.service";
+import { GeoServiceFromBrowser } from "../../services/geo.service";
 import { CurrentPositionMarkerComponent } from "./markers/markerCurrentPositionComponent";
-import { MarkerComponent } from "./markers/markerComponent";
 import { Spiner } from "../ui/spiner/spiner";
-import { FaCompass } from "react-icons/fa";
 import { io, Socket } from "socket.io-client";
 import { MsgEnum } from "../../utils/msg.enum";
 import { Feature } from "@yandex/ymaps3-clusterer";
-import { SOURCE } from "./cluster";
 import { ClusterComponent } from "./markers/clusterComponent";
 import { toast } from "sonner";
-import { MdOutlinePlace } from "react-icons/md";
 import { MarkerCandidateIncidentComponent } from "./markers/markerCandidateIncidentComponent";
 import { debounce } from "lodash";
 import selectedCategoriesStore from "../../stores/selectedCategories.store";
-import { FilterButton } from "./filterButton";
 import { useGetMarks } from "../../hooks/useGetMarks.hook";
+import { WrappedMarker } from "./wrappedMarker";
+import { MapControls } from "./mapControls";
+import { MapConsts } from "./mapConsts";
+import {
+  LngLat,
+  YMap as YMapType,
+  MapEventUpdateHandler,
+} from "@yandex/ymaps3-types";
+import { XXXLARGE_SIZE_MARKER } from "../../utils/markerSizes";
 
 interface MapProps {
   lightMode: boolean;
   isEmptyUser: boolean;
 }
 
+const MAP_UPDATE_DELAY = 100;
+const SPINER_Z_INDEX = 2000;
+
 export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
-  const [currentCoords, setCurrentCoords] = useState<YMaps.LngLat>([0, 0]);
+  const [currentCoords, setCurrentCoords] = useState<LngLat>(
+    MapConsts.INITIAL_CENTER
+  );
   const lightMode = props.lightMode;
-  const [ymap, setYmap] = useState<YMaps.YMap>();
+  const [ymap, setYmap] = useState<YMapType>();
   const [isLoadingMap, setIsLoadingMap] = useState<boolean>(true);
-  const [mapAzimuth, setMapAzimuth] = useState(0);
-  const [mapTilt, setMapTilt] = useState(0);
-  const [mapCenter, setMapCenter] = useState<YMaps.LngLat>([0, 0]);
-  const [mapZoom, setMapZoom] = useState(15);
-  const [isMapInitialized, setIsMapInitialized] = useState(false);
+  const [mapAzimuth, setMapAzimuth] = useState<number>(
+    MapConsts.INITIAL_AZIMUTH
+  );
+  const [mapTilt, setMapTilt] = useState<number>(MapConsts.INITIAL_TILT);
+  const [mapCenter, setMapCenter] = useState<LngLat>(MapConsts.INITIAL_CENTER);
+  const [mapZoom, setMapZoom] = useState<number>(MapConsts.INITIAL_ZOOM);
+  const [isMapInitialized, setIsMapInitialized] = useState<boolean>(false);
   const [points, setPoints] = useState<Feature[]>([]);
   const [filteredPoints, setFilteredPoints] = useState<Feature[]>([]);
   const [selectIncidentMode, setSelectIncidentMode] = useState<boolean>(false);
-  const marker = useCallback(MarkerWrapped, []);
+  const marker = useCallback(WrappedMarker, []);
   const cluster = useCallback(ClusterComponent, []);
-  useState<YMaps.LngLat>([0, 0]);
+  useState<LngLat>(MapConsts.INITIAL_CENTER);
   const [candidateIncidentVisible, setCandidateIncidentVisible] =
     useState<boolean>(false);
   const socket = useRef<Socket | null>(null);
@@ -91,16 +98,16 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
     socket.current.on(MsgEnum.DISCONNECT, () => {
       console.log("Web socket disconnected");
     });
-    socket.current.on("new-mark", onPointsUpdateHandler);
+    socket.current.on(MsgEnum.NEW_MARK, onPointsUpdateHandler);
   }, [onPointsUpdateHandler]);
 
   useEffect(() => {
     if (!ymap || isMapInitialized) return;
     const fetchCurrentPosition = async () => {
       try {
-        const { latitude, longitude } = await GeoService.getCurrentLocation();
-        setCurrentCoords([longitude, latitude]);
-        setMapCenter([longitude, latitude]);
+        const { lat, lng } = await GeoServiceFromBrowser.getCurrentLocation();
+        setCurrentCoords([lng, lat]);
+        setMapCenter([lng, lat]);
         setIsMapInitialized(true);
       } catch (error) {
         toast.error(
@@ -111,41 +118,18 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
     fetchCurrentPosition();
   }, [isMapInitialized, ymap]);
 
-  const onResetCamera = useCallback(() => {
-    if (ymap) {
-      ymap.update({
-        camera: {
-          tilt: ymap.tilt,
-          azimuth:
-            ymap.azimuth < (180 * Math.PI) / 180
-              ? (0 * Math.PI) / 180
-              : (360 * Math.PI) / 180,
-          duration: 350,
-        },
-      });
-    }
-  }, [ymap]);
-
-  const onMapUpdateHandler: YMaps.MapEventUpdateHandler = debounce((obj) => {
+  const onMapUpdateHandler: MapEventUpdateHandler = debounce((obj) => {
     setMapCenter(obj.location.center);
     setMapZoom(obj.location.zoom);
-    setMapTilt(obj.camera.tilt || 0);
-    setMapAzimuth(obj.camera.azimuth || 0);
-  }, 100);
-
-  const onGeolocatePositionHandler = (position: YMaps.LngLat) => {
-    setCurrentCoords(position);
-    setMapCenter(position);
-    setMapZoom(ymap?.zoom || 15);
-    setMapTilt(0);
-    setMapAzimuth(0);
-  };
+    setMapTilt(obj.camera.tilt || MapConsts.INITIAL_TILT);
+    setMapAzimuth(obj.camera.azimuth || MapConsts.INITIAL_AZIMUTH);
+  }, MAP_UPDATE_DELAY);
 
   const onSpawnMarkerControlClick = () => {
     if (!selectIncidentMode) {
       setMapCenter(currentCoords);
-      setMapAzimuth(0);
-      setMapTilt(0);
+      setMapAzimuth(MapConsts.INITIAL_AZIMUTH);
+      setMapTilt(MapConsts.INITIAL_TILT);
     }
     setSelectIncidentMode(!selectIncidentMode);
     setCandidateIncidentVisible(!candidateIncidentVisible);
@@ -156,14 +140,14 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
       <Spiner
         visible={isLoadingMap || isFetchingGetMarks || isLoadingGetMarks}
         fixed
-        zIndex={2000}
+        zIndex={SPINER_Z_INDEX}
         lightMode={lightMode}
-        size={100}
+        size={XXXLARGE_SIZE_MARKER}
       />
       <div className={styles.map__wrapper}>
         <YMapComponentsProvider
           apiKey={`${import.meta.env.VITE_YMAP_API_KEY}`}
-          lang="ru_RU"
+          lang={MapConsts.LANG}
           onLoad={() => {
             setIsLoadingMap(false);
           }}
@@ -171,41 +155,37 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
           <YMap
             behaviors={
               !selectIncidentMode
-                ? [
-                    "pinchZoom",
-                    "drag",
-                    "pinchRotate",
-                    "panTilt",
-                    "mouseTilt",
-                    "scrollZoom",
-                    "mouseRotate",
-                  ]
-                : ["scrollZoom", "drag"]
+                ? MapConsts.BASIC_MAP_BEHAVIORS
+                : MapConsts.SELECT_INCIDENT_MODE_BEHAVIORS
             }
             camera={{ azimuth: mapAzimuth, tilt: mapTilt }}
             key={lightMode ? "dark-map" : "light-map"}
-            ref={(ymap: YMaps.YMap) => {
+            ref={(ymap: YMapType) => {
               setYmap(ymap);
             }}
             location={{ center: mapCenter, zoom: mapZoom }}
-            mode="vector"
+            mode={MapConsts.MAP_MODE}
             theme={!lightMode ? "dark" : "light"}
           >
             <YMapDefaultSchemeLayer />
             <YMapDefaultFeaturesLayer visible={false} />
-            <YMapFeatureDataSource id={SOURCE} />
-            <YMapLayer source={SOURCE} type="markers" zIndex={1800} />
+            <YMapFeatureDataSource id={MapConsts.BASIC_MAP_SOURCE} />
+            <YMapLayer
+              source={MapConsts.BASIC_MAP_SOURCE}
+              type={MapConsts.MAP_LAYER_TYPE}
+              zIndex={MapConsts.MAP_LAYER_Z_INDEX}
+            />
             <YMapCustomClusterer
               marker={marker}
               cluster={cluster}
               features={filteredPoints}
-              gridSize={16}
+              gridSize={MapConsts.CLUSTER_GRID_SIZE}
             />
             <YMapListener onUpdate={onMapUpdateHandler} />
             <MarkerCandidateIncidentComponent
               coords={currentCoords}
               visible={candidateIncidentVisible}
-              source={SOURCE}
+              source={MapConsts.BASIC_MAP_SOURCE}
               draggable
               mapFollowsOnDrag
               color="coral"
@@ -214,56 +194,27 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
             <CurrentPositionMarkerComponent
               coords={currentCoords}
               color="green"
-              source={SOURCE}
+              source={MapConsts.BASIC_MAP_SOURCE}
             />
-            <YMapControls position="top">
-              {selectIncidentMode && (
-                <YMapControlButton onClick={onSpawnMarkerControlClick}>
-                  Выйти из режима выбора
-                </YMapControlButton>
-              )}
-              {!selectIncidentMode && (
-                <YMapControls position="top left" orientation="vertical">
-                  <FilterButton
-                    points={points}
-                    setFilteredPoints={setFilteredPoints}
-                  />
-                </YMapControls>
-              )}
-            </YMapControls>
-            {!selectIncidentMode && (
-              <YMapControls position="top right" orientation="vertical">
-                <YMapGeolocationControl
-                  onGeolocatePosition={onGeolocatePositionHandler}
-                  duration={0}
-                />
-                <YMapControlButton onClick={onResetCamera}>
-                  <FaCompass size={24} />
-                </YMapControlButton>
-                {!props.isEmptyUser && (
-                  <YMapControlButton onClick={onSpawnMarkerControlClick}>
-                    <MdOutlinePlace size={24} />
-                  </YMapControlButton>
-                )}
-              </YMapControls>
-            )}
+            <MapControls
+              selectIncidentMode={selectIncidentMode}
+              candidateIncidentVisible={candidateIncidentVisible}
+              currentCoords={currentCoords}
+              setCurrentCoords={setCurrentCoords}
+              setMapCenter={setMapCenter}
+              setMapAzimuth={setMapAzimuth}
+              setMapTilt={setMapTilt}
+              setMapZoom={setMapZoom}
+              setSelectIncidentMode={setSelectIncidentMode}
+              setCandidateIncidentVisible={setCandidateIncidentVisible}
+              points={points}
+              setFilteredPoints={setFilteredPoints}
+              ymap={ymap}
+              isEmptyUser={props.isEmptyUser}
+            />
           </YMap>
         </YMapComponentsProvider>
       </div>
     </>
   );
 });
-
-const MarkerWrapped = (feature: Feature) => {
-  return (
-    <>
-      <MarkerComponent
-        markId={feature.id}
-        key={feature.id}
-        coords={feature.geometry.coordinates}
-        source={SOURCE}
-        properties={feature.properties}
-      />
-    </>
-  );
-};

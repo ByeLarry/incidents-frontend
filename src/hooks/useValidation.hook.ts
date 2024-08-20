@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { emailReg } from "../utils/email.util";
-import { Validation } from "../interfaces/IValidators";
-import { ValidationErrors } from "../interfaces/IValidationErrors";
+import { Validation } from "../interfaces/validators";
+import { ValidationErrors } from "../interfaces/validationErrors";
 
 const useValidation = (
   value: string,

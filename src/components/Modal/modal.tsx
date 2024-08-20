@@ -3,6 +3,7 @@ import "./modal.scss";
 import "../../index.scss";
 import { IoMdClose } from "react-icons/io";
 import { useRef } from "react";
+import { LARGE_SIZE_MARKER } from "../../utils/markerSizes";
 
 interface ModalProps {
   children?: React.ReactNode;
@@ -24,7 +25,7 @@ export const ModalComponent: React.FC<ModalProps> = (props: ModalProps) => {
                   aria-label="Close modal"
                   onClick={() => props.onClose()}
                 >
-                  <IoMdClose size={32} />
+                  <IoMdClose size={LARGE_SIZE_MARKER} />
                 </button>
                 {props.children}
               </div>

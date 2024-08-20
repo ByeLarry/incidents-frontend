@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import { YMapControlButton } from "ymap3-components";
 import "./filterButton.scss";
-import { AxiosError, AxiosResponse } from "axios";
 import { toast } from "sonner";
 import { Feature } from "@yandex/ymaps3-clusterer";
 import { observer } from "mobx-react-lite";
 import { ModalComponent } from "../modal/modal";
 import selectedCategoriesStore from "../../stores/selectedCategories.store";
 import { CategoryDto } from "../../dto/categories.dto";
-import { MarksService } from "../../services/marks.service";
-import { FilterButtonModal } from "../modals/filter-button.modal";
+import { FilterButtonModal } from "../modals/filterButton.modal";
+import { useGetCategories } from "../../hooks/useGetCategories.hook";
+import { MEDIUM_SIZE_MARKER } from "../../utils/markerSizes";
 
 interface Props {
   points: Feature[];
@@ -19,12 +19,29 @@ interface Props {
 
 export const FilterButton: React.FC<Props> = observer((props: Props) => {
   const [modalOpen, setModalOpen] = useState(false);
-  const [categories, setCategories] = useState<CategoryDto[]>([]);
-  const [submitting, setSubmitting] = useState(false);
+  const [localCategories, setLocalCategories] = useState<CategoryDto[]>([]);
   const [selectedCategoriesLocal, setSelectedCategoriesLocal] = useState<
     number[]
   >([]);
   const { selectedCategories, setSelectedCategories } = selectedCategoriesStore;
+  const {
+    categories,
+    isLoadingGetCategories,
+    isErrorGetCategories,
+    errorGetCategories,
+    isFetchingGetCategories,
+    isSuccessGetCategories,
+  } = useGetCategories();
+
+  useEffect(() => {
+    if (categories && isSuccessGetCategories) setLocalCategories(categories);
+  }, [categories, isSuccessGetCategories]);
+
+  useEffect(() => {
+    if (isErrorGetCategories) {
+      toast.error("Серверная ошибка при загрузке категорий");
+    }
+  }, [isErrorGetCategories, errorGetCategories]);
 
   useEffect(() => {
     setSelectedCategoriesLocal(selectedCategories);
@@ -32,27 +49,6 @@ export const FilterButton: React.FC<Props> = observer((props: Props) => {
 
   const onFilterClickHandler = async () => {
     setModalOpen(true);
-    try {
-      setSubmitting(true);
-      const response: AxiosResponse<CategoryDto[]> =
-        await MarksService.getCategories();
-      setCategories(response.data);
-      setSubmitting(false);
-    } catch (error) {
-      setSubmitting(false);
-      if (error instanceof AxiosError) {
-        switch (error.response?.status) {
-          case 404:
-            toast.error("Категории не загружены");
-            break;
-          case 500:
-            toast.error("Произошла серверная ошибка");
-            break;
-          default:
-            toast.error("Произошла непредвиденная ошибка");
-        }
-      }
-    }
   };
 
   return (
@@ -63,7 +59,7 @@ export const FilterButton: React.FC<Props> = observer((props: Props) => {
           onFilterClickHandler();
         }}
       >
-        <FaFilter size={24} />
+        <FaFilter size={MEDIUM_SIZE_MARKER} />
       </YMapControlButton>
       <ModalComponent
         isOpen={modalOpen}
@@ -72,14 +68,14 @@ export const FilterButton: React.FC<Props> = observer((props: Props) => {
         }}
       >
         <FilterButtonModal
-          categories={categories}
+          categories={localCategories}
           selectedCategoriesLocal={selectedCategoriesLocal}
           setSelectedCategoriesLocal={setSelectedCategoriesLocal}
           setFilteredPoints={props.setFilteredPoints}
           points={props.points}
           setModalOpen={setModalOpen}
           setSelectedCategories={setSelectedCategories}
-          submitting={submitting}
+          submitting={isLoadingGetCategories || isFetchingGetCategories}
         />
       </ModalComponent>
     </>
