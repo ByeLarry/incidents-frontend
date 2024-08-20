@@ -1,4 +1,3 @@
-import { memo } from "react";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
 import { LabelComponent } from "../ui/label/label";
@@ -14,18 +13,19 @@ import { TextareaComponent } from "../ui/textarea/textarea";
 import { CategoryDto } from "../../dto/categories.dto";
 import { useCreateMark } from "../../hooks/useCreateMark.hook";
 import { ValidationErrorMessages } from "../../utils/validationErrorMessages";
+import closeCandidateMarkFormCallbackStore from "../../stores/closeCandidateMarkFormCallback.store";
+import { observer } from "mobx-react-lite";
 
 interface Props {
   submitting: boolean;
   setCheckedValue: React.Dispatch<React.SetStateAction<string | undefined>>;
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  propsCallback: () => void;
   categories: CategoryDto[];
   checkedValue?: string;
   coords: [number, number] | LngLat;
 }
 
-export const CreateMarkForm: React.FC<Props> = memo((props: Props) => {
+export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
   const title = useInput("", { minLength: 3, isEmpty: true, maxLength: 100 });
   const description = useInput("", { maxLength: 199 });
   const { user } = userStore;
@@ -50,8 +50,7 @@ export const CreateMarkForm: React.FC<Props> = memo((props: Props) => {
     createMark(newMark);
     title.setDirty(false);
     description.setDirty(false);
-    if (props.propsCallback) props.propsCallback();
-
+    closeCandidateMarkFormCallbackStore.callback();
     props.setModalOpen(false);
     title.setValue("");
     description.setValue("");

@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { AxiosError } from "axios";
 
 export function useCreateMark() {
-  const { mutate, isPending, data } = useMutation({
+  const { mutate, isPending, data, error, isError } = useMutation({
     mutationKey: ["createMark"],
     mutationFn: async (newMark: CreateMarkDto) =>
       MarksService.postCreateMark(newMark),
@@ -32,5 +32,7 @@ export function useCreateMark() {
     createMark: mutate,
     isPendingCreateMark: isPending,
     dataCreateMark: data,
+    errorCreateMark: error,
+    isErrorCreateMark: isError,
   };
 }

@@ -21,7 +21,6 @@ interface Props {
   onClick?: (event?: MouseEvent) => void;
   onDoubleClick?: (event?: MouseEvent) => void;
   visible: boolean;
-  callback: () => void;
 }
 export const MarkerCandidateIncidentComponent: React.FC<Props> = observer(
   (props: Props) => {
@@ -87,7 +86,6 @@ export const MarkerCandidateIncidentComponent: React.FC<Props> = observer(
               coords={coords}
               checkedValue={checkedValue}
               setCheckedValue={setCheckedValue}
-              propsCallback={props.callback}
             />
           </ModalComponent>
         }

@@ -9,7 +9,7 @@ import {
   YMapLayer,
   YMapListener,
 } from "ymap3-components";
-import { memo, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./map.module.scss";
 import { GeoServiceFromBrowser } from "../../services/geo.service";
 import { CurrentPositionMarkerComponent } from "./markers/markerCurrentPositionComponent";
@@ -32,6 +32,8 @@ import {
   MapEventUpdateHandler,
 } from "@yandex/ymaps3-types";
 import { XXXLARGE_SIZE_MARKER } from "../../utils/markerSizes";
+import closeCandidateMarkFormCallbackStore from "../../stores/closeCandidateMarkFormCallback.store";
+import { observer } from "mobx-react-lite";
 
 interface MapProps {
   lightMode: boolean;
@@ -41,7 +43,7 @@ interface MapProps {
 const MAP_UPDATE_DELAY = 100;
 const SPINER_Z_INDEX = 2000;
 
-export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
+export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
   const [currentCoords, setCurrentCoords] = useState<LngLat>(
     MapConsts.INITIAL_CENTER
   );
@@ -125,7 +127,8 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
     setMapAzimuth(obj.camera.azimuth || MapConsts.INITIAL_AZIMUTH);
   }, MAP_UPDATE_DELAY);
 
-  const onSpawnMarkerControlClick = () => {
+  const onSpawnMarkerControlClick = useCallback(() => {
+    console.log("onSpawnMarkerControlClick");
     if (!selectIncidentMode) {
       setMapCenter(currentCoords);
       setMapAzimuth(MapConsts.INITIAL_AZIMUTH);
@@ -133,7 +136,13 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
     }
     setSelectIncidentMode(!selectIncidentMode);
     setCandidateIncidentVisible(!candidateIncidentVisible);
-  };
+  }, [candidateIncidentVisible, currentCoords, selectIncidentMode]);
+
+  useEffect(() => {
+    closeCandidateMarkFormCallbackStore.changeCallback(
+      onSpawnMarkerControlClick
+    );
+  }, [onSpawnMarkerControlClick]);
 
   return (
     <>
@@ -189,7 +198,6 @@ export const MapComponent: React.FC<MapProps> = memo((props: MapProps) => {
               draggable
               mapFollowsOnDrag
               color="coral"
-              callback={onSpawnMarkerControlClick}
             />
             <CurrentPositionMarkerComponent
               coords={currentCoords}

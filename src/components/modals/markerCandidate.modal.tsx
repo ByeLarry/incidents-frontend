@@ -7,7 +7,6 @@ import { XXXLARGE_SIZE_MARKER } from "../../utils/markerSizes";
 
 interface Props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  propsCallback: () => void;
   coords: [number, number] | LngLat;
   categories: CategoryDto[];
   setCategories: React.Dispatch<React.SetStateAction<CategoryDto[]>>;
@@ -26,7 +25,6 @@ export const MarkerCandidateModal: React.FC<Props> = memo((props: Props) => {
           coords={props.coords}
           categories={props.categories}
           setModalOpen={props.setModalOpen}
-          propsCallback={props.propsCallback}
           submitting={props.submitting}
           setCheckedValue={props.setCheckedValue}
           checkedValue={props.checkedValue}
