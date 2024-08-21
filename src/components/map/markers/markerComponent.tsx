@@ -25,7 +25,11 @@ import { useGetMark } from "../../../hooks/useGetMark.hook";
 import { useVerify } from "../../../hooks/useVerify.hook";
 import { useUnverify } from "../../../hooks/useUnverify.hook";
 import { CoordsDto } from "../../../dto/coords.dto";
-import { LARGE_SIZE_MARKER, MEDIUM_SIZE_MARKER, SMALL_SIZE_MARKER } from "../../../utils/markerSizes";
+import {
+  LARGE_SIZE_MARKER,
+  MEDIUM_SIZE_MARKER,
+  SMALL_SIZE_MARKER,
+} from "../../../utils/markerSizes";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -58,7 +62,11 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
   };
   const { mark, isFetchingGetMark, isLoadingGetMark } = useGetMark(getMarkDto);
   useEffect(() => {
-    if (mark) setMarkData(mark);
+    if (mark) {
+      setVerified(mark.isMyVerify as boolean);
+      setVerificationCount(mark.verified as number);
+      setMarkData(mark);
+    }
   }, [mark]);
 
   useEffect(() => {
@@ -156,19 +164,28 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
               <h4 className="popup-title">{markData?.title}</h4>
               <div className="popup-description">
                 <TooltipComponent text="Дата создания" visible>
-                  <CiCalendarDate size={MEDIUM_SIZE_MARKER} className="popup-icon" />
+                  <CiCalendarDate
+                    size={MEDIUM_SIZE_MARKER}
+                    className="popup-icon"
+                  />
                 </TooltipComponent>
                 <p className="popup-text">{timeAgo(markData?.createdAt)}</p>
               </div>
               <div className="popup-description">
                 <TooltipComponent visible text="Подтверждений">
-                  <CiCircleCheck size={MEDIUM_SIZE_MARKER} className="popup-icon" />
+                  <CiCircleCheck
+                    size={MEDIUM_SIZE_MARKER}
+                    className="popup-icon"
+                  />
                 </TooltipComponent>
                 <p className="popup-text">{verificationCount}</p>
               </div>
               <div className="popup-description">
                 <TooltipComponent visible text="Расстояние">
-                  <GiPathDistance size={MEDIUM_SIZE_MARKER} className="popup-icon" />
+                  <GiPathDistance
+                    size={MEDIUM_SIZE_MARKER}
+                    className="popup-icon"
+                  />
                 </TooltipComponent>
                 <p className="popup-text">
                   {`${formatDistance(markData.distance as number)}`}
@@ -176,7 +193,10 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
               </div>
               <div className="popup-description">
                 <TooltipComponent visible text="Описание">
-                  <PiFileTextThin size={MEDIUM_SIZE_MARKER} className="popup-icon" />
+                  <PiFileTextThin
+                    size={MEDIUM_SIZE_MARKER}
+                    className="popup-icon"
+                  />
                 </TooltipComponent>
                 <p className="popup-text">{markData?.description}</p>
               </div>
