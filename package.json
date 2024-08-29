@@ -4,7 +4,7 @@
   "version": "0.1.1",
   "description": "Frontend for the Incidents project",
   "author": "Solovey Roman",
-  "license": "UNLICENSED",
+  "license": "GPL-3.0-only",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -59,6 +59,7 @@
     "sass": "^1.77.6",
     "storybook": "^8.2.4",
     "typescript": "^5.2.2",
-    "vite": "^5.3.1"
+    "vite": "^5.3.1",
+    "vite-plugin-pwa": "^0.20.2"
   }
 }
