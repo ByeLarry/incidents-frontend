@@ -33,9 +33,10 @@ const App = observer(() => {
     <>
       <div className="App">
         <Toaster
-          position="bottom-center"
+          position="top-center"
           richColors
-          toastOptions={{ duration: 5000 }}
+          closeButton
+          toastOptions={{ duration: Infinity }}
         />
         <Routes>
           <Route path="/" element={<Home />} />

@@ -34,6 +34,7 @@ import {
 import { XXXLARGE_SIZE_MARKER } from "../../utils/markerSizes";
 import closeCandidateMarkFormCallbackStore from "../../stores/closeCandidateMarkFormCallback.store";
 import { observer } from "mobx-react-lite";
+import { ErrorStub } from "../ui/errorStub/errorStub";
 
 interface MapProps {
   lightMode: boolean;
@@ -42,7 +43,7 @@ interface MapProps {
 
 const MAP_UPDATE_DELAY = 100;
 const SPINER_Z_INDEX = 2000;
-
+const LOADING_MAP_INTERVAL = 5000;
 export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
   const [currentCoords, setCurrentCoords] = useState<LngLat>(
     MapConsts.INITIAL_CENTER
@@ -57,6 +58,7 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
   const [mapCenter, setMapCenter] = useState<LngLat>(MapConsts.INITIAL_CENTER);
   const [mapZoom, setMapZoom] = useState<number>(MapConsts.INITIAL_ZOOM);
   const [isMapInitialized, setIsMapInitialized] = useState<boolean>(false);
+  const [mapLoadingFailed, setMapLoadingFailed] = useState<boolean>(false);
   const [points, setPoints] = useState<Feature[]>([]);
   const [filteredPoints, setFilteredPoints] = useState<Feature[]>([]);
   const [selectIncidentMode, setSelectIncidentMode] = useState<boolean>(false);
@@ -139,6 +141,16 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
     });
   }, [candidateIncidentVisible, currentCoords, selectIncidentMode]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (isLoadingMap) {
+        setMapLoadingFailed(true);
+        setIsLoadingMap(false);
+      }
+    }, LOADING_MAP_INTERVAL);
+    return () => clearTimeout(timer);
+  }, [isLoadingMap]);
+
   return (
     <>
       <Spiner
@@ -148,76 +160,80 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
         lightMode={lightMode}
         size={XXXLARGE_SIZE_MARKER}
       />
-      <div className={styles.map__wrapper}>
-        <YMapComponentsProvider
-          apiKey={`${import.meta.env.VITE_YMAP_API_KEY}`}
-          lang={MapConsts.LANG}
-          onLoad={() => {
-            setIsLoadingMap(false);
-          }}
-        >
-          <YMap
-            behaviors={
-              !selectIncidentMode
-                ? MapConsts.BASIC_MAP_BEHAVIORS
-                : MapConsts.SELECT_INCIDENT_MODE_BEHAVIORS
-            }
-            camera={{ azimuth: mapAzimuth, tilt: mapTilt }}
-            key={lightMode ? "dark-map" : "light-map"}
-            ref={(ymap: YMapType) => {
-              setYmap(ymap);
+      {!mapLoadingFailed ? (
+        <section className={styles.map__wrapper}>
+          <YMapComponentsProvider
+            apiKey={`${import.meta.env.VITE_YMAP_API_KEY}`}
+            lang={MapConsts.LANG}
+            onLoad={() => {
+              setIsLoadingMap(false);
             }}
-            location={{ center: mapCenter, zoom: mapZoom }}
-            mode={MapConsts.MAP_MODE}
-            theme={!lightMode ? "dark" : "light"}
           >
-            <YMapDefaultSchemeLayer />
-            <YMapDefaultFeaturesLayer visible={false} />
-            <YMapFeatureDataSource id={MapConsts.BASIC_MAP_SOURCE} />
-            <YMapLayer
-              source={MapConsts.BASIC_MAP_SOURCE}
-              type={MapConsts.MAP_LAYER_TYPE}
-              zIndex={MapConsts.MAP_LAYER_Z_INDEX}
-            />
-            <YMapCustomClusterer
-              marker={marker}
-              cluster={cluster}
-              features={filteredPoints}
-              gridSize={MapConsts.CLUSTER_GRID_SIZE}
-            />
-            <YMapListener onUpdate={onMapUpdateHandler} />
-            <MarkerCandidateIncidentComponent
-              coords={currentCoords}
-              visible={candidateIncidentVisible}
-              source={MapConsts.BASIC_MAP_SOURCE}
-              draggable
-              mapFollowsOnDrag
-              color="coral"
-            />
-            <CurrentPositionMarkerComponent
-              coords={currentCoords}
-              color="green"
-              source={MapConsts.BASIC_MAP_SOURCE}
-            />
-            <MapControls
-              selectIncidentMode={selectIncidentMode}
-              candidateIncidentVisible={candidateIncidentVisible}
-              currentCoords={currentCoords}
-              setCurrentCoords={setCurrentCoords}
-              setMapCenter={setMapCenter}
-              setMapAzimuth={setMapAzimuth}
-              setMapTilt={setMapTilt}
-              setMapZoom={setMapZoom}
-              setSelectIncidentMode={setSelectIncidentMode}
-              setCandidateIncidentVisible={setCandidateIncidentVisible}
-              points={points}
-              setFilteredPoints={setFilteredPoints}
-              ymap={ymap}
-              isEmptyUser={props.isEmptyUser}
-            />
-          </YMap>
-        </YMapComponentsProvider>
-      </div>
+            <YMap
+              behaviors={
+                !selectIncidentMode
+                  ? MapConsts.BASIC_MAP_BEHAVIORS
+                  : MapConsts.SELECT_INCIDENT_MODE_BEHAVIORS
+              }
+              camera={{ azimuth: mapAzimuth, tilt: mapTilt }}
+              key={lightMode ? "dark-map" : "light-map"}
+              ref={(ymap: YMapType) => {
+                setYmap(ymap);
+              }}
+              location={{ center: mapCenter, zoom: mapZoom }}
+              mode={MapConsts.MAP_MODE}
+              theme={!lightMode ? "dark" : "light"}
+            >
+              <YMapDefaultSchemeLayer />
+              <YMapDefaultFeaturesLayer visible={false} />
+              <YMapFeatureDataSource id={MapConsts.BASIC_MAP_SOURCE} />
+              <YMapLayer
+                source={MapConsts.BASIC_MAP_SOURCE}
+                type={MapConsts.MAP_LAYER_TYPE}
+                zIndex={MapConsts.MAP_LAYER_Z_INDEX}
+              />
+              <YMapCustomClusterer
+                marker={marker}
+                cluster={cluster}
+                features={filteredPoints}
+                gridSize={MapConsts.CLUSTER_GRID_SIZE}
+              />
+              <YMapListener onUpdate={onMapUpdateHandler} />
+              <MarkerCandidateIncidentComponent
+                coords={currentCoords}
+                visible={candidateIncidentVisible}
+                source={MapConsts.BASIC_MAP_SOURCE}
+                draggable
+                mapFollowsOnDrag
+                color="coral"
+              />
+              <CurrentPositionMarkerComponent
+                coords={currentCoords}
+                color="green"
+                source={MapConsts.BASIC_MAP_SOURCE}
+              />
+              <MapControls
+                selectIncidentMode={selectIncidentMode}
+                candidateIncidentVisible={candidateIncidentVisible}
+                currentCoords={currentCoords}
+                setCurrentCoords={setCurrentCoords}
+                setMapCenter={setMapCenter}
+                setMapAzimuth={setMapAzimuth}
+                setMapTilt={setMapTilt}
+                setMapZoom={setMapZoom}
+                setSelectIncidentMode={setSelectIncidentMode}
+                setCandidateIncidentVisible={setCandidateIncidentVisible}
+                points={points}
+                setFilteredPoints={setFilteredPoints}
+                ymap={ymap}
+                isEmptyUser={props.isEmptyUser}
+              />
+            </YMap>
+          </YMapComponentsProvider>
+        </section>
+      ) : (
+        <ErrorStub />
+      )}
     </>
   );
 });

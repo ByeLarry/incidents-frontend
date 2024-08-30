@@ -15,6 +15,7 @@ import { MEDIUM_SIZE_MARKER } from "../../utils/markerSizes";
 interface Props {
   points: Feature[];
   setFilteredPoints: React.Dispatch<React.SetStateAction<Feature[]>>;
+  title: string;
 }
 
 export const FilterButton: React.FC<Props> = observer((props: Props) => {
@@ -59,7 +60,7 @@ export const FilterButton: React.FC<Props> = observer((props: Props) => {
           onFilterClickHandler();
         }}
       >
-        <FaFilter size={MEDIUM_SIZE_MARKER} />
+        <FaFilter title={props.title} size={MEDIUM_SIZE_MARKER} />
       </YMapControlButton>
       <ModalComponent
         isOpen={modalOpen}

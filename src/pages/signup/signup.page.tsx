@@ -3,7 +3,6 @@ import styles from "./signup.module.scss";
 import "../../index.scss";
 import CustomCursorComponent from "../../components/cursor/customCursorComponent";
 import ThemeStore from "../../stores/theme.store";
-import { Toaster } from "sonner";
 import { SignUpForm } from "../../components/forms/signup.form";
 
 export const SignUp: React.FC = () => {
@@ -12,11 +11,6 @@ export const SignUp: React.FC = () => {
   return (
     <main className={`${styles.main} user-select-none`}>
       <CustomCursorComponent highlight />
-      <Toaster
-        position="bottom-center"
-        richColors
-        toastOptions={{ duration: 4000 }}
-      />
       <h1 className={`${styles.title} ${lightMode ? styles.text_shadow : ""}`}>
         Incidents
       </h1>

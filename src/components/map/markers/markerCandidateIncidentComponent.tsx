@@ -5,7 +5,6 @@ import "./markers.scss";
 import "./createIncidentForm.scss";
 import { ModalComponent } from "../../modal/modal";
 import { CategoryDto } from "../../../dto/categories.dto";
-import { toast } from "sonner";
 import { observer } from "mobx-react-lite";
 import { MarkerCandidateModal } from "../../modals/markerCandidate.modal";
 import { useGetCategories } from "../../../hooks/useGetCategories.hook";
@@ -31,8 +30,6 @@ export const MarkerCandidateIncidentComponent: React.FC<Props> = observer(
     const {
       categories,
       isLoadingGetCategories,
-      isErrorGetCategories,
-      errorGetCategories,
       isFetchingGetCategories,
       isSuccessGetCategories,
     } = useGetCategories();
@@ -41,11 +38,6 @@ export const MarkerCandidateIncidentComponent: React.FC<Props> = observer(
       if (categories && isSuccessGetCategories) setLocalCategories(categories);
     }, [categories, isSuccessGetCategories]);
 
-    useEffect(() => {
-      if (isErrorGetCategories) {
-        toast.error("Серверная ошибка при загрузке категорий");
-      }
-    }, [isErrorGetCategories, errorGetCategories]);
 
     useEffect(() => {
       setCoords(props.coords);

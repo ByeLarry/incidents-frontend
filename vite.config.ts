@@ -6,9 +6,10 @@ const vitePwa = VitePWA({
   registerType: "autoUpdate",
   outDir: "dist",
   manifest: {
-    name: "Incidents Service",
+    name: "Сервис происшествий",
     short_name: "Incidents",
-    description: "Incident analysis service",
+    description:
+      "Сервис предоставляющий информацию о происшествиях, и позволяющий пользователям отмечать происшествия на карте в реальном времени",
     theme_color: "#2b2d31",
     start_url: "/",
     display: "standalone",
@@ -17,51 +18,37 @@ const vitePwa = VitePWA({
     lang: "Ru",
     icons: [
       {
-        src: "./public/images/favicon-16.png",
-        sizes: "16x16",
+        src: "images/android-chrome-192x192.png",
+        sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "./public/images/favicon-32.png",
-        sizes: "32x32",
+        src: "images/android-chrome-512x512.png",
+        sizes: "512x512",
         type: "image/png",
       },
+    ],
+    screenshots: [
       {
-        src: "./public/images/favicon-57.png",
-        sizes: "57x57",
-        type: "image/png",
+        src: "screenshots/screenshot-wide.png",
+        label: "Wide screenshot",
+        form_factor: "wide",
+        sizes: "1679x911",
       },
       {
-        src: "./public/images/favicon-60.png",
-        sizes: "60x60",
-        type: "image/png",
+        src: "screenshots/screenshot-narrow.png",
+        label: "Narrow screenshot",
+        form_factor: "narrow",
+        sizes: "372x823",
       },
-      {
-        src: "./public/images/favicon-70.png",
-        sizes: "70x70",
-        type: "image/png",
-      },
-      {
-        src: "./public/images/favicon-72.png",
-        sizes: "72x72",
-        type: "image/png",
-      },
-      {
-        src: "./public/images/favicon-76.png",
-        sizes: "76x76",
-        type: "image/png",
-      },
-      {
-        src: "./public/images/favicon-96.png",
-        sizes: "96x96",
-        type: "image/png",
-      }
     ],
   },
   workbox: {
     globDirectory: "dist/",
-    globPatterns: ["**/*.{js,css,html,png,svg,jpg,jpeg}"],
+    globPatterns: ["**/*.{js,css,png,svg,jpg,jpeg}"],
     swDest: "dist/sw.js",
+    globIgnores: ["**/node_modules/**"],
+    
   },
 });
 

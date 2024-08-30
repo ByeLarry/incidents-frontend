@@ -11,7 +11,7 @@ export const ErrorPage: React.FC = () => {
       }`}
     >
       <section className={styles.section}>
-        <h1 className={styles.title}>404 Not Found</h1>
+        <h2 className={styles.title}>404 Not Found</h2>
         <p>Страница, которую вы ищете, не существует.</p>
         <p>
           Вернитесь на{" "}

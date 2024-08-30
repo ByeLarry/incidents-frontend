@@ -78,6 +78,7 @@ export const MapControls: React.FC<Props> = (props: Props) => {
             <FilterButton
               points={props.points}
               setFilteredPoints={props.setFilteredPoints}
+              title="Фильтр"
             />
           </YMapControls>
         )}
@@ -89,11 +90,11 @@ export const MapControls: React.FC<Props> = (props: Props) => {
             duration={MapConsts.GEOLOCATION_CONTROL_DURATION}
           />
           <YMapControlButton onClick={onResetCamera}>
-            <FaCompass size={MEDIUM_SIZE_MARKER} />
+            <FaCompass title="Сброс камеры" size={MEDIUM_SIZE_MARKER} />
           </YMapControlButton>
           {!props.isEmptyUser && (
             <YMapControlButton onClick={onSpawnMarkerControlClick}>
-              <MdOutlinePlace size={MEDIUM_SIZE_MARKER} />
+              <MdOutlinePlace title="Режим выбора" size={MEDIUM_SIZE_MARKER} />
             </YMapControlButton>
           )}
         </YMapControls>
