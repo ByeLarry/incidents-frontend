@@ -24,6 +24,34 @@ npm run dev
 docker-compose up -d
 ```
 
+### Полная установка 
+_Чтобы не копировать вручную можно запустить **setup.bat** для Windows или **setup.sh** для Linux_
+```bash
+mkdir incidents
+
+cd incidents
+
+git clone https://github.com/ByeLarry/incidents-frontend.git
+cd incidents-frontend
+docker-compose up -d
+cd ../
+
+git clone https://github.com/ByeLarry/incidents-gateway.git
+cd incidents-gateway
+docker-compose up -d 
+cd ../
+
+git clone https://github.com/ByeLarry/incidents-marks-service.git
+cd incidents-marks-service
+docker-compose up -d 
+cd ../
+
+git clone https://github.com/ByeLarry/incidents-auth-service.git
+cd incidents-auth-service
+docker-compose up -d 
+cd ../
+```
+
 ## Проектирование
 
 _Диаграммы можно сохранять и редактировать в ***[draw.io](https://app.diagrams.net/)***_
