@@ -34,6 +34,9 @@ _Диаграммы можно сохранять и редактировать 
 - ### Архитектура приложения
     ![Архитектура приложения](https://github.com/user-attachments/assets/15ca1580-62a1-418b-bd27-fbd20f18426d)
 
+- ### Граф (схема) перемещения по сайту
+  ![Граф (схема) перемещения по сайту](https://github.com/user-attachments/assets/79e1db54-b03e-460e-9a21-6e405c66a348)
+
 ## Прототипы пользовательского интерфейса
 
 _Прототипы в **Figma**: https://www.figma.com/design/uS1sOHazna93fKYVemZtpb/incidents?node-id=0-1&t=I219QsAhbcTF8Shd-1_
