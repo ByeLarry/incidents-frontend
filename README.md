@@ -24,7 +24,7 @@ npm run dev
 docker-compose up -d
 ```
 
-### Полная установка 
+### Полная установка проекта
 _Чтобы не копировать вручную можно запустить **setup.bat** для Windows или **setup.sh** для Linux_
 ```bash
 mkdir incidents
