@@ -1,0 +1,55 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ButtonComponent > should render button 1`] = `
+<button
+  class="_button_522ad7      "
+>
+  Button
+</button>
+`;
+
+exports[`ButtonComponent > should render button 2`] = `
+<button
+  class="_button_522ad7      "
+>
+  Button
+</button>
+`;
+
+exports[`ButtonComponent > should render button with onClick 1`] = `
+<button
+  aria-label="Button"
+  class="_button_522ad7 _button_modal_522ad7     "
+  type="button"
+>
+  Button
+</button>
+`;
+
+exports[`ButtonComponent > should render button with onClick and handle click event 1`] = `
+<button
+  aria-label="Button"
+  class="_button_522ad7 _button_modal_522ad7     "
+  type="button"
+>
+  Button
+</button>
+`;
+
+exports[`ButtonComponent > should render button with props 1`] = `
+<button
+  aria-label="Button"
+  class="_button_522ad7 _button_modal_522ad7     "
+  type="button"
+>
+  Button
+</button>
+`;
+
+exports[`should render button 1`] = `
+<button
+  class="_button_522ad7      "
+>
+  Button
+</button>
+`;

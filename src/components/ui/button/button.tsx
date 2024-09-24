@@ -3,7 +3,6 @@ import styles from "./button.module.scss";
 import "../../../index.scss";
 
 interface ButtonComponentProps {
-  className?: string;
   onClick?: () => void;
   children?: React.ReactNode;
   type?: "submit" | "button" | "reset";
@@ -36,11 +35,11 @@ export const ButtonComponent: React.FC<ButtonComponentProps> = memo(
         title={props.title}
         className={`${props.noHover ? styles.button_no_hover : styles.button} ${
           props.modalButton ? styles.button_modal : ""
-        } ${props.inverse && styles.button_inverse} ${
-          props.textInverse && styles.button__text_inverse
-        } ${props.noHover && styles.button_no_hover} ${
-          props.transparent && styles.button_transparent
-        } ${props.className} ${
+        } ${props.inverse ? styles.button_inverse : ""} ${
+          props.textInverse ? styles.button__text_inverse : ""
+        } ${props.noHover ? styles.button_no_hover : ""} ${
+          props.transparent ? styles.button_transparent : ""
+        } ${
           props.verifyed ? `color-${props.categoryColor}` : ""
         }`}
         style={{ zIndex: props.zIndex }}

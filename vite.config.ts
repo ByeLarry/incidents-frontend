@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { VitePWA } from "vite-plugin-pwa";
@@ -48,13 +50,18 @@ const vitePwa = VitePWA({
     globPatterns: ["**/*.{js,css,png,svg,jpg,jpeg}"],
     swDest: "dist/sw.js",
     globIgnores: ["**/node_modules/**"],
-    
   },
 });
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), vitePwa],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
+    css: true,
+  },
   server: {
     port: 80,
   },
