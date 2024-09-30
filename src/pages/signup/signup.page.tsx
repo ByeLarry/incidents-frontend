@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./signup.module.scss";
 import "../../index.scss";
-import CustomCursorComponent from "../../components/cursor/customCursorComponent";
+import CustomCursorComponent from "../../components/cursor/custom-cursor-component";
 import ThemeStore from "../../stores/theme.store";
 import { SignUpForm } from "../../components/forms/signup.form";
 

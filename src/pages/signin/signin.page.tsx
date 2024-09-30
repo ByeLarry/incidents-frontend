@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "../../index.scss";
 import styles from "./signin.module.scss";
-import CustomCursorComponent from "../../components/cursor/customCursorComponent";
+import CustomCursorComponent from "../../components/cursor/custom-cursor-component";
 import { SignInForm } from "../../components/forms/signin.form";
 
 export const SignIn: React.FC = () => {

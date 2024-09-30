@@ -1,14 +1,14 @@
 import { makeAutoObservable } from "mobx";
-import { User } from "../interfaces/user";
+import { UserDto } from "../libs/dto/user.dto";
 
 class UserStore {
-  user: User | null = null;
+  user: UserDto | null = null;
 
   constructor() {
     makeAutoObservable(this);
   }
 
-  changeUser = (data: User | null) => {
+  changeUser = (data: UserDto | null) => {
     this.user = data;
   };
 

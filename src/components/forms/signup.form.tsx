@@ -2,15 +2,14 @@ import { memo, useEffect } from "react";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
 import { LabelComponent } from "../ui/label/label";
-import csrfStore from "../../stores/csrf.store";
-import { SignUpDto } from "../../dto/signup.dto";
-import { User } from "../../interfaces/user";
-import useInput from "../../hooks/useInput.hook";
+import { SignUpDto } from "../../libs/dto/signup.dto";
+import useInput from "../../libs/hooks/input.hook";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../stores/user.store";
 import { InputComponent } from "../ui/input/input";
-import { ValidationErrorMessages } from "../../utils/validationErrorMessages";
-import { useSignup } from "../../hooks/useSignup";
+import { ValidationErrorMessages } from "../../libs/helpers/validation-error-messages";
+import { useSignup } from "../../libs/hooks/signup";
+import { UserDto } from "../../libs/dto/user.dto";
 
 export const SignUpForm: React.FC = memo(() => {
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });
@@ -25,8 +24,7 @@ export const SignUpForm: React.FC = memo(() => {
 
   useEffect(() => {
     if (isSuccessSignup && signupResponse) {
-      changeUser(signupResponse.data as User);
-      csrfStore.changeCsrf(signupResponse.data.csrf_token);
+      changeUser(signupResponse.data.user as UserDto);
       navigate("/", { replace: true });
     }
   }, [changeUser, isSuccessSignup, navigate, signupResponse]);

@@ -11,30 +11,30 @@ import {
 } from "ymap3-components";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./map.module.scss";
-import { GeoServiceFromBrowser } from "../../services/geo.service";
-import { CurrentPositionMarkerComponent } from "./markers/markerCurrentPositionComponent";
+import { GeoServiceFromBrowser } from "../../libs/services/geo.service";
+import { CurrentPositionMarkerComponent } from "./markers/marker-current-position-component";
 import { Spiner } from "../ui/spiner/spiner";
 import { io, Socket } from "socket.io-client";
-import { MsgEnum } from "../../utils/msg.enum";
+import { MsgEnum } from "../../libs/enums/msg.enum";
 import { Feature } from "@yandex/ymaps3-clusterer";
-import { ClusterComponent } from "./markers/clusterComponent";
+import { ClusterComponent } from "./markers/cluster/cluster-component";
 import { toast } from "sonner";
-import { MarkerCandidateIncidentComponent } from "./markers/markerCandidateIncidentComponent";
+import { MarkerCandidateIncidentComponent } from "./markers/marker-candidate-incident-component";
 import { debounce } from "lodash";
-import selectedCategoriesStore from "../../stores/selectedCategories.store";
-import { useGetMarks } from "../../hooks/useGetMarks.hook";
-import { WrappedMarker } from "./wrappedMarker";
-import { MapControls } from "./mapControls";
-import { MapConsts } from "./mapConsts";
+import selectedCategoriesStore from "../../stores/selected-categories.store";
+import { useGetMarks } from "../../libs/hooks/get-marks.hook";
+import { WrappedMarker } from "./markers/wrapped-marker";
+import { MapControls } from "./map-controls/map-controls";
+import { MapConsts } from "../../libs/utils/map-consts.util";
 import {
   LngLat,
   YMap as YMapType,
   MapEventUpdateHandler,
 } from "@yandex/ymaps3-types";
-import { XXXLARGE_SIZE_MARKER } from "../../utils/markerSizes";
-import closeCandidateMarkFormCallbackStore from "../../stores/closeCandidateMarkFormCallback.store";
+import { XXXLARGE_SIZE_MARKER } from "../../libs/utils/marker-sizes.util";
+import closeCandidateMarkFormCallbackStore from "../../stores/close-candidate-mark-form-callback.store";
 import { observer } from "mobx-react-lite";
-import { ErrorStub } from "../ui/errorStub/errorStub";
+import { ErrorStub } from "../ui/error-stub/error-stub";
 
 interface MapProps {
   lightMode: boolean;

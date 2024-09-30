@@ -3,7 +3,7 @@ import "./modal.scss";
 import "../../index.scss";
 import { IoMdClose } from "react-icons/io";
 import { useRef } from "react";
-import { LARGE_SIZE_MARKER } from "../../utils/markerSizes";
+import { LARGE_SIZE_MARKER } from "../../libs/utils/marker-sizes.util";
 
 interface ModalProps {
   children?: React.ReactNode;

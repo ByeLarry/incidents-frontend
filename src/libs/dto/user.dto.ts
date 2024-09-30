@@ -1,0 +1,9 @@
+export interface UserDto {
+  _id: string;
+  name: string;
+  surname: string;
+  email: string;
+  activated: boolean;
+  provider: string;
+  roles: string[];
+}

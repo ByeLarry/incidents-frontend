@@ -1,10 +1,9 @@
 import { toast } from "sonner";
-import csrfStore from "../../stores/csrf.store";
 import { ButtonComponent } from "../ui/button/button";
 import styles from "../header/header.module.scss";
 import userStore from "../../stores/user.store";
 import { memo, useEffect } from "react";
-import { useLogout } from "../../hooks/useLogout.hook";
+import { useLogout } from "../../libs/hooks/logout.hook";
 
 interface Props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -17,13 +16,12 @@ export const LogoutModal: React.FC<Props> = memo((props: Props) => {
     if (isSuccessLogout) {
       toast.success("Вы вышли из аккаунта");
       userStore.changeUser(null);
-      csrfStore.changeCsrf("");
       props.setModalOpen(false);
     }
   }, [isSuccessLogout, props]);
 
   const handleLogout = () => {
-    mutateLogout({ csrf_token: csrfStore.csrf });
+    mutateLogout();
   };
   return (
     <>

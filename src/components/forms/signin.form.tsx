@@ -2,14 +2,13 @@ import { memo, useEffect } from "react";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
 import { LabelComponent } from "../ui/label/label";
-import csrfStore from "../../stores/csrf.store";
-import useInput from "../../hooks/useInput.hook";
+import useInput from "../../libs/hooks/input.hook";
 import { useNavigate } from "react-router-dom";
 import userStore from "../../stores/user.store";
 import { InputComponent } from "../ui/input/input";
-import { SignInDto } from "../../dto/signin.dto";
-import { ValidationErrorMessages } from "../../utils/validationErrorMessages";
-import { useSignin } from "../../hooks/useSignin";
+import { SignInDto } from "../../libs/dto/signin.dto";
+import { ValidationErrorMessages } from "../../libs/helpers/validation-error-messages";
+import { useSignin } from "../../libs/hooks/signin";
 
 export const SignInForm: React.FC = memo(() => {
   const navigate = useNavigate();
@@ -21,11 +20,10 @@ export const SignInForm: React.FC = memo(() => {
 
   useEffect(() => {
     if (isSuccessSignin && signinResponse) {
-      changeUser(signinResponse.data);
-      csrfStore.changeCsrf(signinResponse.data.csrf_token);
+      changeUser(signinResponse.data.user);
       navigate("/", { replace: true });
     }
-  }, [isSuccessSignin, signinResponse, changeUser, navigate]);
+  }, [changeUser, isSuccessSignin, navigate, signinResponse]);
 
   const onSubmit = async function (e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();

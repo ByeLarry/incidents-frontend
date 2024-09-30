@@ -7,21 +7,18 @@ import { useEffect } from "react";
 import UserStore from "../stores/user.store";
 import { Toaster, toast } from "sonner";
 import { ErrorPage } from "../pages/error/error.page";
-import csrfStore from "../stores/csrf.store";
 import { observer } from "mobx-react-lite";
-import { useGetUser } from "../hooks/useGetUser.hook";
+import { useGetUser } from "../libs/hooks/get-user.hook";
 
 const App = observer(() => {
   const { user, changeUser } = UserStore;
-  const { csrf, changeCsrf } = csrfStore;
   const { userdata, isSuccessGetUser } = useGetUser();
 
   useEffect(() => {
     if (isSuccessGetUser && userdata) {
       changeUser(userdata);
-      changeCsrf(userdata.csrf_token);
     }
-  }, [userdata, isSuccessGetUser, changeUser, changeCsrf]);
+  }, [userdata, isSuccessGetUser, changeUser]);
 
   useEffect(() => {
     if (!user || user.activated === undefined) return;
@@ -29,6 +26,7 @@ const App = observer(() => {
       toast.info("Почта не подтверждена");
     }
   }, [user]);
+
   return (
     <>
       <div className="App">
@@ -42,11 +40,11 @@ const App = observer(() => {
           <Route path="/" element={<Home />} />
           <Route
             path="/signin"
-            element={!csrf && !user ? <SignIn /> : <Navigate to="/" />}
+            element={!user ? <SignIn /> : <Navigate to="/" />}
           />
           <Route
             path="/signup"
-            element={!csrf && !user ? <SignUp /> : <Navigate to="/" />}
+            element={!user ? <SignUp /> : <Navigate to="/" />}
           />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

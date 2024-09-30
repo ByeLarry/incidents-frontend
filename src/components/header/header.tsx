@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styles from "./header.module.scss";
-import '../../index.scss'
+import "../../index.scss";
 import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { RiCriminalFill } from "react-icons/ri";
@@ -12,8 +12,10 @@ import { ToggleComponent } from "../ui/toggle/toggle";
 import { ButtonComponent } from "../ui/button/button";
 import { ModalComponent } from "../modal/modal";
 import { LogoutModal } from "../modals/logout.modal";
-import { MEDIUM_SIZE_MARKER, XLARGE_SIZE_MARKER } from "../../utils/markerSizes";
-
+import {
+  MEDIUM_SIZE_MARKER,
+  XLARGE_SIZE_MARKER,
+} from "../../libs/utils/marker-sizes.util";
 
 export const Header: React.FC = observer(() => {
   const { lightMode } = themeStore;
@@ -41,7 +43,10 @@ export const Header: React.FC = observer(() => {
         <div className={styles.icon__wrapper}>
           <RiCriminalFill size={XLARGE_SIZE_MARKER} />
           <div className={styles.knife__wrapper}>
-            <GiBowieKnife className={styles.knife__icon} size={MEDIUM_SIZE_MARKER} />
+            <GiBowieKnife
+              className={styles.knife__icon}
+              size={MEDIUM_SIZE_MARKER}
+            />
           </div>
         </div>
       </div>
@@ -79,7 +84,6 @@ export const Header: React.FC = observer(() => {
                 type="button"
                 ariaLabel="Выход"
                 noHover={lightMode}
-                className="position_relative"
                 onClick={() => setModalOpen(true)}
               >
                 <IoIosLogOut size={30} color={lightMode ? "black" : "white"} />
