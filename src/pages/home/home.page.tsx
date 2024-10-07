@@ -8,6 +8,7 @@ import "../../index.scss";
 export const Home: React.FC = observer(() => {
   const { lightMode } = ThemeStore;
   const { isEmptyUser } = userStore;
+
   return (
     <>
       <Header />

@@ -13,3 +13,5 @@ export * from "./user.dto";
 export * from "./verified-count.dto";
 export * from "./verified-count.dto";
 export * from "./verify-mark.dto";
+export * from "./delete-user.dto";
+export * from "./auth-providers.dto";

@@ -5,30 +5,26 @@ import { useEffect, useState } from "react";
 import "./markers.scss";
 import { toast } from "sonner";
 import { IoMdClose } from "react-icons/io";
-import { MarkRecvDto } from "../../../libs/dto/mark-recv.dto";
-import { timeAgo } from "../../../libs/utils/time-ago.util";
-import { IncidentCategoryLabel } from "../../ui/incident-category-label/incident-category-label";
-import { ButtonComponent } from "../../ui/button/button";
-import { observer } from "mobx-react-lite";
-import userStore from "../../../stores/user.store";
-import { Spiner } from "../../ui/spiner/spiner";
-import { VerifyMarkDto } from "../../../libs/dto/verify-mark.dto";
-import { formatDistance } from "../../../libs/helpers/format-distance";
-import { TooltipComponent } from "../../ui/tooltip/tooltip";
-import { PiFileTextThin } from "react-icons/pi";
-import { GiPathDistance } from "react-icons/gi";
-import { CiCircleCheck } from "react-icons/ci";
-import { CiCalendarDate } from "react-icons/ci";
-import { GeoServiceFromBrowser } from "../../../libs/services/geo.service";
-import { useGetMark } from "../../../libs/hooks/get-mark.hook";
-import { useVerify } from "../../../libs/hooks/verify.hook";
-import { useUnverify } from "../../../libs/hooks/unverify.hook";
-import { CoordsDto } from "../../../libs/dto/coords.dto";
+
 import {
   LARGE_SIZE_MARKER,
   MEDIUM_SIZE_MARKER,
   SMALL_SIZE_MARKER,
 } from "../../../libs/utils/marker-sizes.util";
+import { observer } from "mobx-react-lite";
+import { CoordsDto, MarkRecvDto, VerifyMarkDto } from "../../../libs/dto";
+import userStore from "../../../stores/user.store";
+import { useGetMark, useUnverify, useVerify } from "../../../libs/hooks";
+import { GeoServiceFromBrowser } from "../../../libs/services/geo.service";
+import { IncidentCategoryLabel } from "../../ui/incident-category-label/incident-category-label";
+import { TooltipComponent } from "../../ui/tooltip/tooltip";
+import { CiCalendarDate, CiCircleCheck } from "react-icons/ci";
+import { GiPathDistance } from "react-icons/gi";
+import { timeAgo } from "../../../libs/utils";
+import { formatDistance } from "../../../libs/helpers";
+import { PiFileTextThin } from "react-icons/pi";
+import { Spiner } from "../../ui/spiner/spiner";
+import { ButtonComponent } from "../../ui/button/button";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -44,8 +40,10 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
   const [markData, setMarkData] = useState<MarkRecvDto | null>(null);
   const [zIndex, setZIndex] = useState(100);
   const { user, isEmptyUser } = userStore;
-  const { mutateVerify, isPendingVerify, dataVerify } = useVerify();
-  const { mutateUnverify, isPendingUnverify, dataUnverify } = useUnverify();
+  const { mutateVerify, isPendingVerify, dataVerify, isSuccessVerify } =
+    useVerify();
+  const { mutateUnverify, isPendingUnverify, dataUnverify, isSuccessUnverify } =
+    useUnverify();
   const [currentCoords, setCurrentCoords] = useState<CoordsDto>({
     lat: 0,
     lng: 0,
@@ -53,7 +51,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
 
   const getMarkDto = {
     markId: props.markId,
-    userId: user?._id as string,
+    userId: user?.id as string,
     lat: currentCoords?.lat,
     lng: currentCoords?.lng,
     enabled: popupState,
@@ -103,17 +101,26 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
     }
     const mark: VerifyMarkDto = {
       markId: markData?.id as number,
-      userId: user?._id as string,
+      userId: user?.id as string,
     };
     if (verified) {
       mutateUnverify(mark);
-      setVerified(false);
     } else {
       mutateVerify(mark);
-      setVerified(true);
     }
   };
 
+  useEffect(() => {
+    if (isSuccessVerify) {
+      setVerified(true);
+    }
+  }, [isSuccessVerify]);
+
+  useEffect(() => {
+    if (isSuccessUnverify) {
+      setVerified(false);
+    }
+  }, [isSuccessUnverify]);
   return (
     <YMapMarker
       coordinates={props.coords}

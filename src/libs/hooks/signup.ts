@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { AuthService } from "../services/auth.service";
 import { toast } from "sonner";
-import { AxiosError } from "axios";
+import { AxiosError, HttpStatusCode } from "axios";
 import { SignUpDto } from "../dto/signup.dto";
 import { ACCESS_TOKEN_KEY } from "../utils/consts.util";
 
@@ -17,10 +17,10 @@ export function useSignup() {
     onError: (error) => {
       if (error instanceof AxiosError) {
         switch (error.response?.status) {
-          case 409:
+          case HttpStatusCode.Conflict:
             toast.error("Такой пользователь уже существует");
             break;
-          case 500:
+          case HttpStatusCode.InternalServerError:
             toast.error("Произошла серверная ошибка");
             break;
           default:

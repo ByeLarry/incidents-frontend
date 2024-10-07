@@ -24,7 +24,7 @@ export const SignUpForm: React.FC = memo(() => {
 
   useEffect(() => {
     if (isSuccessSignup && signupResponse) {
-      changeUser(signupResponse.data.user as UserDto);
+      changeUser(signupResponse.data.user as UserDto || null);
       navigate("/", { replace: true });
     }
   }, [changeUser, isSuccessSignup, navigate, signupResponse]);

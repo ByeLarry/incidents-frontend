@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export const UNVERIFY_KEY = "unverify";
 
 export function useUnverify() {
-  const { mutate, isPending, data } = useMutation({
+  const { mutate, isPending, data, isSuccess } = useMutation({
     mutationKey: [UNVERIFY_KEY],
     mutationFn: async (markData: VerifyMarkDto) =>
       MarksService.postVerifyFalse(markData),
@@ -19,5 +19,6 @@ export function useUnverify() {
     mutateUnverify: mutate,
     isPendingUnverify: isPending,
     dataUnverify: data,
+    isSuccessUnverify: isSuccess,
   };
 }

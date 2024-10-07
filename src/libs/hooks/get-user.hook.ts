@@ -4,13 +4,12 @@ import { AuthService } from "../services/auth.service";
 export const GET_USER_KEY = "getUser";
 
 export function useGetUser() {
-  const { data, isLoading, isSuccess, isError, error, isFetching, refetch } = useQuery({
-    queryKey: [GET_USER_KEY],
-    queryFn: () => AuthService.getUser(),
-    select: (data) => data.data,
-    retry: 1,
-    retryDelay: 3000,
-  });
+  const { data, isLoading, isSuccess, isError, error, isFetching, refetch } =
+    useQuery({
+      queryKey: [GET_USER_KEY],
+      queryFn: () => AuthService.getUser(),
+      select: (data) => data.data,
+    });
 
   return {
     userdata: data,

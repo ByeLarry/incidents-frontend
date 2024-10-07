@@ -1,18 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
-import { SignInDto } from "../dto/signin.dto";
 import { AuthService } from "../services/auth.service";
 import { toast } from "sonner";
 import { AxiosError, HttpStatusCode } from "axios";
-import { ACCESS_TOKEN_KEY } from "../utils/consts.util";
+import { DeleteUserDto } from "../dto";
+import { ACCESS_TOKEN_KEY } from "../utils";
 
-export const SIGNIN_KEY = "signin";
+export const DELETE_USER_KEY = "signin";
 
-export function useSignin() {
+export function useDeleteUser() {
   const { mutate, isPending, data, isSuccess, isError, error } = useMutation({
-    mutationKey: [SIGNIN_KEY],
-    mutationFn: async (data: SignInDto) => AuthService.postSignIn(data),
-    onSuccess: (response) => {
-      localStorage.setItem(ACCESS_TOKEN_KEY, response.data.accessToken);
+    mutationKey: [DELETE_USER_KEY],
+    mutationFn: async (data: DeleteUserDto) => AuthService.deleteUser(data),
+    onSuccess: () => {
+      localStorage.removeItem(ACCESS_TOKEN_KEY);
     },
     onError: (error) => {
       if (error instanceof AxiosError) {
@@ -26,11 +26,6 @@ export function useSignin() {
           case HttpStatusCode.InternalServerError:
             toast.error("Произошла серверная ошибка");
             break;
-          case HttpStatusCode.Conflict:
-            toast.error(
-              "Невозможно войти в аккаунт. Попробуйте другой способ аутентификации."
-            );
-            break;
           default:
             toast.error(
               error.response?.data.message || "Во время входа произошла ошибка"
@@ -43,11 +38,11 @@ export function useSignin() {
   });
 
   return {
-    mutateSignin: mutate,
-    isPendingSignin: isPending,
-    signinResponse: data,
-    isSuccessSignin: isSuccess,
-    isErrorSignin: isError,
-    errorSignin: error,
+    mutateDelete: mutate,
+    isPendingDelete: isPending,
+    deleteResponse: data,
+    isSuccessDelete: isSuccess,
+    isErrorDelete: isError,
+    errorDelete: error,
   };
 }

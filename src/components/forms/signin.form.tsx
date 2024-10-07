@@ -70,7 +70,6 @@ export const SignInForm: React.FC = memo(() => {
             </LabelComponent>
           )}
         </div>
-
         <ButtonComponent
           disabled={
             !email.inputValid || !password.inputValid || isPendingSignin

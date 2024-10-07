@@ -18,7 +18,6 @@ class ThemeStore {
   }
 
   changeTheme = (lightMode: boolean) => {
-    // console.log("[changeTheme]: ", lightMode);
     if (!lightMode) {
       localStorage.setItem("lightMode", "false");
       document.body.classList.add("dark-mode");

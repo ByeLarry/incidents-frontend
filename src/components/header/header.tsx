@@ -15,11 +15,13 @@ import { LogoutModal } from "../modals/logout.modal";
 import {
   MEDIUM_SIZE_MARKER,
   XLARGE_SIZE_MARKER,
+  XXXLARGE_SIZE_MARKER,
 } from "../../libs/utils/marker-sizes.util";
+import { Spiner } from "../ui/spiner/spiner";
 
 export const Header: React.FC = observer(() => {
   const { lightMode } = themeStore;
-  const { isEmptyUser } = userStore;
+  const { isEmptyUser, isInitializedUser } = userStore;
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
@@ -55,40 +57,55 @@ export const Header: React.FC = observer(() => {
           <li className={styles.list__item}>
             <ToggleComponent />
           </li>
-          {isEmptyUser() ? (
+
+          {isInitializedUser() ? (
             <>
-              <li className={styles.list__item}>
-                <Link
-                  to={"signup"}
-                  className={`link ${styles.list__item} ${
-                    lightMode ? "link_light" : ""
-                  }`}
-                >
-                  Регистрация
-                </Link>
-              </li>
-              <li className={styles.list__item}>
-                <Link
-                  to={"signin"}
-                  className={`link ${styles.list__item} ${
-                    lightMode ? "link_light" : ""
-                  }`}
-                >
-                  Вход
-                </Link>
-              </li>
+              {isEmptyUser() ? (
+                <>
+                  <li className={styles.list__item}>
+                    <Link
+                      to={"signup"}
+                      className={`link ${styles.list__item} ${
+                        lightMode ? "link_light" : ""
+                      }`}
+                    >
+                      Регистрация
+                    </Link>
+                  </li>
+                  <li className={styles.list__item}>
+                    <Link
+                      to={"signin"}
+                      className={`link ${styles.list__item} ${
+                        lightMode ? "link_light" : ""
+                      }`}
+                    >
+                      Вход
+                    </Link>
+                  </li>
+                </>
+              ) : (
+                <li className={styles.list__item}>
+                  <ButtonComponent
+                    type="button"
+                    ariaLabel="Выход"
+                    noHover={lightMode}
+                    onClick={() => setModalOpen(true)}
+                  >
+                    <IoIosLogOut
+                      size={30}
+                      color={lightMode ? "black" : "white"}
+                    />
+                  </ButtonComponent>
+                </li>
+              )}
             </>
           ) : (
-            <li className={styles.list__item}>
-              <ButtonComponent
-                type="button"
-                ariaLabel="Выход"
-                noHover={lightMode}
-                onClick={() => setModalOpen(true)}
-              >
-                <IoIosLogOut size={30} color={lightMode ? "black" : "white"} />
-              </ButtonComponent>
-            </li>
+            <Spiner
+              visible={true}
+              fixed
+              lightMode={lightMode}
+              size={XXXLARGE_SIZE_MARKER}
+            />
           )}
         </ul>
       </nav>

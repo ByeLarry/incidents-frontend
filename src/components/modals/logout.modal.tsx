@@ -4,6 +4,7 @@ import styles from "../header/header.module.scss";
 import userStore from "../../stores/user.store";
 import { memo, useEffect } from "react";
 import { useLogout } from "../../libs/hooks/logout.hook";
+import { useDeleteUser } from "../../libs/hooks";
 
 interface Props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -11,6 +12,7 @@ interface Props {
 
 export const LogoutModal: React.FC<Props> = memo((props: Props) => {
   const { mutateLogout, isSuccessLogout } = useLogout();
+  const { mutateDelete } = useDeleteUser();
 
   useEffect(() => {
     if (isSuccessLogout) {
@@ -42,6 +44,14 @@ export const LogoutModal: React.FC<Props> = memo((props: Props) => {
           onClick={() => props.setModalOpen(false)}
         >
           Нет
+        </ButtonComponent>
+      </div>
+      <div style={{ marginTop: "20px" }}>
+        <ButtonComponent
+          type="button"
+          onClick={() => mutateDelete({ userId: userStore.user?.id || "" })}
+        >
+          Delete user (test)
         </ButtonComponent>
       </div>
     </>

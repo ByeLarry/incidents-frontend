@@ -9,16 +9,15 @@ import { Toaster, toast } from "sonner";
 import { ErrorPage } from "../pages/error/error.page";
 import { observer } from "mobx-react-lite";
 import { useGetUser } from "../libs/hooks/get-user.hook";
+import { SuccessAuthPage } from "../pages/success-auth/success-auth.page";
 
 const App = observer(() => {
   const { user, changeUser } = UserStore;
-  const { userdata, isSuccessGetUser } = useGetUser();
+  const { userdata } = useGetUser();
 
   useEffect(() => {
-    if (isSuccessGetUser && userdata) {
-      changeUser(userdata);
-    }
-  }, [userdata, isSuccessGetUser, changeUser]);
+    changeUser(userdata || null);
+  }, [userdata, changeUser]);
 
   useEffect(() => {
     if (!user || user.activated === undefined) return;
@@ -38,6 +37,7 @@ const App = observer(() => {
         />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/success" element={<SuccessAuthPage />} />
           <Route
             path="/signin"
             element={!user ? <SignIn /> : <Navigate to="/" />}

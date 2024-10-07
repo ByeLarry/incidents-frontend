@@ -34,7 +34,7 @@ export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
     e.preventDefault();
 
     const newMark: CreateMarkDto = {
-      userId: user?._id as string,
+      userId: user?.id as string,
       lat: props.coords[1],
       lng: props.coords[0],
       title: title.value,

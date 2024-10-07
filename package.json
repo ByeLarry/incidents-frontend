@@ -16,6 +16,7 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.1",
     "@tanstack/react-query": "^5.51.23",
     "@tanstack/react-query-devtools": "^5.51.23",
     "@yandex/ymaps3-clusterer": "^0.0.9",

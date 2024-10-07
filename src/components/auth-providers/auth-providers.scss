@@ -1,0 +1,17 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+
+.icon {
+    transform: scale(1);
+    transition: transform 0.1s linear;
+    &:hover {
+        cursor: pointer;
+        transform: scale(1.5);
+    }
+}

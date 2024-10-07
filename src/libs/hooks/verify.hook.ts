@@ -6,7 +6,7 @@ import { toast } from "sonner";
 export const VERIFY_KEY = "verify";
 
 export function useVerify() {
-  const { mutate, isPending, data } = useMutation({
+  const { mutate, isPending, data, isSuccess } = useMutation({
     mutationKey: [VERIFY_KEY],
     mutationFn: async (markData: VerifyMarkDto) =>
       MarksService.postVerifyTrue(markData),
@@ -15,5 +15,10 @@ export function useVerify() {
     },
   });
 
-  return { mutateVerify: mutate, isPendingVerify: isPending, dataVerify: data };
+  return {
+    mutateVerify: mutate,
+    isPendingVerify: isPending,
+    dataVerify: data,
+    isSuccessVerify: isSuccess,
+  };
 }

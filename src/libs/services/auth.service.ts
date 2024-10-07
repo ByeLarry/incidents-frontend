@@ -1,10 +1,13 @@
 import { AxiosResponse } from "axios";
-import { SignInDto } from "../dto/signin.dto";
-import { SignUpDto } from "../dto/signup.dto";
-import { UserWithAccessToken } from "../../interfaces/user-with-access-token";
-import { UserDto } from "../dto/user.dto";
+import { UserWithAccessToken } from "../../interfaces";
+import {
+  AccessTokenDto,
+  DeleteUserDto,
+  SignInDto,
+  SignUpDto,
+  UserDto,
+} from "../dto";
 import apiClient from "../../interceptors/auth.interceptor";
-import { AccessTokenDto } from "../dto/access-token.dto";
 
 export class AuthService {
   private static baseUrl = import.meta.env.VITE_API_GETAWAY_HOST;
@@ -41,6 +44,11 @@ export class AuthService {
     const url = `${this.baseUrl}/api/auth/me`;
     const response = await apiClient.get<UserDto>(url, {
       withCredentials: true,
+      // headers: {
+      //   "Cache-Control": "no-store",
+      //   Pragma: "no-cache",
+      //   Expires: "0",
+      // },
     });
     return response;
   }
@@ -67,5 +75,55 @@ export class AuthService {
       }
     );
     return response;
+  }
+
+  static async deleteUser(data: DeleteUserDto): Promise<AxiosResponse> {
+    const url = `${this.baseUrl}/api/auth`;
+    const params = AuthService.getUserDeleteParam(data.userId);
+    const response = await apiClient.delete(`${url}?${params}`, {
+      withCredentials: true,
+    });
+    return response;
+  }
+
+  static async getGoogleAuthSuccess(
+    token: string,
+    name: string,
+    surname: string
+  ): Promise<AxiosResponse<UserWithAccessToken>> {
+    const url = `${this.baseUrl}/api/auth/google/success`;
+    const params = new URLSearchParams({
+      token,
+      name,
+      surname,
+    });
+    const response = await apiClient.get(`${url}?${params}`, {
+      withCredentials: true,
+    });
+    return response;
+  }
+
+  static async getYandexAuthSuccess(
+    token: string,
+    name: string,
+    surname: string
+  ): Promise<AxiosResponse<UserWithAccessToken>> {
+    const url = `${this.baseUrl}/api/auth/yandex/success`;
+    const params = new URLSearchParams({
+      token,
+      name,
+      surname,
+    });
+    const response = await apiClient.get(`${url}?${params}`, {
+      withCredentials: true,
+    });
+    return response;
+  }
+
+  private static getUserDeleteParam(userId: string): string {
+    const params = new URLSearchParams({
+      userId,
+    }).toString();
+    return params;
   }
 }

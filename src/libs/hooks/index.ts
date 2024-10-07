@@ -10,3 +10,5 @@ export * from "./signup";
 export * from "./unverify.hook";
 export * from "./validation.hook";
 export * from "./verify.hook";
+export * from "./delete-user.hook";
+export * from "./google-auth-success.hook";

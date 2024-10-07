@@ -1,0 +1,21 @@
+@import '../../index.scss';
+
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100dvh;
+    width: 100%;
+}
+
+.section {
+    background-color: $light-gray;
+    color: $dark-gray;
+    padding: 1rem 2rem 2rem 2rem;
+    box-shadow: 0 0 0.5rem $dark-gray;
+}
+
+.title {
+    margin: 0;
+}
