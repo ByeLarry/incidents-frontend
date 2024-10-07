@@ -23,3 +23,8 @@ git clone https://github.com/ByeLarry/incidents-auth-service.git
 cd incidents-auth-service
 docker-compose up -d 
 cd ../
+
+git clone https://github.com/ByeLarry/incidents-admin-frontend.git
+cd incidents-admin-frontend
+docker-compose up -d 
+cd ../
