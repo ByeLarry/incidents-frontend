@@ -1,25 +1,23 @@
-import { FcGoogle } from "react-icons/fc";
-import { LARGE_SIZE_MARKER } from "../../libs/utils";
-import { FaYandex } from "react-icons/fa";
+import { ButtonComponent } from "../ui/button/button";
 import "./auth-providers.scss";
+import GoogleButton from "react-google-button";
+import yandex_button from "../../assets/yandex-button.svg";
 
 export const AuthProviders: React.FC = () => {
   return (
     <div className="wrapper">
-      <FcGoogle
-        className="icon"
-        size={LARGE_SIZE_MARKER}
-        onClick={() => {
-          window.location.replace(import.meta.env.VITE_GOOGLE_AUTH_URL);
-        }}
-      />
-      <FaYandex
-        className="icon"
-        size={LARGE_SIZE_MARKER}
-        color="red"
+      <ButtonComponent
+        noHover
         onClick={() =>
           window.location.replace(import.meta.env.VITE_YANDEX_AUTH_URL)
         }
+      >
+        <img src={yandex_button} alt="yandex" />
+      </ButtonComponent>
+      <GoogleButton
+        onClick={() => {
+          window.location.replace(import.meta.env.VITE_GOOGLE_AUTH_URL);
+        }}
       />
     </div>
   );
