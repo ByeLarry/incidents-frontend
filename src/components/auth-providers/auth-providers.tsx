@@ -1,7 +1,7 @@
 import { ButtonComponent } from "../ui/button/button";
 import "./auth-providers.scss";
 import GoogleButton from "react-google-button";
-import yandex_button from "../../assets/yandex-button.svg";
+import yandex_button from "../../../public/svg/yandex-button.svg";
 
 export const AuthProviders: React.FC = () => {
   return (
