@@ -13,13 +13,22 @@ import { SuccessAuthPage } from "../pages/success-auth/success-auth.page";
 
 const App = observer(() => {
   const { user, changeUser } = UserStore;
-  const { userdata } = useGetUser();
+  const { mutateGetUser, userdata, isSuccessGetUser } = useGetUser();
 
   useEffect(() => {
-    changeUser(userdata || null);
-  }, [userdata, changeUser]);
+    mutateGetUser();
+  }, [mutateGetUser]);
 
   useEffect(() => {
+    if (isSuccessGetUser && userdata) {
+      changeUser(userdata.data);
+    } else {
+      changeUser(null);
+    }
+  }, [changeUser, isSuccessGetUser, userdata]);
+
+  useEffect(() => {
+    console.log("user ", user);
     if (!user || user.activated === undefined) return;
     if (user.activated === false) {
       toast.info("Почта не подтверждена");
