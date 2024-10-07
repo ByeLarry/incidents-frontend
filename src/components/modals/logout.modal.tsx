@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { ButtonComponent } from "../ui/button/button";
 import styles from "../header/header.module.scss";
 import userStore from "../../stores/user.store";
@@ -16,7 +15,6 @@ export const LogoutModal: React.FC<Props> = memo((props: Props) => {
 
   useEffect(() => {
     if (isSuccessLogout) {
-      toast.success("Вы вышли из аккаунта");
       userStore.changeUser(null);
       props.setModalOpen(false);
     }
