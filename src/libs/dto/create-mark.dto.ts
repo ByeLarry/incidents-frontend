@@ -1,3 +1,5 @@
+import { IAddress } from "../../interfaces";
+
 export interface CreateMarkDto {
   userId: string;
   lat: number;
@@ -5,4 +7,5 @@ export interface CreateMarkDto {
   title: string;
   description: string;
   categoryId: number;
+  address?: IAddress;
 }

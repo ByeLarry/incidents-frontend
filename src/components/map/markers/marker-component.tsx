@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import "./markers.scss";
 import { toast } from "sonner";
 import { IoMdClose } from "react-icons/io";
-
+import { PiCityThin } from "react-icons/pi";
 import {
   LARGE_SIZE_MARKER,
   MEDIUM_SIZE_MARKER,
@@ -121,6 +121,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
       setVerified(false);
     }
   }, [isSuccessUnverify]);
+  
   return (
     <YMapMarker
       coordinates={props.coords}
@@ -193,6 +194,17 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                 </TooltipComponent>
                 <p className="popup-text">
                   {`${formatDistance(markData.distance as number)}`}
+                </p>
+              </div>
+              <div className="popup-description">
+                <TooltipComponent visible text="Адрес">
+                  <PiCityThin
+                    size={MEDIUM_SIZE_MARKER}
+                    className="popup-icon"
+                  />
+                </TooltipComponent>
+                <p className="popup-text">
+                  {`${markData.addressName ?? "Невозможно определить"}`}
                 </p>
               </div>
               <div className="popup-description">

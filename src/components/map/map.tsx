@@ -11,7 +11,6 @@ import {
 } from "ymap3-components";
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./map.module.scss";
-import { GeoServiceFromBrowser } from "../../libs/services/geo.service";
 import { CurrentPositionMarkerComponent } from "./markers/marker-current-position-component";
 import { Spiner } from "../ui/spiner/spiner";
 import { io, Socket } from "socket.io-client";
@@ -109,7 +108,9 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
     if (!ymap || isMapInitialized) return;
     const fetchCurrentPosition = async () => {
       try {
-        const { lat, lng } = await GeoServiceFromBrowser.getCurrentLocation();
+        const result = await ymaps3.geolocation.getPosition();
+        const lat = result.coords[1];
+        const lng = result.coords[0];
         setCurrentCoords([lng, lat]);
         setMapCenter([lng, lat]);
         setIsMapInitialized(true);

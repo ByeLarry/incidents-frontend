@@ -4,7 +4,7 @@ import { LabelComponent } from "../ui/label/label";
 import useInput from "../../libs/hooks/input.hook";
 import userStore from "../../stores/user.store";
 import { CreateMarkDto } from "../../libs/dto/create-mark.dto";
-import { LngLat } from "@yandex/ymaps3-types";
+import { LngLat, SearchResponse } from "@yandex/ymaps3-types";
 import { categoryIdFromValue } from "../../libs/helpers/category-id-from-value";
 import { SelectComponent } from "../ui/select/select";
 import { InputComponent } from "../ui/input/input";
@@ -21,7 +21,7 @@ interface Props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   categories: CategoryDto[];
   checkedValue?: string;
-  coords: [number, number] | LngLat;
+  coords: LngLat;
 }
 
 export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
@@ -32,13 +32,16 @@ export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    const addresses: SearchResponse = await ymaps3.search({
+      text: props.coords.toLocaleString(),
+    });
     const newMark: CreateMarkDto = {
       userId: user?.id as string,
       lat: props.coords[1],
       lng: props.coords[0],
       title: title.value,
       description: description.value,
+      address: addresses[0].properties ?? null,
       categoryId: categoryIdFromValue(
         props.checkedValue as string,
         props.categories

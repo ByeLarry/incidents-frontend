@@ -13,5 +13,7 @@ export interface MarkRecvDto {
   userId?: string;
   distance?: number;
   verified?: number;
+  addressDescription?: string;
+  addressName?: string;
   isMyVerify?: boolean;
 }

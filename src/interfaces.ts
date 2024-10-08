@@ -40,3 +40,8 @@ export interface Validation {
   maxLength?: number;
   email?: boolean;
 }
+
+export interface IAddress {
+  description: string;
+  name: string;
+}
