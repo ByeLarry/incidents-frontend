@@ -4,7 +4,6 @@ import { Feature } from "@yandex/ymaps3-clusterer";
 import { CoordsDto } from "../dto/coords.dto";
 import { VerifyMarkDto } from "../dto/verify-mark.dto";
 import { MarkDto } from "../dto/mark.dto";
-import { CategoryDto } from "../dto/categories.dto";
 import { VerifiedCountDto } from "../dto/verified-count.dto";
 import { CreateMarkDto } from "../dto/create-mark.dto";
 import apiClient from "../../interceptors/auth.interceptor";
@@ -70,11 +69,6 @@ export class MarksService {
     return await apiClient.post<VerifiedCountDto>(`${url}`, data, {
       withCredentials: true,
     });
-  }
-
-  static async getCategories(): Promise<AxiosResponse<CategoryDto[]>> {
-    const url = `${this.baseUrl}/api/marks/categories`;
-    return await apiClient.get<CategoryDto[]>(url);
   }
 
   static async postCreateMark(

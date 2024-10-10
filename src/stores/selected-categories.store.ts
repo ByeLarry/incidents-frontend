@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
 import { CategoryDto } from "../libs/dto/categories.dto";
-import { MarksService } from "../libs/services/marks.service";
+import { CategoriesService } from "../libs/services/categories.service";
 
 class selectedCategoriesStore {
   selectedCategories: number[] = [];
@@ -9,7 +9,7 @@ class selectedCategoriesStore {
   constructor() {
     makeAutoObservable(this);
 
-    MarksService.getCategories()
+    CategoriesService.getCategories()
       .then((response: AxiosResponse<CategoryDto[]>) => {
         this.selectedCategories = response.data.map((category) => category.id);
       })
