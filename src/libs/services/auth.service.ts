@@ -44,11 +44,6 @@ export class AuthService {
     const url = `${this.baseUrl}/api/auth/me`;
     const response = await apiClient.get<UserDto>(url, {
       withCredentials: true,
-      // headers: {
-      //   "Cache-Control": "no-store",
-      //   Pragma: "no-cache",
-      //   Expires: "0",
-      // },
     });
     return response;
   }
