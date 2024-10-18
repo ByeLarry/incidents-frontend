@@ -6,4 +6,5 @@ export interface UserDto {
   activated: boolean;
   provider: string;
   roles: string[];
+  tokensCount?: number;
 }
