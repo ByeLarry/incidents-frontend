@@ -23,3 +23,5 @@ export const ErrorPage: React.FC = () => {
     </main>
   );
 };
+
+export default ErrorPage;

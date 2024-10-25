@@ -25,3 +25,5 @@ export const SignIn: React.FC = () => {
     </main>
   );
 };
+
+export default SignIn;

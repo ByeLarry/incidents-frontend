@@ -81,3 +81,5 @@ export const SuccessAuthPage: React.FC = () => {
     ></main>
   );
 };
+
+export default SuccessAuthPage;

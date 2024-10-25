@@ -30,3 +30,5 @@ export const SignUp: React.FC = () => {
     </main>
   );
 };
+
+export default SignUp;

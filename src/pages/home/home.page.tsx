@@ -17,3 +17,6 @@ export const Home: React.FC = observer(() => {
     </>
   );
 });
+
+
+export default Home
