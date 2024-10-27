@@ -38,7 +38,7 @@ label {
 }
 
 .form_light{
-  @include backlight(0, 0, 15rem, 0.9, $accent-color, $dark-gray, 10s);
+  @include backlight(0, 0, 15rem, 0.75, $dark-gray, $accent-color, 10s);
 }
 
 .basic_form{

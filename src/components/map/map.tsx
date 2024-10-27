@@ -90,6 +90,32 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
       setFilteredPoints((prev) => [...prev, newFeature]);
   }, []);
 
+  const onDeletePointHandler = useCallback((deletedFeature: Feature) => {
+    console.log(`Feature with id ${deletedFeature.id} was deleted`);
+
+    setPoints((prevPoints) => {
+      const index = prevPoints.findIndex(
+        (point) => point.id === deletedFeature.id
+      );
+      if (index !== -1) {
+        return [...prevPoints.slice(0, index), ...prevPoints.slice(index + 1)];
+      }
+      return prevPoints;
+    });
+
+    setFilteredPoints((prevFilteredPoints) => {
+      const filteredIndex = prevFilteredPoints.findIndex(
+        (point) => point.id === deletedFeature.id
+      );
+      if (filteredIndex !== -1) {
+        return [
+          ...prevFilteredPoints.slice(0, filteredIndex),
+          ...prevFilteredPoints.slice(filteredIndex + 1),
+        ];
+      }
+      return prevFilteredPoints;
+    });
+  }, []);
   useEffect(() => {
     if (socket.current) return;
     socket.current = io(import.meta.env.VITE_SOCKET_CONNECT, {
@@ -102,7 +128,8 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
       console.log("Web socket disconnected");
     });
     socket.current.on(MsgEnum.NEW_MARK, onPointsUpdateHandler);
-  }, [onPointsUpdateHandler]);
+    socket.current.on(MsgEnum.DELETE_MARK, onDeletePointHandler);
+  }, [onDeletePointHandler, onPointsUpdateHandler]);
 
   useEffect(() => {
     if (!ymap || isMapInitialized) return;

@@ -13,10 +13,9 @@ export const Home: React.FC = observer(() => {
     <>
       <Header />
       <MapComponent lightMode={lightMode} isEmptyUser={isEmptyUser()} />
-      <span className="backlight-white"></span>
+      {!lightMode && <span className="backlight-white"></span>}
     </>
   );
 });
 
-
-export default Home
+export default Home;

@@ -18,7 +18,7 @@ export function useGetMark(markGetDto: UseGetMarkDto) {
         lat: markGetDto.lat,
       }),
     select: (data) => data.data,
-    enabled: !!markGetDto.userId && markGetDto.enabled,
+    enabled: !!markGetDto.enabled,
     retry: false,
   });
 

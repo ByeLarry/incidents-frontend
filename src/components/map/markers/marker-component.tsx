@@ -51,7 +51,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
 
   const getMarkDto = {
     markId: props.markId,
-    userId: user?.id as string,
+    userId: user?.id ?? "",
     lat: currentCoords?.lat,
     lng: currentCoords?.lng,
     enabled: popupState,

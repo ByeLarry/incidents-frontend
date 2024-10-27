@@ -11,12 +11,7 @@
 }
 
 .header_light {
-    background-color: $white;
-    color: $dark-gray;
-    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
-    background-position: bottom;
-    background-size: 100% 8px;
-    background-repeat: no-repeat;
+    color: $light-gray;
 }
 
 .header__title {

@@ -36,9 +36,7 @@ export const Header: React.FC = observer(() => {
 
   return (
     <header
-      className={`${styles.header} ${
-        lightMode ? styles.header_light : ""
-      } user-select-none cursor_crosshair`}
+      className={`${styles.header} user-select-none cursor_crosshair`}
     >
       <div className={styles.logo__wrapper}>
         <h1 className={styles.header__title}>Incidents</h1>
@@ -65,9 +63,7 @@ export const Header: React.FC = observer(() => {
                   <li className={styles.list__item}>
                     <Link
                       to={"signup"}
-                      className={`link ${styles.list__item} ${
-                        lightMode ? "link_light" : ""
-                      }`}
+                      className={`link ${styles.list__item} `}
                     >
                       Регистрация
                     </Link>
@@ -75,9 +71,7 @@ export const Header: React.FC = observer(() => {
                   <li className={styles.list__item}>
                     <Link
                       to={"signin"}
-                      className={`link ${styles.list__item} ${
-                        lightMode ? "link_light" : ""
-                      }`}
+                      className={`link ${styles.list__item}`}
                     >
                       Вход
                     </Link>
@@ -88,12 +82,11 @@ export const Header: React.FC = observer(() => {
                   <ButtonComponent
                     type="button"
                     ariaLabel="Выход"
-                    noHover={lightMode}
                     onClick={() => setModalOpen(true)}
                   >
                     <IoIosLogOut
                       size={30}
-                      color={lightMode ? "black" : "white"}
+                      color={"white"}
                     />
                   </ButtonComponent>
                 </li>
@@ -103,7 +96,7 @@ export const Header: React.FC = observer(() => {
             <Spiner
               visible={true}
               fixed
-              lightMode={lightMode}
+              lightMode={false}
               size={XXXLARGE_SIZE_MARKER}
             />
           )}

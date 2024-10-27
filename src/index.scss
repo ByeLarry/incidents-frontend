@@ -133,7 +133,7 @@ body {
         height: 100%;
         width: 100%;
         margin: 0 auto;
-        transform: scale($size);
+        transform: scale($size, $size);
         -webkit-filter: blur($spread);
         -moz-filter: blur($spread);
         -ms-filter: blur($spread);
