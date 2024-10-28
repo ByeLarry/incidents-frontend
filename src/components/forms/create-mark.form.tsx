@@ -70,7 +70,7 @@ export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
               colors={props.categories.map((category) => {
                 return {
                   name: category.name,
-                  color: category.color,
+                  color: category.color ?? '',
                 };
               })}
             />
