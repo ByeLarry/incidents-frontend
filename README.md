@@ -65,7 +65,7 @@ _Диаграммы можно сохранять и редактировать 
      ![Диаграмма прецедентов](https://github.com/user-attachments/assets/28d2a1f0-4f0a-4959-92ee-ba4041a0e844)
 
 - ### Архитектура проекта
-    ![Архитектура приложения](https://github.com/user-attachments/assets/5259fb59-0927-4df3-a73a-5292470c141b)
+    ![incidents arch](https://github.com/user-attachments/assets/a3082981-e39b-4a2e-9080-520024e7e5c2)
 
 - ### Граф (схема) перемещения по сайту
   ![Граф (схема) перемещения по сайту](https://github.com/user-attachments/assets/81389748-da55-4fb7-a85e-90c9b789123b)
