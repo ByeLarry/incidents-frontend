@@ -23,6 +23,9 @@ export function useSignin() {
           case HttpStatusCode.Unauthorized:
             toast.error("Неправильный пароль");
             break;
+          case HttpStatusCode.Forbidden:
+            toast.error("Проверка recaptcha не удалась");
+            break;
           case HttpStatusCode.InternalServerError:
             toast.error("Произошла серверная ошибка");
             break;

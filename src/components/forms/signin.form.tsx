@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
 import { LabelComponent } from "../ui/label/label";
@@ -9,14 +9,17 @@ import { InputComponent } from "../ui/input/input";
 import { SignInDto } from "../../libs/dto/signin.dto";
 import { ValidationErrorMessages } from "../../libs/helpers/validation-error-messages";
 import { useSignin } from "../../libs/hooks/signin";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export const SignInForm: React.FC = memo(() => {
   const navigate = useNavigate();
   const { changeUser } = userStore;
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });
   const password = useInput("", { minLength: 8, isEmpty: true });
+  const [recaptchaToken, setRecaptchaToken] = useState<string>("");
   const { mutateSignin, isPendingSignin, signinResponse, isSuccessSignin } =
     useSignin();
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     if (isSuccessSignin && signinResponse) {
@@ -30,9 +33,17 @@ export const SignInForm: React.FC = memo(() => {
     const signinData: SignInDto = {
       email: email.value,
       password: password.value,
+      recaptchaToken,
     };
+    recaptchaRef.current?.reset();
+    setRecaptchaToken("");
     mutateSignin(signinData);
   };
+
+  const onReCaptchaChange = (token?: string | null) => {
+    setRecaptchaToken(token || "");
+  };
+
   return (
     <>
       <FormComponent title="Вход" onSubmit={onSubmit}>
@@ -70,9 +81,17 @@ export const SignInForm: React.FC = memo(() => {
             </LabelComponent>
           )}
         </div>
+        <ReCAPTCHA
+          sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+          onChange={onReCaptchaChange}
+          ref={recaptchaRef}
+        />
         <ButtonComponent
           disabled={
-            !email.inputValid || !password.inputValid || isPendingSignin
+            !email.inputValid ||
+            !password.inputValid ||
+            isPendingSignin ||
+            !recaptchaToken
           }
           type="submit"
         >

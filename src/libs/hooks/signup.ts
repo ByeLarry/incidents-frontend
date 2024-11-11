@@ -23,6 +23,9 @@ export function useSignup() {
           case HttpStatusCode.InternalServerError:
             toast.error("Произошла серверная ошибка");
             break;
+          case HttpStatusCode.Forbidden:
+            toast.error("Проверка recaptcha не удалась");
+            break;
           default:
             toast.error(
               error.response?.data.message ||

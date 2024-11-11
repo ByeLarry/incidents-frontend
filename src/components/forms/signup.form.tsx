@@ -1,4 +1,4 @@
-import { memo, useEffect } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
 import { LabelComponent } from "../ui/label/label";
@@ -10,6 +10,7 @@ import { InputComponent } from "../ui/input/input";
 import { ValidationErrorMessages } from "../../libs/helpers/validation-error-messages";
 import { useSignup } from "../../libs/hooks/signup";
 import { UserDto } from "../../libs/dto/user.dto";
+import ReCAPTCHA from "react-google-recaptcha";
 
 export const SignUpForm: React.FC = memo(() => {
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });
@@ -21,10 +22,12 @@ export const SignUpForm: React.FC = memo(() => {
   const { changeUser } = userStore;
   const { signupResponse, mutateSignup, isPendingSignup, isSuccessSignup } =
     useSignup();
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string>("");
 
   useEffect(() => {
     if (isSuccessSignup && signupResponse) {
-      changeUser(signupResponse.data.user as UserDto || null);
+      changeUser((signupResponse.data.user as UserDto) || null);
       navigate("/", { replace: true });
     }
   }, [changeUser, isSuccessSignup, navigate, signupResponse]);
@@ -36,8 +39,15 @@ export const SignUpForm: React.FC = memo(() => {
       password: password.value,
       name: name.value,
       surname: surname.value,
+      recaptchaToken,
     };
+    recaptchaRef.current?.reset();
+    setRecaptchaToken("");
     mutateSignup(signupData);
+  };
+
+  const onReCaptchaChange = (token?: string | null) => {
+    setRecaptchaToken(token || "");
   };
 
   return (
@@ -134,6 +144,11 @@ export const SignUpForm: React.FC = memo(() => {
             </LabelComponent>
           )}
         </div>
+        <ReCAPTCHA
+          sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+          onChange={onReCaptchaChange}
+          ref={recaptchaRef}
+        />
         <ButtonComponent
           disabled={
             isPendingSignup ||
@@ -142,6 +157,7 @@ export const SignUpForm: React.FC = memo(() => {
             !confirmPassword.inputValid ||
             !name.inputValid ||
             !surname.inputValid ||
+            !recaptchaToken ||
             password.value.trim() !== confirmPassword.value.trim()
           }
           type="submit"

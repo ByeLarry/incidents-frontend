@@ -3,4 +3,5 @@ export interface SignUpDto {
   password: string;
   name: string;
   surname: string;
+  recaptchaToken: string;
 }
