@@ -50,6 +50,13 @@ const vitePwa = VitePWA({
     globPatterns: ["**/*.{js,css,png,svg,jpg,jpeg}"],
     swDest: "dist/sw.js",
     globIgnores: ["**/node_modules/**"],
+    runtimeCaching: [
+      {
+        urlPattern: /\.(?:js|css|png|svg|jpg|jpeg)$/,
+        handler: "StaleWhileRevalidate",
+      },
+      
+    ],
   },
 });
 
