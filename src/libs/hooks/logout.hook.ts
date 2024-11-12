@@ -9,6 +9,7 @@ export function useLogout() {
   const { mutate, isPending, data, isSuccess } = useMutation({
     mutationKey: [LOGOUT_KEY],
     mutationFn: async () => AuthService.postLogout(),
+    retry: false,
     onSuccess: () => {
       localStorage.removeItem(ACCESS_TOKEN_KEY);
     },

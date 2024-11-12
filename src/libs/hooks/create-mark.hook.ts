@@ -9,6 +9,7 @@ export const CREATE_MARK_KEY = "createMark";
 export function useCreateMark() {
   const { mutate, isPending, data, error, isError } = useMutation({
     mutationKey: [CREATE_MARK_KEY],
+    retry: false,
     mutationFn: async (newMark: CreateMarkDto) =>
       MarksService.postCreateMark(newMark),
     onError: (error) => {

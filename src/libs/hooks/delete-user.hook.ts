@@ -11,6 +11,7 @@ export function useDeleteUser() {
   const { mutate, isPending, data, isSuccess, isError, error } = useMutation({
     mutationKey: [DELETE_USER_KEY],
     mutationFn: async (data: DeleteUserDto) => AuthService.deleteUser(data),
+    retry: false,
     onSuccess: () => {
       localStorage.removeItem(ACCESS_TOKEN_KEY);
     },

@@ -8,9 +8,10 @@ export const YANDEX_AUTH_SUCCESS_KEY = "yandex-auth-success";
 export function useYandexAuthSuccess() {
   const { mutate, isPending, data, error, isError } = useMutation({
     mutationKey: [YANDEX_AUTH_SUCCESS_KEY],
+    retry: false,
     mutationFn: (dto: AuthProvidersDto) =>
       AuthService.getYandexAuthSuccess(dto.token, dto.name, dto.surname),
-    onError: authProvidersErrors
+    onError: authProvidersErrors,
   });
 
   return {

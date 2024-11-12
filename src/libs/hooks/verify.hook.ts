@@ -8,6 +8,7 @@ export const VERIFY_KEY = "verify";
 export function useVerify() {
   const { mutate, isPending, data, isSuccess } = useMutation({
     mutationKey: [VERIFY_KEY],
+    retry: false,
     mutationFn: async (markData: VerifyMarkDto) =>
       MarksService.postVerifyTrue(markData),
     onError: () => {

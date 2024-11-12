@@ -12,6 +12,7 @@ export function useGetMarks(currentCoords: CoordsDto) {
     queryFn: () => MarksService.getNearestMarks(currentCoords),
     select: (data) => data.data,
     enabled: currentCoords.lat !== 0 && currentCoords.lng !== 0,
+    retry: 1,
   });
 
   useEffect(() => {

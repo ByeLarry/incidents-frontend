@@ -11,6 +11,7 @@ export function useSignin() {
   const { mutate, isPending, data, isSuccess, isError, error } = useMutation({
     mutationKey: [SIGNIN_KEY],
     mutationFn: async (data: SignInDto) => AuthService.postSignIn(data),
+    retry: false,
     onSuccess: (response) => {
       localStorage.setItem(ACCESS_TOKEN_KEY, response.data.accessToken);
     },

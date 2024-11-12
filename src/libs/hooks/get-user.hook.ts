@@ -7,6 +7,7 @@ export function useGetUser() {
   const { data, isSuccess, isError, error, mutate } = useMutation({
     mutationKey: [GET_USER_KEY],
     mutationFn: () => AuthService.getUser(),
+    retry: false
   });
 
   return {

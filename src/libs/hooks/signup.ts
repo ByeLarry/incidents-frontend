@@ -11,6 +11,7 @@ export function useSignup() {
   const { mutate, isPending, data, isSuccess, isError, error } = useMutation({
     mutationKey: [SIGNUP_KEY],
     mutationFn: async (data: SignUpDto) => AuthService.postSignUp(data),
+    retry: false,
     onSuccess: (response) => {
       localStorage.setItem(ACCESS_TOKEN_KEY, response.data.accessToken);
     },

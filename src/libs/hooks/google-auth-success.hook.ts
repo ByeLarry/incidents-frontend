@@ -11,6 +11,7 @@ export function useGoogleAuthSuccess() {
     mutationFn: (dto: AuthProvidersDto) =>
       AuthService.getGoogleAuthSuccess(dto.token, dto.name, dto.surname),
     onError: authProvidersErrors,
+    retry: false
   });
 
   return {
