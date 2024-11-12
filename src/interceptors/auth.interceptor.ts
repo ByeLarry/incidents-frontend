@@ -1,11 +1,15 @@
 import axios, { HttpStatusCode } from "axios";
-import { ACCESS_TOKEN_KEY } from "../libs/utils/consts.util";
+import {
+  ACCESS_TOKEN_KEY,
+  DEFAULT_HTTP_TIMEOUT,
+} from "../libs/utils/consts.util";
 import { AuthService } from "../libs/services/auth.service";
 
 const apiClient = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: DEFAULT_HTTP_TIMEOUT,
 });
 
 apiClient.interceptors.request.use(
