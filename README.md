@@ -58,7 +58,7 @@ cd ../
 
 git clone https://github.com/ByeLarry/incidents-search-service.git
 cd incidents-search-service/solution
-docker-compose up -d 
+docker-compose -f "docker-compose.yml" -f "docker-compose.override.yml" up -d 
 cd ../../
 ```
 
