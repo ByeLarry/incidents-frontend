@@ -13,6 +13,8 @@ import { MapConsts } from "../../../libs/utils/map-consts.util";
 import { MEDIUM_SIZE_MARKER } from "../../../libs/utils";
 import { FilterButton } from "../filter-button/filter-button";
 import { Search } from "./search/search";
+import searchModeStore from "../../../stores/search-mode.store";
+import { observer } from "mobx-react-lite";
 
 interface Props {
   selectIncidentMode: boolean;
@@ -31,7 +33,7 @@ interface Props {
   isEmptyUser: boolean;
 }
 
-export const MapControls: React.FC<Props> = (props: Props) => {
+export const MapControls: React.FC<Props> = observer((props: Props) => {
   const onSpawnMarkerControlClick = useCallback(() => {
     if (!props.selectIncidentMode) {
       props.setMapCenter(props.currentCoords);
@@ -75,7 +77,7 @@ export const MapControls: React.FC<Props> = (props: Props) => {
             Выйти из режима выбора
           </YMapControlButton>
         )}
-        {!props.selectIncidentMode && (
+        {!props.selectIncidentMode && !searchModeStore.get() && (
           <YMapControls position="top left" orientation="vertical">
             <FilterButton
               points={props.points}
@@ -92,25 +94,28 @@ export const MapControls: React.FC<Props> = (props: Props) => {
               <Search />
             </YMapControl>
           </YMapControls>
-          <YMapControls position="top right" orientation="vertical">
-            <YMapGeolocationControl
-              onGeolocatePosition={onGeolocatePositionHandler}
-              duration={MapConsts.GEOLOCATION_CONTROL_DURATION}
-            />
-            <YMapControlButton onClick={onResetCamera}>
-              <FaCompass title="Сброс камеры" size={MEDIUM_SIZE_MARKER} />
-            </YMapControlButton>
-            {!props.isEmptyUser && (
-              <YMapControlButton onClick={onSpawnMarkerControlClick}>
-                <MdOutlinePlace
-                  title="Режим выбора"
-                  size={MEDIUM_SIZE_MARKER}
-                />
+
+          {!searchModeStore.get() && (
+            <YMapControls position="top right" orientation="vertical">
+              <YMapGeolocationControl
+                onGeolocatePosition={onGeolocatePositionHandler}
+                duration={MapConsts.GEOLOCATION_CONTROL_DURATION}
+              />
+              <YMapControlButton onClick={onResetCamera}>
+                <FaCompass title="Сброс камеры" size={MEDIUM_SIZE_MARKER} />
               </YMapControlButton>
-            )}
-          </YMapControls>
+              {!props.isEmptyUser && (
+                <YMapControlButton onClick={onSpawnMarkerControlClick}>
+                  <MdOutlinePlace
+                    title="Режим выбора"
+                    size={MEDIUM_SIZE_MARKER}
+                  />
+                </YMapControlButton>
+              )}
+            </YMapControls>
+          )}
         </>
       )}
     </>
   );
-};
+});

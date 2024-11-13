@@ -13,11 +13,11 @@ import { IncidentCategoryLabel } from "../../../ui/incident-category-label/incid
 import { observer } from "mobx-react-lite";
 import searchedMarkStore from "../../../../stores/searched-mark.store";
 import selectedCategoriesStore from "../../../../stores/selected-categories.store";
+import searchModeStore from "../../../../stores/search-mode.store";
 
 export const Search: React.FC = observer(() => {
   const [value, setValue] = useState("");
   const [searchedMarks, setSearchedMarks] = useState<MarkSearchDto[]>([]);
-  const [searchMode, setSearchMode] = useState(false);
   const { lightMode } = themeStore;
   const inputRef = useRef<HTMLInputElement>(null);
   const selectedCategories = selectedCategoriesStore.selectedCategories;
@@ -38,25 +38,25 @@ export const Search: React.FC = observer(() => {
   useEffect(() => {
     if (dataSearchMarks?.data) {
       setSearchedMarks(dataSearchMarks.data);
-      setSearchMode(true);
+      searchModeStore.set(true);
     }
   }, [dataSearchMarks]);
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
-    if (searchMode) setSearchMode(false);
+    if (searchModeStore.get()) searchModeStore.set(false);
   };
 
   const handleBackdropClick = () => {
-    setSearchMode(false);
+    searchModeStore.set(false);
   };
 
   const handleFocusInput = () => {
-    if (!searchMode && value) setSearchMode(true);
+    if (!searchModeStore.get() && value) searchModeStore.set(true);
   };
 
   const handleSelectMark = (mark: MarkSearchDto) => {
-    setSearchMode(false);
+    searchModeStore.set(false);
     setValue("");
     setSearchedMarks([]);
     searchedMarkStore.setSearchedMark(mark);
@@ -64,7 +64,7 @@ export const Search: React.FC = observer(() => {
   return (
     <>
       <Spiner visible={isPendingSearchMarks} fixed lightMode={lightMode} />
-      {searchMode && (
+      {searchModeStore.get() && (
         <div className="search-backdrop" onClick={handleBackdropClick}></div>
       )}
       <div className="search-wrapper">
@@ -77,14 +77,14 @@ export const Search: React.FC = observer(() => {
           value={value}
           ref={inputRef}
         />
-        {searchMode && (
+        {searchModeStore.get() && (
           <span className="search-badge">{searchedMarks.length}</span>
         )}
         {!value.trim() && (
           <IoSearch className="search-icon" size={MEDIUM_SIZE_MARKER} />
         )}
       </div>
-      {searchMode && (
+      {searchModeStore.get() && (
         <ul className="searched-list">
           {searchedMarks.map((mark) => {
             if (selectedCategories.includes(mark.category.id))
