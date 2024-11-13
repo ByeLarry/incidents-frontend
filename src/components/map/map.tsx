@@ -34,15 +34,17 @@ import { XXXLARGE_SIZE_MARKER } from "../../libs/utils/marker-sizes.util";
 import closeCandidateMarkFormCallbackStore from "../../stores/close-candidate-mark-form-callback.store";
 import { observer } from "mobx-react-lite";
 import { ErrorStub } from "../ui/error-stub/error-stub";
+import searchedMarkStore from "../../stores/searched-mark.store";
 
 interface MapProps {
   lightMode: boolean;
   isEmptyUser: boolean;
 }
 
-const MAP_UPDATE_DELAY = 100;
+const MAP_UPDATE_DELAY = 50;
 const SPINER_Z_INDEX = 2000;
 const LOADING_MAP_INTERVAL = 5000;
+const SEARCHED_MARK_ZOOM = 18;
 export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
   const [currentCoords, setCurrentCoords] = useState<LngLat>(
     MapConsts.INITIAL_CENTER
@@ -72,7 +74,7 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
       lng: currentCoords[0],
       lat: currentCoords[1],
     });
-
+  const searchedMark = searchedMarkStore.searchedMark;
   useEffect(() => {
     if (isSuccessGetMarks && marks) {
       setPoints(marks);
@@ -178,6 +180,16 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
     }, LOADING_MAP_INTERVAL);
     return () => clearTimeout(timer);
   }, [isLoadingMap]);
+
+  useEffect(() => {
+    const coordsOfSearcedMark: LngLat = [
+      searchedMark?.lng ?? 0,
+      searchedMark?.lat ?? 0,
+    ];
+    if (coordsOfSearcedMark[0] === 0 && coordsOfSearcedMark[1] === 0) return;
+    setMapCenter(coordsOfSearcedMark);
+    setMapZoom(SEARCHED_MARK_ZOOM);
+  }, [searchedMark]);
 
   return (
     <>

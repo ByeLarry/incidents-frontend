@@ -12,3 +12,4 @@ export * from "./validation.hook";
 export * from "./verify.hook";
 export * from "./delete-user.hook";
 export * from "./google-auth-success.hook";
+export * from "./search-marks.hook";
