@@ -75,6 +75,9 @@ _Диаграммы можно сохранять и редактировать 
 - ### Граф (схема) перемещения по сайту
   ![Граф (схема) перемещения по сайту](https://github.com/user-attachments/assets/81389748-da55-4fb7-a85e-90c9b789123b)
 
+- ### Диаграмма последовательности операций при взаимодействии с reCAPTCHA
+  ![Диаграмма reCAPTHCA](https://github.com/user-attachments/assets/cc79c69e-472a-4746-83a8-51742c1db57e)
+
 ## Прототипы пользовательского интерфейса
 
 _Прототипы в **Figma**: https://www.figma.com/design/uS1sOHazna93fKYVemZtpb/incidents?node-id=0-1&t=I219QsAhbcTF8Shd-1_
