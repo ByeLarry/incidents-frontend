@@ -23,8 +23,8 @@ import { GiPathDistance } from "react-icons/gi";
 import { timeAgo } from "../../../libs/utils";
 import { formatDistance } from "../../../libs/helpers";
 import { PiFileTextThin } from "react-icons/pi";
-import { Spiner } from "../../ui/spiner/spiner";
 import { ButtonComponent } from "../../ui/button/button";
+import { Spinner } from "../../ui/spinner/spinner";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -121,7 +121,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
       setVerified(false);
     }
   }, [isSuccessUnverify]);
-  
+
   return (
     <YMapMarker
       coordinates={props.coords}
@@ -235,7 +235,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                     noHover
                   >
                     {isPendingVerify || isPendingUnverify ? (
-                      <Spiner lightMode visible size={SMALL_SIZE_MARKER} />
+                      <Spinner lightMode visible size={SMALL_SIZE_MARKER} />
                     ) : verified ? (
                       "Отменить"
                     ) : (

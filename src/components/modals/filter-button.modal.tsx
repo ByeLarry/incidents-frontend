@@ -1,4 +1,4 @@
-import { Spiner } from "../ui/spiner/spiner";
+import { Spinner } from "../ui/spinner/spinner";
 import "../map/filter-button/filter-button.scss";
 import { ButtonComponent } from "../ui/button/button";
 import { CategoryDto } from "../../libs/dto/categories.dto";
@@ -57,7 +57,7 @@ export const FilterButtonModal: React.FC<Props> = memo((props: Props) => {
   return (
     <>
       {props.submitting && (
-        <Spiner lightMode fixed visible size={XXXLARGE_SIZE_MARKER} />
+        <Spinner lightMode fixed visible size={XXXLARGE_SIZE_MARKER} />
       )}
       <h3 className="modal__title">{"Фильтр"}</h3>
       <ul className="filter__list">

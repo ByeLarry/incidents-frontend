@@ -17,7 +17,7 @@ import {
   XLARGE_SIZE_MARKER,
   XXXLARGE_SIZE_MARKER,
 } from "../../libs/utils/marker-sizes.util";
-import { Spiner } from "../ui/spiner/spiner";
+import { Spinner } from "../ui/spinner/spinner";
 
 export const Header: React.FC = observer(() => {
   const { lightMode } = themeStore;
@@ -35,9 +35,7 @@ export const Header: React.FC = observer(() => {
   }, [lightMode]);
 
   return (
-    <header
-      className={`${styles.header} user-select-none cursor_crosshair`}
-    >
+    <header className={`${styles.header} user-select-none cursor_crosshair`}>
       <div className={styles.logo__wrapper}>
         <h1 className={styles.header__title}>Incidents</h1>
         <div className={styles.icon__wrapper}>
@@ -69,10 +67,7 @@ export const Header: React.FC = observer(() => {
                     </Link>
                   </li>
                   <li className={styles.list__item}>
-                    <Link
-                      to={"signin"}
-                      className={`link ${styles.list__item}`}
-                    >
+                    <Link to={"signin"} className={`link ${styles.list__item}`}>
                       Вход
                     </Link>
                   </li>
@@ -84,16 +79,13 @@ export const Header: React.FC = observer(() => {
                     ariaLabel="Выход"
                     onClick={() => setModalOpen(true)}
                   >
-                    <IoIosLogOut
-                      size={30}
-                      color={"white"}
-                    />
+                    <IoIosLogOut size={30} color={"white"} />
                   </ButtonComponent>
                 </li>
               )}
             </>
           ) : (
-            <Spiner
+            <Spinner
               visible={true}
               fixed
               lightMode={false}

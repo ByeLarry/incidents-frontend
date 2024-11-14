@@ -12,7 +12,6 @@ import {
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./map.module.scss";
 import { CurrentPositionMarkerComponent } from "./markers/marker-current-position-component";
-import { Spiner } from "../ui/spiner/spiner";
 import { io, Socket } from "socket.io-client";
 import { MsgEnum } from "../../libs/enums/msg.enum";
 import { Feature } from "@yandex/ymaps3-clusterer";
@@ -35,6 +34,7 @@ import closeCandidateMarkFormCallbackStore from "../../stores/close-candidate-ma
 import { observer } from "mobx-react-lite";
 import { ErrorStub } from "../ui/error-stub/error-stub";
 import searchedMarkStore from "../../stores/searched-mark.store";
+import { Spinner } from "../ui/spinner/spinner";
 
 interface MapProps {
   lightMode: boolean;
@@ -42,7 +42,7 @@ interface MapProps {
 }
 
 const MAP_UPDATE_DELAY = 50;
-const SPINER_Z_INDEX = 2000;
+const SPINNER_Z_INDEX = 2000;
 const LOADING_MAP_INTERVAL = 5000;
 const SEARCHED_MARK_ZOOM = 18;
 export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
@@ -193,10 +193,10 @@ export const MapComponent: React.FC<MapProps> = observer((props: MapProps) => {
 
   return (
     <>
-      <Spiner
+      <Spinner
         visible={isLoadingMap || isFetchingGetMarks || isLoadingGetMarks}
         fixed
-        zIndex={SPINER_Z_INDEX}
+        zIndex={SPINNER_Z_INDEX}
         lightMode={lightMode}
         size={XXXLARGE_SIZE_MARKER}
       />

@@ -7,13 +7,13 @@ import "./search.scss";
 import { IoSearch } from "react-icons/io5";
 import { useSearchMarks } from "../../../../libs/hooks";
 import { MarkSearchDto } from "../../../../libs/dto";
-import { Spiner } from "../../../ui/spiner/spiner";
 import themeStore from "../../../../stores/theme.store";
 import { IncidentCategoryLabel } from "../../../ui/incident-category-label/incident-category-label";
 import { observer } from "mobx-react-lite";
 import searchedMarkStore from "../../../../stores/searched-mark.store";
 import selectedCategoriesStore from "../../../../stores/selected-categories.store";
 import searchModeStore from "../../../../stores/search-mode.store";
+import { Spinner } from "../../../ui/spinner/spinner";
 
 export const Search: React.FC = observer(() => {
   const [value, setValue] = useState("");
@@ -63,7 +63,7 @@ export const Search: React.FC = observer(() => {
   };
   return (
     <>
-      <Spiner visible={isPendingSearchMarks} fixed lightMode={lightMode} />
+      <Spinner visible={isPendingSearchMarks} fixed lightMode={lightMode} />
       {searchModeStore.get() && (
         <div className="search-backdrop" onClick={handleBackdropClick}></div>
       )}

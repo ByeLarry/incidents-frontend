@@ -1,6 +1,6 @@
-import "./spiner.scss";
+import "./spinner.scss";
 
-interface SpinerProps {
+interface SpinnerProps {
   lightMode?: boolean;
   zIndex?: number;
   className?: string;
@@ -10,10 +10,10 @@ interface SpinerProps {
   visible?: boolean;
 }
 
-export const Spiner: React.FC<SpinerProps> = (props: SpinerProps) => {
+export const Spinner: React.FC<SpinnerProps> = (props: SpinnerProps) => {
   return (
     <div
-      className={`${props.fixed ? "spiner--fixed" : ""}`}
+      className={`${props.fixed ? "spinner--fixed" : ""}`}
       style={{
         zIndex: props.zIndex,
         width: `${props.size}px`,
@@ -22,7 +22,7 @@ export const Spiner: React.FC<SpinerProps> = (props: SpinerProps) => {
       }}
     >
       <div
-        className={`spiner ${props.className}`}
+        className={`spinner ${props.className}`}
         style={{
           width: `${props.size}px`,
           height: `${props.size}px`,
@@ -34,5 +34,3 @@ export const Spiner: React.FC<SpinerProps> = (props: SpinerProps) => {
     </div>
   );
 };
-
-
