@@ -67,7 +67,7 @@ cd ../../
 _Диаграммы можно сохранять и редактировать в ***[draw.io](https://app.diagrams.net/)***_
 
 - ### Диаграмма прецедентов
-     ![Диаграмма прецедентов](https://github.com/user-attachments/assets/28d2a1f0-4f0a-4959-92ee-ba4041a0e844)
+     ![Диаграмма прецедентов](https://github.com/user-attachments/assets/a7cf66c9-3a7a-4e5e-9556-cb60af01fa84)
 
 - ### Архитектура проекта
     ![Архитектура приложения](https://github.com/user-attachments/assets/87ece1ad-fd5b-47e0-bafb-d79baeae74b1)
