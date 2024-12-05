@@ -78,6 +78,9 @@ _Диаграммы можно сохранять и редактировать 
 - ### Диаграмма последовательности операций при взаимодействии с reCAPTCHA
   ![Диаграмма reCAPTHCA](https://github.com/user-attachments/assets/cc79c69e-472a-4746-83a8-51742c1db57e)
 
+- ### Компоненты клиентской части пользователя
+  ![Компоненты клиентской части пользователя](https://github.com/user-attachments/assets/b54df031-f94a-4bcb-86a7-b2b85744ae24)
+
 ## Прототипы пользовательского интерфейса
 
 _Прототипы в **Figma**: https://www.figma.com/design/uS1sOHazna93fKYVemZtpb/incidents?node-id=0-1&t=I219QsAhbcTF8Shd-1_
