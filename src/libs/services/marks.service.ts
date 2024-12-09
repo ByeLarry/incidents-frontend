@@ -56,7 +56,7 @@ export class MarksService {
   static async postVerifyTrue(
     verifyData: VerifyMarkDto
   ): Promise<AxiosResponse<VerifiedCountDto>> {
-    const url = `${this.baseUrl}/api/marks/verify/true`;
+    const url = `${this.baseUrl}/api/marks/verify`;
     return await apiClient.post<VerifiedCountDto>(`${url}`, verifyData, {
       withCredentials: true,
     });
@@ -65,7 +65,7 @@ export class MarksService {
   static async postVerifyFalse(
     data: VerifyMarkDto
   ): Promise<AxiosResponse<VerifiedCountDto>> {
-    const url = `${this.baseUrl}/api/marks/verify/false`;
+    const url = `${this.baseUrl}/api/marks/unverify`;
     return await apiClient.post<VerifiedCountDto>(`${url}`, data, {
       withCredentials: true,
     });
