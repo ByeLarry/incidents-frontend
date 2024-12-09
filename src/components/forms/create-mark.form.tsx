@@ -14,6 +14,9 @@ import { useCreateMark } from "../../libs/hooks/create-mark.hook";
 import { ValidationErrorMessages } from "../../libs/helpers/validation-error-messages";
 import closeCandidateMarkFormCallbackStore from "../../stores/close-candidate-mark-form-callback.store";
 import { observer } from "mobx-react-lite";
+import { Spinner } from "../ui/spinner/spinner";
+import { MEDIUM_SIZE_MARKER } from "../../libs/utils";
+import { useState } from "react";
 
 interface Props {
   submitting: boolean;
@@ -28,9 +31,11 @@ export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
   const title = useInput("", { minLength: 3, isEmpty: true, maxLength: 100 });
   const description = useInput("", { maxLength: 199 });
   const { user } = userStore;
-  const { createMark, isPendingCreateMark } = useCreateMark();
+  const { createMark } = useCreateMark();
+  const [submitting, setSubmitting] = useState(false);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    setSubmitting(true);
     e.preventDefault();
     const addresses: SearchResponse = await ymaps3.search({
       text: props.coords.toLocaleString(),
@@ -54,6 +59,7 @@ export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
     props.setModalOpen(false);
     title.setValue("");
     description.setValue("");
+    setSubmitting(false);
   };
   return (
     <>
@@ -70,7 +76,7 @@ export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
               colors={props.categories.map((category) => {
                 return {
                   name: category.name,
-                  color: category.color ?? '',
+                  color: category.color ?? "",
                 };
               })}
             />
@@ -126,15 +132,20 @@ export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
           <li className="list__item form__button">
             <ButtonComponent
               type="submit"
+              ariaLabel="Отправить"
               modalButton
               disabled={
-                isPendingCreateMark ||
+                submitting ||
                 props.submitting ||
                 props.categories.length === 0 ||
                 !title.inputValid
               }
             >
-              Отправить
+              {!submitting ? (
+                "Отправить"
+              ) : (
+                <Spinner visible={true} size={MEDIUM_SIZE_MARKER} lightMode />
+              )}
             </ButtonComponent>
           </li>
         </ul>

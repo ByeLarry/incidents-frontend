@@ -207,15 +207,17 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                   {`${markData.addressName ?? "Невозможно определить"}`}
                 </p>
               </div>
-              <div className="popup-description">
-                <TooltipComponent visible text="Описание">
-                  <PiFileTextThin
-                    size={MEDIUM_SIZE_MARKER}
-                    className="popup-icon"
-                  />
-                </TooltipComponent>
-                <p className="popup-text">{markData?.description}</p>
-              </div>
+              {markData?.description && (
+                <div className="popup-description">
+                  <TooltipComponent visible text="Описание">
+                    <PiFileTextThin
+                      size={MEDIUM_SIZE_MARKER}
+                      className="popup-icon"
+                    />
+                  </TooltipComponent>
+                  <p className="popup-text">{markData?.description}</p>
+                </div>
+              )}
               <div className="popup-footer">
                 <TooltipComponent
                   text="Отменить подтверждение"
