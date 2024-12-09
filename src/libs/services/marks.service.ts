@@ -7,7 +7,6 @@ import { MarkDto } from "../dto/mark.dto";
 import { VerifiedCountDto } from "../dto/verified-count.dto";
 import { CreateMarkDto } from "../dto/create-mark.dto";
 import apiClient from "../../interceptors/auth.interceptor";
-import { MarkSearchDto } from "../dto";
 
 export class MarksService {
   private static baseUrl: string = import.meta.env.VITE_API_GETAWAY_HOST;
@@ -79,10 +78,5 @@ export class MarksService {
     return await apiClient.post<Feature>(`${url}`, newMark, {
       withCredentials: true,
     });
-  }
-
-  static async searchMarks(query: string): Promise<AxiosResponse<MarkSearchDto[]>> {
-    const url = `${this.baseUrl}/api/marks/search?query=${query}`;
-    return await apiClient.get<MarkSearchDto[]>(`${url}`);
   }
 }
