@@ -74,7 +74,7 @@ export const MapControls: React.FC<Props> = observer((props: Props) => {
       <YMapControls position="top">
         {props.selectIncidentMode && (
           <YMapControlButton onClick={onSpawnMarkerControlClick}>
-            Выйти из режима выбора
+            Выйти из режима фиксации происшествий
           </YMapControlButton>
         )}
         {!props.selectIncidentMode && !searchModeStore.get() && (
