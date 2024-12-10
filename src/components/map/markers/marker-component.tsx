@@ -219,10 +219,6 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                 </div>
               )}
               <div className="popup-footer">
-                <TooltipComponent
-                  text="Отменить подтверждение"
-                  visible={verified && !isEmptyUser()}
-                >
                   <ButtonComponent
                     modalButton
                     type="button"
@@ -239,12 +235,11 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                     {isPendingVerify || isPendingUnverify ? (
                       <Spinner lightMode visible size={SMALL_SIZE_MARKER} />
                     ) : verified ? (
-                      "Отменить"
+                      "Отменить подтверждение"
                     ) : (
                       "Подтверждаю"
                     )}
                   </ButtonComponent>
-                </TooltipComponent>
               </div>
             </div>
           ) : (
