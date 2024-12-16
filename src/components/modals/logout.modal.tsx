@@ -1,7 +1,7 @@
 import userStore from "../../stores/user.store";
 import { memo, useEffect } from "react";
-import { useLogout } from "../../libs/hooks/logout.hook";
 import { ConfirmModal } from "./confirm.modal";
+import { useLogout } from "../../hooks";
 
 interface Props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;

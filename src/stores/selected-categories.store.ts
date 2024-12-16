@@ -1,7 +1,8 @@
 import { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
-import { CategoryDto } from "../libs/dto/categories.dto";
-import { CategoriesService } from "../libs/services/categories.service";
+import { CategoryDto } from "../dto";
+import { CategoriesService } from "../services/categories.service";
+
 
 class selectedCategoriesStore {
   selectedCategories: number[] = [];

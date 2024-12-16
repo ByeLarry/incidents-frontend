@@ -1,22 +1,20 @@
+import { LngLat, SearchResponse } from "@yandex/ymaps3-types";
+import { observer } from "mobx-react-lite";
+import { useState } from "react";
+import { CategoryDto, CreateMarkDto } from "../../dto";
+import { categoryIdFromValue, ValidationErrorMessages } from "../../helpers";
+import { useCreateMark } from "../../hooks";
+import useInput from "../../hooks/input.hook";
+import closeCandidateMarkFormCallbackStore from "../../stores/close-candidate-mark-form-callback.store";
+import userStore from "../../stores/user.store";
+import { MEDIUM_SIZE_MARKER } from "../../utils";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
-import { LabelComponent } from "../ui/label/label";
-import useInput from "../../libs/hooks/input.hook";
-import userStore from "../../stores/user.store";
-import { CreateMarkDto } from "../../libs/dto/create-mark.dto";
-import { LngLat, SearchResponse } from "@yandex/ymaps3-types";
-import { categoryIdFromValue } from "../../libs/helpers/category-id-from-value";
-import { SelectComponent } from "../ui/select/select";
 import { InputComponent } from "../ui/input/input";
-import { TextareaComponent } from "../ui/textarea/textarea";
-import { CategoryDto } from "../../libs/dto/categories.dto";
-import { useCreateMark } from "../../libs/hooks/create-mark.hook";
-import { ValidationErrorMessages } from "../../libs/helpers/validation-error-messages";
-import closeCandidateMarkFormCallbackStore from "../../stores/close-candidate-mark-form-callback.store";
-import { observer } from "mobx-react-lite";
+import { LabelComponent } from "../ui/label/label";
+import { SelectComponent } from "../ui/select/select";
 import { Spinner } from "../ui/spinner/spinner";
-import { MEDIUM_SIZE_MARKER } from "../../libs/utils";
-import { useState } from "react";
+import { TextareaComponent } from "../ui/textarea/textarea";
 
 interface Props {
   submitting: boolean;

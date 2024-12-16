@@ -1,7 +1,7 @@
 import userStore from "../../stores/user.store";
 import { memo, useEffect } from "react";
 import { ConfirmModal } from "./confirm.modal";
-import { useDeleteMark } from "../../libs/hooks";
+import { useDeleteMark } from "../../hooks";
 
 interface Props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;

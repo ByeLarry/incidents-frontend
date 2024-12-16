@@ -1,8 +1,8 @@
 import { ButtonComponent } from "../ui/button/button";
 import styles from "../header/header.module.scss";
 import { memo } from "react";
-import { MEDIUM_SIZE_MARKER } from "../../libs/utils";
 import { Spinner } from "../ui/spinner/spinner";
+import { MEDIUM_SIZE_MARKER } from "../../utils";
 
 interface Props {
   isPending: boolean;

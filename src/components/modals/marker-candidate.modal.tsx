@@ -1,9 +1,9 @@
 import { memo } from "react";
 import { Spinner } from "../ui/spinner/spinner";
 import { LngLat } from "@yandex/ymaps3-types";
-import { CategoryDto } from "../../libs/dto/categories.dto";
 import { CreateMarkForm } from "../forms/create-mark.form";
-import { XXXLARGE_SIZE_MARKER } from "../../libs/utils/marker-sizes.util";
+import { XXXLARGE_SIZE_MARKER } from "../../utils";
+import { CategoryDto } from "../../dto";
 
 interface Props {
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;

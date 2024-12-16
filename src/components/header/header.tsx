@@ -12,12 +12,9 @@ import { ToggleComponent } from "../ui/toggle/toggle";
 import { ButtonComponent } from "../ui/button/button";
 import { ModalComponent } from "../modal/modal";
 import { LogoutModal } from "../modals/logout.modal";
-import {
-  MEDIUM_SIZE_MARKER,
-  XLARGE_SIZE_MARKER,
-  XXXLARGE_SIZE_MARKER,
-} from "../../libs/utils/marker-sizes.util";
+
 import { Spinner } from "../ui/spinner/spinner";
+import { MEDIUM_SIZE_MARKER, XLARGE_SIZE_MARKER, XXXLARGE_SIZE_MARKER } from "../../utils";
 
 export const Header: React.FC = observer(() => {
   const { lightMode } = themeStore;

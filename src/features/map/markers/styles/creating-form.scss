@@ -1,0 +1,47 @@
+@import '../../../../index.scss';
+
+.modal__title {
+    text-align: center;
+    font-size: 2em;
+    margin: 0;
+    color: $dark-gray;
+    text-shadow: 0.25rem 0.25rem 0 $light-gray;
+}
+
+.buttons__wrapper {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.modal__wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.form__list {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: start;
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+    box-sizing: border-box;
+}
+
+.list__item {
+    margin-top: 0.5rem;
+}
+
+.form__button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

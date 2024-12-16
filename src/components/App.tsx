@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import UserStore from "../stores/user.store";
 import { Toaster, toast } from "sonner";
 import { observer } from "mobx-react-lite";
-import { useGetUser } from "../libs/hooks/get-user.hook";
 import {
   ErrorPageLazy,
   HomeLazy,
@@ -12,6 +11,7 @@ import {
   SignUpLazy,
   SuccessAuthPageLazy,
 } from "../lazy-pages";
+import { useGetUser } from "../hooks";
 
 const App = observer(() => {
   const { user, changeUser } = UserStore;

@@ -1,10 +1,10 @@
 import { Spinner } from "../ui/spinner/spinner";
-import "../map/filter-button/filter-button.scss";
+import "../../features/map/controls/filter-button/filter-button.scss";
 import { ButtonComponent } from "../ui/button/button";
-import { CategoryDto } from "../../libs/dto/categories.dto";
 import { Feature } from "@yandex/ymaps3-clusterer";
 import { memo, useCallback } from "react";
-import { XXXLARGE_SIZE_MARKER } from "../../libs/utils/marker-sizes.util";
+import { CategoryDto } from "../../dto";
+import { XXXLARGE_SIZE_MARKER } from "../../utils";
 
 interface Props {
   submitting: boolean;

@@ -2,15 +2,14 @@ import { memo, useEffect, useRef, useState } from "react";
 import { ButtonComponent } from "../ui/button/button";
 import { FormComponent } from "../ui/form/form";
 import { LabelComponent } from "../ui/label/label";
-import { SignUpDto } from "../../libs/dto/signup.dto";
-import useInput from "../../libs/hooks/input.hook";
+import ReCAPTCHA from "react-google-recaptcha";
+import useInput from "../../hooks/input.hook";
 import { useNavigate } from "react-router-dom";
+import { UserDto, SignUpDto } from "../../dto";
+import { ValidationErrorMessages } from "../../helpers";
+import { useSignup } from "../../hooks";
 import userStore from "../../stores/user.store";
 import { InputComponent } from "../ui/input/input";
-import { ValidationErrorMessages } from "../../libs/helpers/validation-error-messages";
-import { useSignup } from "../../libs/hooks/signup";
-import { UserDto } from "../../libs/dto/user.dto";
-import ReCAPTCHA from "react-google-recaptcha";
 
 export const SignUpForm: React.FC = memo(() => {
   const email = useInput("", { email: true, minLength: 3, isEmpty: true });

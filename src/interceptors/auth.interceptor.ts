@@ -1,9 +1,6 @@
 import axios, { HttpStatusCode } from "axios";
-import {
-  ACCESS_TOKEN_KEY,
-  DEFAULT_HTTP_TIMEOUT,
-} from "../libs/utils/consts.util";
-import { AuthService } from "../libs/services/auth.service";
+import { ACCESS_TOKEN_KEY, DEFAULT_HTTP_TIMEOUT } from "../utils";
+import { AuthService } from "../services";
 
 const apiClient = axios.create({
   headers: {
