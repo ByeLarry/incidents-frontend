@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { UserDto } from "../libs/dto/user.dto";
+import { UserDto } from "../dto";
 
 class UserStore {
   user: UserDto | null | undefined = undefined;

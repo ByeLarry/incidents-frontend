@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import { MarkSearchDto } from "../libs/dto";
+import { MarkSearchDto } from "../dto";
 
 class SearchedMarkStore {
   searchedMark?: MarkSearchDto;

@@ -1,4 +1,4 @@
-import { InputHookReturn } from "../../interfaces";
+import { InputHookReturn } from "../interfaces";
 
 export class ValidationErrorMessages {
   static getTitleErrorMessage = (title: InputHookReturn): string | null => {

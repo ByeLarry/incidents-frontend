@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { UserDto } from "./libs/dto";
+import { UserDto } from "./dto";
 
 export interface InputHookReturn {
   isEmpty: boolean;

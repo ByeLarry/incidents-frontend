@@ -2,11 +2,12 @@ import { useNavigate } from "react-router-dom";
 import ThemeStore from "../../stores/theme.store";
 import styles from "./success-auth.module.scss";
 import { useEffect } from "react";
-import { useGoogleAuthSuccess } from "../../libs/hooks";
-import { ACCESS_TOKEN_KEY } from "../../libs/utils";
+import { AuthProvidersEnum } from "../../enums";
+import { useGoogleAuthSuccess } from "../../hooks";
+import { useYandexAuthSuccess } from "../../hooks/yandex-auth-success.hook";
 import userStore from "../../stores/user.store";
-import { AuthProvidersEnum } from "../../libs/enums";
-import { useYandexAuthSuccess } from "../../libs/hooks/yandex-auth-success.hook";
+import { ACCESS_TOKEN_KEY } from "../../utils";
+
 
 export const SuccessAuthPage: React.FC = () => {
   const navigate = useNavigate();

@@ -25,7 +25,7 @@ export const onVerifyOrUnverifyIncidentHandler = async (
   >,
   verified: boolean,
   markData: MarkRecvDto | null,
-  user: UserDto | null
+  user: UserDto | null | undefined
 ) => {
   if (isEmptyUser()) {
     toast.error(
