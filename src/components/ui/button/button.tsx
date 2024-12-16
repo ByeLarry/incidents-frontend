@@ -18,7 +18,6 @@ interface ButtonComponentProps {
   onSubmit?: FormEventHandler<HTMLButtonElement>;
   form?: string;
   verifyed?: boolean;
-  categoryId?: number;
   categoryColor?: string;
 }
 

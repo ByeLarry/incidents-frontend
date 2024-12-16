@@ -79,4 +79,14 @@ export class MarksService {
       withCredentials: true,
     });
   }
+
+  static async deleteMark(
+    markId?: number
+  ): Promise<AxiosResponse<MarkRecvDto>> {
+    const url = `${this.baseUrl}/api/marks`;
+    return await apiClient.delete<MarkRecvDto>(
+      markId ? `${url}/${markId}` : `${url}`,
+      { withCredentials: true }
+    );
+  }
 }

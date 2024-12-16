@@ -25,6 +25,8 @@ import { formatDistance } from "../../../libs/helpers";
 import { PiFileTextThin } from "react-icons/pi";
 import { ButtonComponent } from "../../ui/button/button";
 import { Spinner } from "../../ui/spinner/spinner";
+import { ModalComponent } from "../../modal/modal";
+import { DeleteMarkModal } from "../../modals/delete-mark.modal";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -38,6 +40,7 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
   const [verified, setVerified] = useState(false);
   const [verificationCount, setVerificationCount] = useState(0);
   const [markData, setMarkData] = useState<MarkRecvDto | null>(null);
+  const [deleteMarkModalState, setDeleteMarkModalState] = useState(false);
   const [zIndex, setZIndex] = useState(100);
   const { user, isEmptyUser } = userStore;
   const { mutateVerify, isPendingVerify, dataVerify, isSuccessVerify } =
@@ -92,6 +95,10 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
     setZIndex(200);
   };
 
+  const isCurrentUserMarker = () => {
+    return user?.id === mark?.userId;
+  };
+
   const onVerifyHandler = async () => {
     if (isEmptyUser()) {
       toast.error(
@@ -123,102 +130,103 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
   }, [isSuccessUnverify]);
 
   return (
-    <YMapMarker
-      coordinates={props.coords}
-      source={props.source}
-      zIndex={zIndex}
-    >
-      <FaMapMarker
-        onClick={onClickHandler}
-        className={`${
-          props.properties
-            ? `color-text-${props.properties["color"] as string}`
-            : ""
-        } ${!popupState ? `fixed` : "fixed-top-left"} `}
-        size={LARGE_SIZE_MARKER}
-      />
-      {popupState && (
-        <div className="popup">
-          <button
-            className="modal-close"
-            aria-label="Close modal"
-            onClick={() => {
-              setPopupState(false);
-              setZIndex(100);
-            }}
-          >
-            <IoMdClose size={LARGE_SIZE_MARKER} />
-          </button>
-          {isLoadingGetMark || isFetchingGetMark ? (
-            <h4 className="load-title">Загрузка...</h4>
-          ) : markData ? (
-            <div
-              className={`${
-                props.properties
-                  ? `popup-content backlight-${
-                      props.properties["color"] as string
-                    }`
-                  : "popup-content"
-              } `}
+    <>
+      <YMapMarker
+        coordinates={props.coords}
+        source={props.source}
+        zIndex={zIndex}
+      >
+        <FaMapMarker
+          onClick={onClickHandler}
+          className={`${
+            props.properties
+              ? `color-text-${props.properties["color"] as string}`
+              : ""
+          } ${!popupState ? `fixed` : "fixed-top-left"} `}
+          size={LARGE_SIZE_MARKER}
+        />
+        {popupState && (
+          <div className="popup">
+            <button
+              className="modal-close"
+              aria-label="Close modal"
+              onClick={() => {
+                setPopupState(false);
+                setZIndex(100);
+              }}
             >
-              <IncidentCategoryLabel
-                id={markData?.category.id as number}
-                name={markData?.category.name as string}
-                color={markData?.category.color as string}
-              />
-              <h4 className="popup-title">{markData?.title}</h4>
-              <div className="popup-description">
-                <TooltipComponent text="Дата создания" visible>
-                  <CiCalendarDate
-                    size={MEDIUM_SIZE_MARKER}
-                    className="popup-icon"
-                  />
-                </TooltipComponent>
-                <p className="popup-text">{timeAgo(markData?.createdAt)}</p>
-              </div>
-              <div className="popup-description">
-                <TooltipComponent visible text="Подтверждений">
-                  <CiCircleCheck
-                    size={MEDIUM_SIZE_MARKER}
-                    className="popup-icon"
-                  />
-                </TooltipComponent>
-                <p className="popup-text">{verificationCount}</p>
-              </div>
-              <div className="popup-description">
-                <TooltipComponent visible text="Расстояние">
-                  <GiPathDistance
-                    size={MEDIUM_SIZE_MARKER}
-                    className="popup-icon"
-                  />
-                </TooltipComponent>
-                <p className="popup-text">
-                  {`${formatDistance(markData.distance as number)}`}
-                </p>
-              </div>
-              <div className="popup-description">
-                <TooltipComponent visible text="Адрес">
-                  <PiCityThin
-                    size={MEDIUM_SIZE_MARKER}
-                    className="popup-icon"
-                  />
-                </TooltipComponent>
-                <p className="popup-text">
-                  {`${markData.addressName ?? "Невозможно определить"}`}
-                </p>
-              </div>
-              {markData?.description && (
+              <IoMdClose size={LARGE_SIZE_MARKER} />
+            </button>
+            {isLoadingGetMark || isFetchingGetMark ? (
+              <h4 className="load-title">Загрузка...</h4>
+            ) : markData ? (
+              <div
+                className={`${
+                  props.properties
+                    ? `popup-content backlight-${
+                        props.properties["color"] as string
+                      }`
+                    : "popup-content"
+                } `}
+              >
+                <IncidentCategoryLabel
+                  id={markData?.category.id as number}
+                  name={markData?.category.name as string}
+                  color={markData?.category.color as string}
+                />
+                <h4 className="popup-title">{markData?.title}</h4>
                 <div className="popup-description">
-                  <TooltipComponent visible text="Описание">
-                    <PiFileTextThin
+                  <TooltipComponent text="Дата создания" visible>
+                    <CiCalendarDate
                       size={MEDIUM_SIZE_MARKER}
                       className="popup-icon"
                     />
                   </TooltipComponent>
-                  <p className="popup-text">{markData?.description}</p>
+                  <p className="popup-text">{timeAgo(markData?.createdAt)}</p>
                 </div>
-              )}
-              <div className="popup-footer">
+                <div className="popup-description">
+                  <TooltipComponent visible text="Подтверждений">
+                    <CiCircleCheck
+                      size={MEDIUM_SIZE_MARKER}
+                      className="popup-icon"
+                    />
+                  </TooltipComponent>
+                  <p className="popup-text">{verificationCount}</p>
+                </div>
+                <div className="popup-description">
+                  <TooltipComponent visible text="Расстояние">
+                    <GiPathDistance
+                      size={MEDIUM_SIZE_MARKER}
+                      className="popup-icon"
+                    />
+                  </TooltipComponent>
+                  <p className="popup-text">
+                    {`${formatDistance(markData.distance as number)}`}
+                  </p>
+                </div>
+                <div className="popup-description">
+                  <TooltipComponent visible text="Адрес">
+                    <PiCityThin
+                      size={MEDIUM_SIZE_MARKER}
+                      className="popup-icon"
+                    />
+                  </TooltipComponent>
+                  <p className="popup-text">
+                    {`${markData.addressName ?? "Невозможно определить"}`}
+                  </p>
+                </div>
+                {markData?.description && (
+                  <div className="popup-description">
+                    <TooltipComponent visible text="Описание">
+                      <PiFileTextThin
+                        size={MEDIUM_SIZE_MARKER}
+                        className="popup-icon"
+                      />
+                    </TooltipComponent>
+                    <p className="popup-text">{markData?.description}</p>
+                  </div>
+                )}
+                <div className="popup-footer">
                   <ButtonComponent
                     modalButton
                     type="button"
@@ -228,7 +236,6 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                     onClick={onVerifyHandler}
                     disabled={isPendingVerify || isPendingUnverify}
                     verifyed={!verified && !isEmptyUser()}
-                    categoryId={markData?.category.id as number}
                     categoryColor={markData?.category.color as string}
                     noHover
                   >
@@ -240,15 +247,36 @@ export const MarkerComponent = observer((props: MapMarkerProps) => {
                       "Подтверждаю"
                     )}
                   </ButtonComponent>
+                  {isCurrentUserMarker() && (
+                    <ButtonComponent
+                      modalButton
+                      type="button"
+                      ariaLabel="Удалить"
+                      noHover
+                      onClick={() => setDeleteMarkModalState(true)}
+                    >
+                      Удалить
+                    </ButtonComponent>
+                  )}
+                </div>
               </div>
-            </div>
-          ) : (
-            <div className="popup-content">
-              <h4 className="load-title">Произошла серверная ошибка</h4>
-            </div>
-          )}
-        </div>
-      )}
-    </YMapMarker>
+            ) : (
+              <div className="popup-content">
+                <h4 className="load-title">Произошла серверная ошибка</h4>
+              </div>
+            )}
+          </div>
+        )}
+      </YMapMarker>
+      <ModalComponent
+        isOpen={deleteMarkModalState}
+        onClose={() => setDeleteMarkModalState(false)}
+      >
+        <DeleteMarkModal
+          setModalOpen={setDeleteMarkModalState}
+          markId={markData?.id}
+        />
+      </ModalComponent>
+    </>
   );
 });

@@ -5,7 +5,7 @@ import { AxiosError, HttpStatusCode } from "axios";
 import { DeleteUserDto } from "../dto";
 import { ACCESS_TOKEN_KEY } from "../utils";
 
-export const DELETE_USER_KEY = "signin";
+export const DELETE_USER_KEY = "deleteUser";
 
 export function useDeleteUser() {
   const { mutate, isPending, data, isSuccess, isError, error } = useMutation({
@@ -39,11 +39,11 @@ export function useDeleteUser() {
   });
 
   return {
-    mutateDelete: mutate,
-    isPendingDelete: isPending,
-    deleteResponse: data,
-    isSuccessDelete: isSuccess,
-    isErrorDelete: isError,
-    errorDelete: error,
+    mutateDeleteUser: mutate,
+    isPendingDeleteUser: isPending,
+    deleteUserResponse: data,
+    isSuccessDeleteUser: isSuccess,
+    isErrorDeleteUser: isError,
+    errorDeleteUser: error,
   };
 }
