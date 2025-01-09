@@ -13,11 +13,6 @@ type Story = StoryObj<typeof SelectComponent>;
 export const Base: Story = {
   args: {
     values: ["red", "green", "blue"],
-    colors: [
-      { name: "red", color: "red" },
-      { name: "green", color: "green" },
-      { name: "blue", color: "blue" },
-    ],
     setCheckedValue: () => {},
   },
 };
