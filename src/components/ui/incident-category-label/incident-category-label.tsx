@@ -8,7 +8,10 @@ interface Props {
 
 export const IncidentCategoryLabel: React.FC<Props> = (props: Props) => {
   return (
-    <span className={`incident-category color-${props.color}`}>
+    <span
+      className={`incident-category`}
+      style={{ backgroundColor: props.color }}
+    >
       {props.name}
     </span>
   );

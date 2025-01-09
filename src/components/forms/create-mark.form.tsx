@@ -71,12 +71,6 @@ export const CreateMarkForm: React.FC<Props> = observer((props: Props) => {
               width={300}
               disabled={props.categories.length === 0 || props.submitting}
               setCheckedValue={props.setCheckedValue}
-              colors={props.categories.map((category) => {
-                return {
-                  name: category.name,
-                  color: category.color ?? "",
-                };
-              })}
             />
             {props.categories.length === 0 && (
               <LabelComponent htmlFor="incident-category">

@@ -9,7 +9,6 @@ interface Props {
   isCategories?: boolean;
   width?: number | string;
   disabled?: boolean;
-  colors?: { name: string; color: string }[];
   setCheckedValue: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
@@ -31,15 +30,15 @@ export const SelectComponent: React.FC<Props> = (props: Props) => {
   return (
     <>
       <select
-        className={`select color-${
-          props.colors?.find((color) => color.name === selectedValue)?.color
-        }`}
+        className={`select`}
         id={props.id}
         name={props.name}
         required={props.required}
         onChange={handleChange}
         defaultValue={props.values?.[0]}
-        style={{ width: props.width }}
+        style={{
+          width: props.width,
+        }}
         disabled={props.disabled}
       >
         {props.values?.map((value) => (

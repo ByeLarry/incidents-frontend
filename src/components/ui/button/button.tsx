@@ -18,7 +18,6 @@ interface ButtonComponentProps {
   onSubmit?: FormEventHandler<HTMLButtonElement>;
   form?: string;
   verifyed?: boolean;
-  categoryColor?: string;
 }
 
 export const ButtonComponent: React.FC<ButtonComponentProps> = memo(
@@ -38,10 +37,10 @@ export const ButtonComponent: React.FC<ButtonComponentProps> = memo(
           props.textInverse ? styles.button__text_inverse : ""
         } ${props.noHover ? styles.button_no_hover : ""} ${
           props.transparent ? styles.button_transparent : ""
-        } ${
-          props.verifyed ? `color-${props.categoryColor}` : ""
         }`}
-        style={{ zIndex: props.zIndex }}
+        style={{
+          zIndex: props.zIndex,
+        }}
       >
         {props.children}
       </button>

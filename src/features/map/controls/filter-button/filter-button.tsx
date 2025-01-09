@@ -6,11 +6,11 @@ import { toast } from "sonner";
 import { Feature } from "@yandex/ymaps3-clusterer";
 import { observer } from "mobx-react-lite";
 import { ModalComponent } from "../../../../components/modal/modal";
-import { FilterButtonModal } from "../../../../components/modals";
 import { CategoryDto } from "../../../../dto";
 import { useGetCategories } from "../../../../hooks";
 import selectedCategoriesStore from "../../../../stores/selected-categories.store";
 import { MEDIUM_SIZE_MARKER } from "../../../../utils";
+import { FilterIncidentsModal } from "../../../../components/modals";
 
 
 interface Props {
@@ -69,7 +69,7 @@ export const FilterButton: React.FC<Props> = observer((props: Props) => {
           setModalOpen(false);
         }}
       >
-        <FilterButtonModal
+        <FilterIncidentsModal
           categories={localCategories}
           selectedCategoriesLocal={selectedCategoriesLocal}
           setSelectedCategoriesLocal={setSelectedCategoriesLocal}

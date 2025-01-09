@@ -26,6 +26,7 @@ import {
   onIncidentClickHandler,
   onVerifyOrUnverifyIncidentHandler,
 } from "../handlers";
+import themeStore from "../../../stores/theme.store";
 
 interface MapMarkerProps {
   coords: [number, number] | LngLat;
@@ -71,11 +72,12 @@ export const IncidentComponent = observer((props: MapMarkerProps) => {
           onClick={() =>
             onIncidentClickHandler(popupState, setPopupState, setZIndex)
           }
-          className={`${
-            props.properties
-              ? `color-text-${props.properties["color"] as string}`
-              : ""
-          } ${!popupState ? `fixed` : "fixed-top-left"} `}
+          className={`${!popupState ? `fixed` : "fixed-top-left"} `}
+          style={{
+            color: props.properties && props.properties["color"] as string
+              ? (props.properties["color"] as string)
+              : themeStore.color,
+          }}
           size={LARGE_SIZE_MARKER}
         />
         {popupState && (
@@ -93,15 +95,7 @@ export const IncidentComponent = observer((props: MapMarkerProps) => {
             {isLoadingGetMark || isFetchingGetMark ? (
               <h4 className="load-title">Загрузка...</h4>
             ) : markData ? (
-              <div
-                className={`${
-                  props.properties
-                    ? `popup-content backlight-${
-                        props.properties["color"] as string
-                      }`
-                    : "popup-content"
-                } `}
-              >
+              <div className={`popup-content backlight-flashing`}>
                 <IncidentCategoryLabel
                   id={markData?.category.id as number}
                   name={markData?.category.name as string}
@@ -178,7 +172,6 @@ export const IncidentComponent = observer((props: MapMarkerProps) => {
                     }
                     disabled={isPendingVerify || isPendingUnverify}
                     verifyed={!verified && !isEmptyUser()}
-                    categoryColor={markData?.category.color as string}
                     noHover
                   >
                     {isPendingVerify || isPendingUnverify ? (

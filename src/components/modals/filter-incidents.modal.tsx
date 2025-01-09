@@ -17,7 +17,7 @@ interface Props {
   setSelectedCategories: (selectedCategories: number[]) => void;
 }
 
-export const FilterButtonModal: React.FC<Props> = memo((props: Props) => {
+export const FilterIncidentsModal: React.FC<Props> = memo((props: Props) => {
   const toggleCategory = (categoryId: number) => {
     if (props.selectedCategoriesLocal.includes(categoryId)) {
       props.setSelectedCategoriesLocal(
